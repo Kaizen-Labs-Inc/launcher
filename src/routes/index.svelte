@@ -3,57 +3,128 @@
 </script>
 
 <script lang="ts">
-	import Counter from '$lib/Counter.svelte';
+	import { goto } from '$app/navigation';
+	import { SearchIcon, PlusCircleIcon } from 'svelte-feather-icons';
+	let query = '';
+	$: filteredChannels = channels.filter(
+		(channel) => channel.title.toLowerCase().indexOf(query.toLowerCase()) !== -1
+	);
+	const channels = [
+		{
+			id: 1,
+			icon: '✉️',
+			title: 'Gmail',
+			url: 'mail.google.com',
+			description: 'Lorem ipsum'
+		},
+		{
+			id: 2,
+			icon: '🗓',
+			title: 'Calendar',
+			url: 'calendar.google.com',
+
+			description: 'Lorem ipsum'
+		},
+
+		{
+			id: 3,
+			icon: '💬',
+			title: 'Slack',
+			url: 'kaizen-enps.slack.com',
+			description: 'Lorem ipsum'
+		},
+		{
+			id: 4,
+			icon: '📓',
+			title: 'Notion',
+			url: 'notion.so',
+			description: 'Lorem ipsum'
+		},
+		{
+			id: 5,
+			icon: '📬',
+			title: 'Customer.io',
+			url: 'customer.io',
+			description: 'Lorem ipsum'
+		},
+		{
+			id: 6,
+			icon: '🖇',
+			title: 'Trello',
+			url: 'trello.com',
+			description: 'Lorem ipsum'
+		},
+		{
+			id: 7,
+			icon: '📈',
+			title: 'Mixpanel',
+			url: 'mixpanel.com',
+			description: 'Lorem ipsum'
+		},
+		{
+			id: 7,
+			icon: '💸',
+			title: 'Rippling',
+			url: 'rippling.com',
+			description: 'Lorem ipsum'
+		},
+		{
+			id: 7,
+			icon: '☎',
+			title: 'Zendesk',
+			url: 'zendesk.com',
+			description: 'Lorem ipsum'
+		},
+		{
+			id: 7,
+			icon: '💼',
+			title: 'Salesforce',
+			url: 'kaizen.salesforce.com',
+			description: 'Lorem ipsum'
+		}
+	];
 </script>
 
 <svelte:head>
-	<title>Home</title>
+	<title>Springboard</title>
 </svelte:head>
-
-<section>
-	<h1>
-		<div class="welcome">
-			<picture>
-				<source srcset="svelte-welcome.webp" type="image/webp" />
-				<img src="svelte-welcome.png" alt="Welcome" />
-			</picture>
+<div class="container mx-auto">
+	<nav class="mt-4">
+		<ul class="flex flex-row justify-end text-gray-500">
+			<li class="cursor-pointer mr-6 hover:text-white">Kaizen Labs</li>
+			<li class="cursor-pointer mr-6 hover:text-white">Jordan</li>
+			<li class="cursor-pointer hover:text-white">Sign out</li>
+		</ul>
+	</nav>
+	<section class="w-full mt-32 flex justify-between">
+		<div class="flex flex-row">
+			<SearchIcon size="48" strokeWidth="1" />
+			<input
+				bind:value={query}
+				autofocus
+				placeholder="Search"
+				class="ml-4 text-5xl border-0 outline-none bg-transparent text-white font-light"
+			/>
 		</div>
-
-		to your new<br />SvelteKit app
-	</h1>
-
-	<h2>
-		try editing <strong>src/routes/index.svelte</strong>
-	</h2>
-
-	<Counter />
-</section>
+		<button class="cursor-pointer transition duration-200 ease-in-out hover:scale-110"
+			><PlusCircleIcon size="48" strokeWidth="1" /></button
+		>
+	</section>
+	<section class="grid lg:grid-cols-6 md:grid-cols-4 cols-2 gap-16 mt-16">
+		{#each filteredChannels as channel}
+			<div
+				on:click={() => {
+					window.open('https://' + channel.url, '_blank').focus();
+				}}
+				class="cursor-pointer w-64 text-center transition duration-200 ease-in-out hover:-translate-y-1 hover:scale-110"
+			>
+				<div class="text-7xl mb-4">{channel.icon}</div>
+				<div class="text-2xl">{channel.title}</div>
+				<div class="text-md opacity-30">{channel.url}</div>
+			</div>
+		{/each}
+	</section>
+</div>
 
 <style>
-	section {
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
-		flex: 1;
-	}
-
-	h1 {
-		width: 100%;
-	}
-
-	.welcome {
-		position: relative;
-		width: 100%;
-		height: 0;
-		padding: 0 0 calc(100% * 495 / 2048) 0;
-	}
-
-	.welcome img {
-		position: absolute;
-		width: 100%;
-		height: 100%;
-		top: 0;
-		display: block;
-	}
 </style>
