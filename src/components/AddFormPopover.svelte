@@ -1,28 +1,44 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
+
 	import { scale } from 'svelte/transition';
 	import { PlusCircleIcon } from 'svelte-feather-icons';
 	import Popover from 'svelte-popover';
-	let addPopoverIsFocused: boolean = false;
+	let popOverIsFocused: boolean = false;
+
+	onMount(() => {
+		document.addEventListener(
+			'keydown',
+			(event) => {
+				if (popOverIsFocused && event.key === 'Escape') {
+					popOverIsFocused = false;
+				}
+			},
+			false
+		);
+	});
 </script>
 
 <Popover
 	arrow={false}
 	placement="left-start"
+	open={popOverIsFocused}
 	on:open={() => {
-		addPopoverIsFocused = true;
+		popOverIsFocused = true;
 	}}
 	on:close={() => {
-		addPopoverIsFocused = false;
+		popOverIsFocused = false;
 	}}
 >
 	<button
 		slot="target"
-		class="cursor-pointer transition duration-200 ease-in-out {addPopoverIsFocused
+		class="cursor-pointer transition duration-200 ease-in-out {popOverIsFocused
 			? 'rotate-45'
 			: 'hover:scale-110 hover:opacity-100 opacity-75'}"
 		><PlusCircleIcon size="48" strokeWidth="1" /></button
 	>
 	<!-- TODO add icon/image upload -->
+
 	<div
 		transition:scale={{ duration: 200, opacity: 0, start: 0.9 }}
 		slot="content"
