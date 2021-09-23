@@ -115,7 +115,7 @@
 	<section class="w-full mt-32 flex justify-between">
 		<div class="flex flex-row">
 			<SearchIcon size="48" strokeWidth="1" />
-			<div class="flex flex-row">
+			<div class="flex flex-row items-center">
 				<input
 					bind:value={query}
 					on:click={() => {
@@ -131,7 +131,7 @@
 				{#if !searchIsFocused}
 					<span
 						transition:fade={{ duration: 200 }}
-						class="text-lg font-light border-1 border-white border w-10 h-10 opacity-50 flex items-center justify-center rounded-md"
+						class="border-2 border-white border-opacity-50 w-10 h-10 opacity-50 flex items-center justify-center rounded-md"
 						>⌘K</span
 					>
 				{/if}
@@ -141,13 +141,13 @@
 			><PlusCircleIcon size="48" strokeWidth="1" /></button
 		>
 	</section>
-	<section class="grid lg:grid-cols-6 md:grid-cols-4 cols-2 gap-16 mt-16">
+	<section class="grid lg:grid-cols-6 md:grid-cols-4 cols-2 gap-8 md:gap-12 lg:gap-16 mt-16">
 		{#each filteredChannels as channel}
 			<div
 				on:click={() => {
 					window.open('https://' + channel.url, '_blank').focus();
 				}}
-				class="cursor-pointer w-64 text-center transition duration-200 ease-in-out hover:-translate-y-1 hover:scale-110"
+				class="cursor-pointer flex items-center justify-between flex-col text-center transition duration-200 ease-in-out hover:-translate-y-1 hover:scale-110"
 			>
 				<div class="text-7xl mb-4">{channel.icon}</div>
 				<div class="text-2xl">{channel.title}</div>
