@@ -35,11 +35,11 @@
 				if (
 					searchIsFocused &&
 					event.key === 'ArrowDown' &&
-					selectedChannelIndex <= filteredChannels.length - 1
+					selectedChannelIndex <= filteredChannels.length - 2
 				) {
 					selectedChannelIndex = selectedChannelIndex + 1;
 				}
-				if (searchIsFocused && event.key === 'ArrowUp' && selectedChannelIndex >= 0) {
+				if (searchIsFocused && event.key === 'ArrowUp' && selectedChannelIndex > 0) {
 					selectedChannelIndex = selectedChannelIndex - 1;
 				}
 				if (searchIsFocused && event.key === 'Escape') {
