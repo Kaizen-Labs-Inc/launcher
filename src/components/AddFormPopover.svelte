@@ -100,8 +100,8 @@
 		font-size: 16px;
 	}
 	.tagsContainer :global(.svelte-tags-input-tag) {
-		border-radius: 4px;
-		background: black;
+		border-radius: 3px;
+		background: rgba(0, 0, 0, 0.8);
 		font-size: 16px;
 		padding: 4px;
 	}
