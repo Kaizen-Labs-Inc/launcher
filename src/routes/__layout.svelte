@@ -7,7 +7,9 @@
 </main>
 
 <footer>
-	<p>Springboard 2021</p>
+	<p class="mx-3">Springboard 2021</p>
+	<a href="#" class="mx-3">Privacy policy</a>
+	<a href="#" class="mx-3">Terms of use</a>
 </footer>
 
 <style>
@@ -24,14 +26,11 @@
 
 	footer {
 		display: flex;
-		flex-direction: column;
+
+		flex-direction: row;
 		justify-content: center;
 		align-items: center;
 		padding: 40px;
-	}
-
-	footer a {
-		font-weight: bold;
 	}
 
 	@media (min-width: 480px) {

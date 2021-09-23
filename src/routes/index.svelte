@@ -84,7 +84,11 @@
 		</ul>
 	</nav>
 	<section class="w-full mt-16 flex justify-between">
-		<div class="flex flex-row">
+		<div
+			class="flex flex-row p-4 rounded-t-lg  {searchIsFocused
+				? 'bg-white bg-opacity-10 w-full'
+				: ''}"
+		>
 			<SearchIcon size="48" strokeWidth="1" />
 			<div class="flex flex-row items-center">
 				<input
@@ -105,16 +109,17 @@
 				/>
 				{#if !searchIsFocused}
 					<span
-						transition:fade={{ duration: 200 }}
 						class="absolute ml-48 border-2 border-white border-opacity-50 w-10 h-10 opacity-50 flex items-center justify-center rounded-md"
 						>⌘K</span
 					>
 				{/if}
 			</div>
 		</div>
-		<button class="cursor-pointer transition duration-200 ease-in-out hover:scale-110"
-			><PlusCircleIcon size="48" strokeWidth="1" /></button
-		>
+		{#if !searchIsFocused}
+			<button class="cursor-pointer transition duration-200 ease-in-out hover:scale-110"
+				><PlusCircleIcon size="48" strokeWidth="1" /></button
+			>
+		{/if}
 	</section>
 	{#if !searchIsFocused}
 		<section class="grid lg:grid-cols-6 md:grid-cols-4 grid-cols-2 gap-8 md:gap-12 lg:gap-16 mt-16">
@@ -133,11 +138,12 @@
 			{/each}
 		</section>
 	{:else}
-		<section class="flex flex-col w-full mt-8">
-			<!-- TODO Have 2 states. A) by last used, when  -->
+		<section class="flex flex-col w-full bg-white bg-opacity-10 rounded-b-lg rounded-r-lg">
+			<!-- TODO Have 2 states. A) by last used, when b) alpha  -->
 			{#each filteredChannels.sort((a, b) => a.title.localeCompare(b.title)) as channel, i}
 				<div
 					on:click|preventDefault={() => {
+						// TODO this click is getting intercepted somehow
 						handleProceed(channel);
 					}}
 					on:mouseover={() => {
