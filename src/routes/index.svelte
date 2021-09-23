@@ -6,18 +6,45 @@
 	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
 
-	import { mockChannels } from '../models/Channel';
+	import Channel, { mockChannels } from '../models/Channel';
 	import { SearchIcon, PlusCircleIcon } from 'svelte-feather-icons';
 	let query = '';
 	let searchIsFocused: boolean = false;
+	let selectedChannelIndex = 0;
+
 	$: filteredChannels = mockChannels.filter(
 		(channel) => channel.title.toLowerCase().indexOf(query.toLowerCase()) !== -1
 	);
+
+	const handleProceed = (channel: Channel) => {
+		window.open('https://' + channel.url, '_blank').focus();
+	};
+	const handleBlur = () => {
+		let searchInput = document.getElementById('searchInput');
+		searchIsFocused = false;
+		searchInput.blur();
+		selectedChannelIndex = 0;
+		query = '';
+	};
+
 	onMount(() => {
 		document.addEventListener(
 			'keydown',
 			(event) => {
 				let searchInput = document.getElementById('searchInput');
+				if (
+					searchIsFocused &&
+					event.key === 'ArrowDown' &&
+					selectedChannelIndex <= filteredChannels.length - 1
+				) {
+					selectedChannelIndex = selectedChannelIndex + 1;
+				}
+				if (searchIsFocused && event.key === 'ArrowUp' && selectedChannelIndex >= 0) {
+					selectedChannelIndex = selectedChannelIndex - 1;
+				}
+				if (searchIsFocused && event.key === 'Escape') {
+					handleBlur();
+				}
 				if (
 					event.metaKey &&
 					event.key === 'k' &&
@@ -49,12 +76,11 @@
 			<div class="flex flex-row items-center">
 				<input
 					bind:value={query}
-					on:click={() => {
+					on:focus={() => {
 						searchIsFocused = true;
 					}}
 					on:blur={() => {
-						searchIsFocused = false;
-						query = '';
+						handleBlur();
 					}}
 					autocomplete="false"
 					id="searchInput"
@@ -76,10 +102,11 @@
 	</section>
 	{#if !searchIsFocused}
 		<section class="grid lg:grid-cols-6 md:grid-cols-4 grid-cols-2 gap-8 md:gap-12 lg:gap-16 mt-16">
-			{#each filteredChannels as channel}
+			<!-- TODO allow user to rearrange the channels -->
+			{#each mockChannels as channel}
 				<div
-					on:click={() => {
-						window.open('https://' + channel.url, '_blank').focus();
+					on:click|preventDefault={() => {
+						handleProceed(channel);
 					}}
 					class="cursor-pointer flex items-center justify-between flex-col text-center transition duration-200 ease-in-out hover:-translate-y-1 hover:scale-110"
 				>
@@ -90,7 +117,38 @@
 			{/each}
 		</section>
 	{:else}
-		table goes here...
+		<section class="flex flex-col w-full mt-8">
+			<!-- TODO Have 2 states. A) by last used, when  -->
+			{#each filteredChannels.sort((a, b) => a.title.localeCompare(b.title)) as channel, i}
+				<div
+					on:click|preventDefault={() => {
+						handleProceed(channel);
+					}}
+					on:mouseover={() => {
+						selectedChannelIndex = i;
+					}}
+					on:focus
+					class="flex text-left justify-between rounded-2xl cursor-pointer p-6 transition duration-200 ease-in-out  {selectedChannelIndex ===
+					i
+						? 'bg-white bg-opacity-10 backdrop-blur-md scale-105'
+						: 'bg-transparent'}
+					"
+				>
+					<div class="flex flex-row">
+						<div class="text-6xl mr-4">{channel.icon}</div>
+						<div class="text-2xl">
+							{channel.title}
+							<div class="block text-sm {selectedChannelIndex === i ? 'opacity-50' : 'opacity-25'}">
+								{channel.url}
+							</div>
+						</div>
+					</div>
+					<div>{channel.description}</div>
+					<div>Tags go here</div>
+					<div>Actions go here</div>
+				</div>
+			{/each}
+		</section>
 	{/if}
 </div>
 
