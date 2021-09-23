@@ -3,12 +3,26 @@
 </script>
 
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
 	import { SearchIcon, PlusCircleIcon } from 'svelte-feather-icons';
 	let query = '';
+	let searchIsFocused: boolean = false;
 	$: filteredChannels = channels.filter(
 		(channel) => channel.title.toLowerCase().indexOf(query.toLowerCase()) !== -1
 	);
+	onMount(() => {
+		document.addEventListener(
+			'keydown',
+			(event) => {
+				let searchInput = document.getElementById('searchInput');
+				if (event.metaKey && event.key === 'k' && searchInput !== document.activeElement) {
+					searchInput.focus();
+				}
+			},
+			false
+		);
+	});
 	const channels = [
 		{
 			id: 1,
@@ -99,12 +113,26 @@
 	<section class="w-full mt-32 flex justify-between">
 		<div class="flex flex-row">
 			<SearchIcon size="48" strokeWidth="1" />
-			<input
-				bind:value={query}
-				autofocus
-				placeholder="Search"
-				class="ml-4 text-5xl border-0 outline-none bg-transparent text-white font-light"
-			/>
+			<div class="flex flex-row">
+				<input
+					bind:value={query}
+					on:click={() => {
+						searchIsFocused = true;
+					}}
+					on:blur={() => {
+						searchIsFocused = false;
+					}}
+					id="searchInput"
+					placeholder="Search"
+					class="ml-4 text-5xl border-0 outline-none bg-transparent text-white font-light"
+				/>
+				{#if !searchIsFocused}
+					<span
+						class="text-lg font-light border-1 border-white border w-10 h-10 opacity-50 flex items-center justify-center rounded-md"
+						>⌘K</span
+					>
+				{/if}
+			</div>
 		</div>
 		<button class="cursor-pointer transition duration-200 ease-in-out hover:scale-110"
 			><PlusCircleIcon size="48" strokeWidth="1" /></button
