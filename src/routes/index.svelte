@@ -13,10 +13,13 @@
 	let selectedChannelIndex = 0;
 
 	$: filteredChannels = mockChannels.filter(
+		// TODO also filter by description, tags, and URL
 		(channel) => channel.title.toLowerCase().indexOf(query.toLowerCase()) !== -1
 	);
 
 	const handleProceed = (channel: Channel) => {
+		// TODO popover/content blockers are getting in the way of this
+		// https://stackoverflow.com/questions/2587677/avoid-browser-popup-blockers
 		window.open('https://' + channel.url, '_blank').focus();
 	};
 	const handleBlur = () => {
@@ -26,13 +29,17 @@
 		selectedChannelIndex = 0;
 		query = '';
 	};
+	const handleFocus = () => {
+		searchIsFocused = true;
+		selectedChannelIndex = 0;
+	};
 
 	onMount(() => {
 		document.addEventListener(
 			'keydown',
 			(event) => {
 				let searchInput = document.getElementById('searchInput');
-
+				// TODO when the text input value or query changes, reset the selectedChannelIndex to 0
 				if (
 					searchIsFocused &&
 					event.key === 'ArrowDown' &&
@@ -45,6 +52,9 @@
 				}
 				if (searchIsFocused && event.key === 'Escape') {
 					handleBlur();
+				}
+				if (searchIsFocused && event.key === 'Enter') {
+					handleProceed(filteredChannels[selectedChannelIndex]);
 				}
 				if (
 					event.metaKey &&
@@ -78,7 +88,7 @@
 				<input
 					bind:value={query}
 					on:focus={() => {
-						searchIsFocused = true;
+						handleFocus();
 					}}
 					on:blur={() => {
 						handleBlur();
@@ -152,11 +162,26 @@
 						<div />
 					{/if}
 					{#if channel.tags}
-						<div>Tags go here</div>
+						<div class="flex flex-wrap flex-row">
+							{#each channel.tags as tag}
+								<div
+									class="flex justify-center items-center h-8 mr-2 mb-2 text-sm font-medium rounded bg-white bg-opacity-5 px-2 py-1"
+								>
+									#{tag}
+								</div>
+							{/each}
+						</div>
 					{:else}
 						<div />
 					{/if}
-					<div><Edit2Icon size="20" strokeWidth="1" /></div>
+					<div
+						on:click|preventDefault={() => {
+							console.log('edit clicked');
+						}}
+						class="w-12 h-12 hover:bg-white hover:bg-opacity-10 rounded-md flex justify-center items-center"
+					>
+						<Edit2Icon size="20" strokeWidth="1" />
+					</div>
 				</div>
 			{/each}
 		</section>

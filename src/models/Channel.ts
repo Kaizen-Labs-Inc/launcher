@@ -12,13 +12,15 @@ export const mockChannels = [
 		id: '1',
 		icon: '✉️',
 		title: 'Gmail',
-		url: 'mail.google.com'
+		url: 'mail.google.com',
+		tags: ['email', 'google']
 	},
 	{
 		id: '2',
 		icon: '🗓',
 		title: 'Calendar',
-		url: 'calendar.google.com'
+		url: 'calendar.google.com',
+		tags: ['google', 'gsuite']
 	},
 
 	{
@@ -33,48 +35,55 @@ export const mockChannels = [
 		icon: '📓',
 		title: 'Notion',
 		url: 'notion.so',
-		description: 'Docs and notes'
+		description: 'Docs and notes',
+		tags: ['product', 'docs']
 	},
 	{
 		id: '5',
 		icon: '📬',
 		title: 'Customer.io',
 		url: 'customer.io',
-		description: 'Customer messaging (email & push)'
+		description: 'Customer messaging (email & push)',
+		tags: ['marketing', 'push', 'email']
 	},
 	{
 		id: '6',
 		icon: '🖇',
 		title: 'Trello',
 		url: 'trello.com',
-		description: 'Feature tracking for POs'
+		description: 'Feature tracking for POs',
+		tags: ['product']
 	},
 	{
 		id: '7',
 		icon: '📈',
 		title: 'Mixpanel',
 		url: 'mixpanel.com',
-		description: 'Product analytics'
+		description: 'Product analytics',
+		tags: ['product', 'data']
 	},
 	{
 		id: '8',
 		icon: '💸',
 		title: 'Rippling',
 		url: 'rippling.com',
-		description: 'HR, pay, and IT'
+		description: 'HR, pay, and IT',
+		tags: ['HR', 'IT']
 	},
 	{
 		id: '9',
 		icon: '☎',
 		title: 'Zendesk',
 		url: 'zendesk.com',
-		description: 'Customer support'
+		description: 'Customer support',
+		tags: ['CS']
 	},
 	{
 		id: '10',
 		icon: '💼',
 		title: 'Salesforce',
 		url: 'salesforce.com',
-		description: 'Sales tracking'
+		description: 'Sales tracking',
+		tags: ['sales']
 	}
 ];
