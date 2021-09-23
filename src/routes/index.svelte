@@ -4,6 +4,8 @@
 
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import { fade } from 'svelte/transition';
+
 	import { goto } from '$app/navigation';
 	import { SearchIcon, PlusCircleIcon } from 'svelte-feather-icons';
 	let query = '';
@@ -128,6 +130,7 @@
 				/>
 				{#if !searchIsFocused}
 					<span
+						transition:fade={{ duration: 200 }}
 						class="text-lg font-light border-1 border-white border w-10 h-10 opacity-50 flex items-center justify-center rounded-md"
 						>⌘K</span
 					>
