@@ -112,7 +112,7 @@
 			<li class="cursor-pointer hover:text-white">Sign out</li>
 		</ul>
 	</nav>
-	<section class="w-full mt-32 flex justify-between">
+	<section class="w-full mt-16 flex justify-between">
 		<div class="flex flex-row">
 			<SearchIcon size="48" strokeWidth="1" />
 			<div class="flex flex-row items-center">
