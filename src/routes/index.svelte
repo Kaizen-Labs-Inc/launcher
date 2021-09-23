@@ -4,10 +4,9 @@
 
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { fade } from 'svelte/transition';
+	import AddFormPopover from '../components/AddFormPopover.svelte';
 	import Channel, { mockChannels } from '../models/Channel';
-	import { SearchIcon, PlusCircleIcon, Edit2Icon } from 'svelte-feather-icons';
-
+	import { SearchIcon, Edit2Icon } from 'svelte-feather-icons';
 	let query = '';
 	let searchIsFocused: boolean = false;
 	let selectedChannelIndex = 0;
@@ -116,9 +115,7 @@
 			</div>
 		</div>
 		{#if !searchIsFocused}
-			<button class="cursor-pointer transition duration-200 ease-in-out hover:scale-110"
-				><PlusCircleIcon size="48" strokeWidth="1" /></button
-			>
+			<AddFormPopover />
 		{/if}
 	</section>
 	{#if !searchIsFocused}
@@ -138,7 +135,7 @@
 			{/each}
 		</section>
 	{:else}
-		<section class="flex flex-col w-full bg-white bg-opacity-10 rounded-b-lg rounded-r-lg">
+		<section class="flex flex-col w-full bg-white bg-opacity-10 rounded-b-lg">
 			<!-- TODO Have 2 states. A) by last used, when b) alpha  -->
 			{#each filteredChannels.sort((a, b) => a.title.localeCompare(b.title)) as channel, i}
 				<div
