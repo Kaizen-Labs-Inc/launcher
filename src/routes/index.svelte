@@ -33,13 +33,15 @@
 		searchIsFocused = true;
 		selectedChannelIndex = 0;
 	};
+	const handleInput = () => {
+		selectedChannelIndex = 0;
+	};
 
 	onMount(() => {
 		document.addEventListener(
 			'keydown',
 			(event) => {
 				let searchInput = document.getElementById('searchInput');
-				// TODO when the text input value or query changes, reset the selectedChannelIndex to 0
 				if (
 					searchIsFocused &&
 					event.key === 'ArrowDown' &&
@@ -92,6 +94,9 @@
 					}}
 					on:blur={() => {
 						handleBlur();
+					}}
+					on:input={() => {
+						handleInput();
 					}}
 					autocomplete="false"
 					id="searchInput"
