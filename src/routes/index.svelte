@@ -19,6 +19,7 @@
 			(event) => {
 				let searchInput = document.getElementById('searchInput');
 				if (event.metaKey && event.key === 'k' && searchInput !== document.activeElement) {
+					searchIsFocused = true;
 					searchInput.focus();
 				}
 			},
@@ -46,7 +47,7 @@
 			id: 3,
 			icon: '💬',
 			title: 'Slack',
-			url: 'kaizen-enps.slack.com',
+			url: 'slack.com',
 			description: 'Lorem ipsum'
 		},
 		{
@@ -95,7 +96,7 @@
 			id: 7,
 			icon: '💼',
 			title: 'Salesforce',
-			url: 'kaizen.salesforce.com',
+			url: 'salesforce.com',
 			description: 'Lorem ipsum'
 		}
 	];
@@ -123,7 +124,9 @@
 					}}
 					on:blur={() => {
 						searchIsFocused = false;
+						query = '';
 					}}
+					autocomplete="false"
 					id="searchInput"
 					placeholder="Search"
 					class="ml-4 text-5xl border-0 outline-none bg-transparent text-white font-light"
@@ -131,7 +134,7 @@
 				{#if !searchIsFocused}
 					<span
 						transition:fade={{ duration: 200 }}
-						class="border-2 border-white border-opacity-50 w-10 h-10 opacity-50 flex items-center justify-center rounded-md"
+						class="absolute ml-48 border-2 border-white border-opacity-50 w-10 h-10 opacity-50 flex items-center justify-center rounded-md"
 						>⌘K</span
 					>
 				{/if}
@@ -141,20 +144,24 @@
 			><PlusCircleIcon size="48" strokeWidth="1" /></button
 		>
 	</section>
-	<section class="grid lg:grid-cols-6 md:grid-cols-4 cols-2 gap-8 md:gap-12 lg:gap-16 mt-16">
-		{#each filteredChannels as channel}
-			<div
-				on:click={() => {
-					window.open('https://' + channel.url, '_blank').focus();
-				}}
-				class="cursor-pointer flex items-center justify-between flex-col text-center transition duration-200 ease-in-out hover:-translate-y-1 hover:scale-110"
-			>
-				<div class="text-7xl mb-4">{channel.icon}</div>
-				<div class="text-2xl">{channel.title}</div>
-				<div class="text-md opacity-30">{channel.url}</div>
-			</div>
-		{/each}
-	</section>
+	{#if !searchIsFocused}
+		<section class="grid lg:grid-cols-6 md:grid-cols-4 grid-cols-2 gap-8 md:gap-12 lg:gap-16 mt-16">
+			{#each filteredChannels as channel}
+				<div
+					on:click={() => {
+						window.open('https://' + channel.url, '_blank').focus();
+					}}
+					class="cursor-pointer flex items-center justify-between flex-col text-center transition duration-200 ease-in-out hover:-translate-y-1 hover:scale-110"
+				>
+					<div class="text-7xl mb-4">{channel.icon}</div>
+					<div class="text-2xl">{channel.title}</div>
+					<div class="text-md opacity-30">{channel.url}</div>
+				</div>
+			{/each}
+		</section>
+	{:else}
+		table goes here...
+	{/if}
 </div>
 
 <style>
