@@ -5,9 +5,9 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
-
 	import Channel, { mockChannels } from '../models/Channel';
-	import { SearchIcon, PlusCircleIcon } from 'svelte-feather-icons';
+	import { SearchIcon, PlusCircleIcon, Edit2Icon } from 'svelte-feather-icons';
+
 	let query = '';
 	let searchIsFocused: boolean = false;
 	let selectedChannelIndex = 0;
@@ -32,6 +32,7 @@
 			'keydown',
 			(event) => {
 				let searchInput = document.getElementById('searchInput');
+
 				if (
 					searchIsFocused &&
 					event.key === 'ArrowDown' &&
@@ -128,7 +129,7 @@
 						selectedChannelIndex = i;
 					}}
 					on:focus
-					class="flex text-left justify-between rounded-2xl cursor-pointer p-6 transition duration-200 ease-in-out  {selectedChannelIndex ===
+					class="grid grid-cols-4 gap-12 text-left rounded-2xl cursor-pointer p-6 transition duration-200 ease-in-out  {selectedChannelIndex ===
 					i
 						? 'bg-white bg-opacity-10 backdrop-blur-md scale-105'
 						: 'bg-transparent'}
@@ -143,9 +144,19 @@
 							</div>
 						</div>
 					</div>
-					<div>{channel.description}</div>
-					<div>Tags go here</div>
-					<div>Actions go here</div>
+					{#if channel.description}
+						<div class={selectedChannelIndex === i ? 'opacity-50' : 'opacity-25'}>
+							{channel.description}
+						</div>
+					{:else}
+						<div />
+					{/if}
+					{#if channel.tags}
+						<div>Tags go here</div>
+					{:else}
+						<div />
+					{/if}
+					<div><Edit2Icon size="20" strokeWidth="1" /></div>
 				</div>
 			{/each}
 		</section>

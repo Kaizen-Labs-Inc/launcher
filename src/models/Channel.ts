@@ -4,6 +4,7 @@ export default interface Channel {
 	url: string;
 	description?: string;
 	icon?: string; // TODO support image paths and/or emojis
+	tags?: string[];
 }
 
 export const mockChannels = [
@@ -11,16 +12,13 @@ export const mockChannels = [
 		id: '1',
 		icon: '✉️',
 		title: 'Gmail',
-		url: 'mail.google.com',
-		description: 'Lorem ipsum'
+		url: 'mail.google.com'
 	},
 	{
 		id: '2',
 		icon: '🗓',
 		title: 'Calendar',
-		url: 'calendar.google.com',
-
-		description: 'Lorem ipsum'
+		url: 'calendar.google.com'
 	},
 
 	{
@@ -28,55 +26,55 @@ export const mockChannels = [
 		icon: '💬',
 		title: 'Slack',
 		url: 'slack.com',
-		description: 'Lorem ipsum'
+		description: 'Real-time comms'
 	},
 	{
 		id: '4',
 		icon: '📓',
 		title: 'Notion',
 		url: 'notion.so',
-		description: 'Lorem ipsum'
+		description: 'Docs and notes'
 	},
 	{
 		id: '5',
 		icon: '📬',
 		title: 'Customer.io',
 		url: 'customer.io',
-		description: 'Lorem ipsum'
+		description: 'Customer messaging (email & push)'
 	},
 	{
 		id: '6',
 		icon: '🖇',
 		title: 'Trello',
 		url: 'trello.com',
-		description: 'Lorem ipsum'
+		description: 'Feature tracking for POs'
 	},
 	{
 		id: '7',
 		icon: '📈',
 		title: 'Mixpanel',
 		url: 'mixpanel.com',
-		description: 'Lorem ipsum'
+		description: 'Product analytics'
 	},
 	{
 		id: '8',
 		icon: '💸',
 		title: 'Rippling',
 		url: 'rippling.com',
-		description: 'Lorem ipsum'
+		description: 'HR, pay, and IT'
 	},
 	{
 		id: '9',
 		icon: '☎',
 		title: 'Zendesk',
 		url: 'zendesk.com',
-		description: 'Lorem ipsum'
+		description: 'Customer support'
 	},
 	{
 		id: '10',
 		icon: '💼',
 		title: 'Salesforce',
 		url: 'salesforce.com',
-		description: 'Lorem ipsum'
+		description: 'Sales tracking'
 	}
 ];
