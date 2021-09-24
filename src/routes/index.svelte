@@ -122,14 +122,32 @@
 	{#if !searchIsFocused}
 		<section class="grid lg:grid-cols-6 md:grid-cols-4 grid-cols-2 gap-8 md:gap-12 lg:gap-16 mt-16">
 			<!-- TODO allow user to rearrange the channels -->
-			{#each mockChannels as channel}
+			<!-- TODO create icons for top ~100 saas apps -->
+			<!-- Make beautiful, 3 dimensional, follow cursor -->
+			{#each mockChannels as channel, i}
 				<div
+					on:focus
+					on:blur
+					on:mouseover={() => {
+						selectedChannelIndex = i;
+					}}
+					on:mouseout={() => {
+						selectedChannelIndex = null;
+					}}
 					on:click|preventDefault={() => {
 						handleProceed(channel);
 					}}
 					class="cursor-pointer flex items-center justify-between flex-col text-center transition duration-200 ease-in-out hover:-translate-y-1 hover:scale-110"
 				>
-					<div class="text-7xl mb-4">{channel.icon}</div>
+					<div class="text-6xl mb-4 icon flex items-center justify-center">
+						<span
+							class="transition duration-300 ease-in-out {selectedChannelIndex === i
+								? 'rotate-6 scale-110'
+								: ''}"
+						>
+							{channel.icon}
+						</span>
+					</div>
 					<div class="text-2xl">{channel.title}</div>
 					<div class="text-md opacity-30">{channel.url}</div>
 				</div>
@@ -147,4 +165,10 @@
 </div>
 
 <style>
+	.icon {
+		width: 120px;
+		height: 120px;
+		background: linear-gradient(25.13deg, #dbdbdb 15.69%, #fcfcfc 93.91%);
+		border-radius: 40px;
+	}
 </style>
