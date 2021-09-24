@@ -10,7 +10,7 @@
 	import { SearchIcon } from 'svelte-feather-icons';
 	let query = '';
 	let searchIsFocused: boolean = false;
-	let selectedChannelIndex = 0;
+	let selectedChannelIndex;
 
 	$: filteredChannels = mockChannels.filter(
 		// TODO also filter by description, tags, and URL
@@ -26,7 +26,7 @@
 		let searchInput = document.getElementById('searchInput');
 		searchIsFocused = false;
 		searchInput.blur();
-		selectedChannelIndex = 0;
+		selectedChannelIndex = null;
 		query = '';
 	};
 	const handleFocus = () => {

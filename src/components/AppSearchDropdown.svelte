@@ -9,7 +9,10 @@
 	// export const onSelect = (channel) => void;
 </script>
 
-<section class="flex flex-col w-full bg-white bg-opacity-10 rounded-b-lg">
+<section
+	style="max-height: 500px"
+	class="flex flex-col w-full bg-white bg-opacity-10 rounded-b-lg overflow-y-scroll overflow-x-visible"
+>
 	<!-- TODO Have 2 states. A) by last used, when b) alpha  -->
 	{#each filteredChannels.sort((a, b) => a.title.localeCompare(b.title)) as channel, i}
 		<div
@@ -28,7 +31,9 @@
             "
 		>
 			<div class="flex flex-row">
-				<div class="text-6xl mr-4">{channel.icon}</div>
+				<div class="icon flex-shrink-0 w-14 h-14 flex items-center justify-center mr-4">
+					<img class="w-8 h-8" src={channel.iconImageUrl} alt={channel.title} />
+				</div>
 				<div class="text-2xl">
 					{channel.title}
 					<div class="block text-sm {selectedChannelIndex === i ? 'opacity-50' : 'opacity-25'}">
@@ -67,3 +72,10 @@
 		</div>
 	{/each}
 </section>
+
+<style>
+	.icon {
+		background: linear-gradient(25.13deg, #dbdbdb 15.69%, #fcfcfc 93.91%);
+		border-radius: 20px;
+	}
+</style>
