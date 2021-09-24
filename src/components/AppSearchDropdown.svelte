@@ -30,8 +30,10 @@
 					selectedChannelIndex = i;
 				}}
 				on:focus
-				class="grid grid-cols-4 gap-12 text-left cursor-pointer p-6 transition duration-200 ease-in-out  {selectedChannelIndex ===
-				i
+				class="grid grid-cols-4 gap-12 text-left cursor-pointer p-6 transition duration-200 ease-in-out {filteredChannels.length ===
+				1
+					? 'rounded-b-lg'
+					: ''}  {selectedChannelIndex === i
 					? 'bg-white bg-opacity-10 backdrop-blur-md'
 					: 'bg-transparent'}
             "
