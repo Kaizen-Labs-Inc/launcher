@@ -43,7 +43,7 @@
 		transition:scale={{ duration: 200, opacity: 0, start: 0.9 }}
 		slot="content"
 		style="width: 400px;"
-		class="bg-white p-6 shadow-lg text-black rounded-lg mr-2"
+		class="bg-white backdrop-blur-lg bg-opacity-10 p-6 shadow-lg text-black rounded-lg mr-2"
 	>
 		<h2 class="text-xl font-medium ">Add something</h2>
 		<form>
