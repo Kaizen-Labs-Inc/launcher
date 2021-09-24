@@ -140,13 +140,20 @@
 					class="cursor-pointer flex items-center justify-between flex-col text-center transition duration-200 ease-in-out hover:-translate-y-1 hover:scale-110"
 				>
 					<div class="text-6xl mb-4 icon flex items-center justify-center">
-						<span
+						<!-- <span
 							class="transition duration-300 ease-in-out {selectedChannelIndex === i
 								? 'rotate-6 scale-110'
 								: ''}"
 						>
 							{channel.icon}
-						</span>
+						</span> -->
+						<img
+							alt={channel.title}
+							class="transition w-16 h-16 duration-300 ease-in-out {selectedChannelIndex === i
+								? 'rotate-6 scale-110'
+								: ''}"
+							src={channel.iconImageUrl}
+						/>
 					</div>
 					<div class="text-2xl">{channel.title}</div>
 					<div class="text-md opacity-30">{channel.url}</div>
