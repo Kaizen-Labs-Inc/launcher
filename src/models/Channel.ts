@@ -12,7 +12,7 @@ export const mockChannels = [
 	{
 		id: '1',
 		icon: '✉️',
-		iconImageUrl: '../../../static/icons/gmail.svg',
+		iconImageUrl: '../../../icons/gmail.svg',
 		title: 'Gmail',
 		url: 'mail.google.com',
 		tags: ['email', 'google']
@@ -20,7 +20,7 @@ export const mockChannels = [
 	{
 		id: '2',
 		icon: '🗓',
-		iconImageUrl: '../../../static/icons/gcal.svg',
+		iconImageUrl: '../../../icons/gcal.svg',
 		title: 'Calendar',
 		url: 'calendar.google.com',
 		tags: ['google', 'gsuite']
@@ -29,7 +29,7 @@ export const mockChannels = [
 	{
 		id: '3',
 		icon: '💬',
-		iconImageUrl: '../../../static/icons/slack.svg',
+		iconImageUrl: '../../../icons/slack.svg',
 		title: 'Slack',
 		url: 'slack.com',
 		description: 'Real-time comms'
@@ -37,7 +37,7 @@ export const mockChannels = [
 	{
 		id: '4',
 		icon: '📓',
-		iconImageUrl: '../../../static/icons/notion.svg',
+		iconImageUrl: '../../../icons/notion.svg',
 		title: 'Notion',
 		url: 'notion.so',
 		description: 'Docs and notes',
@@ -46,7 +46,7 @@ export const mockChannels = [
 	{
 		id: '5',
 		icon: '📬',
-		iconImageUrl: '../../../static/icons/intercom.svg',
+		iconImageUrl: '../../../icons/intercom.svg',
 		title: 'Intercom',
 		url: 'intercom.io',
 		description: 'Customer messaging (email & push)',
@@ -55,7 +55,7 @@ export const mockChannels = [
 	{
 		id: '6',
 		icon: '🖇',
-		iconImageUrl: '../../../static/icons/trello.svg',
+		iconImageUrl: '../../../icons/trello.svg',
 		title: 'Trello',
 		url: 'trello.com',
 		description: 'Feature tracking for POs',
@@ -64,7 +64,7 @@ export const mockChannels = [
 	{
 		id: '7',
 		icon: '📈',
-		iconImageUrl: '../../../static/icons/tableau.svg',
+		iconImageUrl: '../../../icons/tableau.svg',
 		title: 'Tableau',
 		url: 'tableau.com',
 		description: 'Product analytics',
@@ -73,7 +73,7 @@ export const mockChannels = [
 	{
 		id: '8',
 		icon: '💸',
-		iconImageUrl: '../../../static/icons/workday.svg',
+		iconImageUrl: '../../../icons/workday.svg',
 		title: 'Workday',
 		url: 'workday.com',
 		description: 'HR, pay, and IT',
@@ -82,7 +82,7 @@ export const mockChannels = [
 	{
 		id: '9',
 		icon: '☎',
-		iconImageUrl: '../../../static/icons/zendesk.svg',
+		iconImageUrl: '../../../icons/zendesk.svg',
 		title: 'Zendesk',
 		url: 'zendesk.com',
 		description: 'Customer support',
@@ -91,7 +91,7 @@ export const mockChannels = [
 	{
 		id: '10',
 		icon: '💼',
-		iconImageUrl: '../../../static/icons/figma.svg',
+		iconImageUrl: '../../../icons/figma.svg',
 		title: 'Figma',
 		url: 'figma.com',
 		description: 'Sales tracking',
@@ -101,7 +101,7 @@ export const mockChannels = [
 	{
 		id: '11',
 		icon: '💼',
-		iconImageUrl: '../../../static/icons/marketo.svg',
+		iconImageUrl: '../../../icons/marketo.svg',
 		title: 'Marketo',
 		url: 'marketo.com',
 		description: 'Sales tracking',
@@ -110,7 +110,7 @@ export const mockChannels = [
 	{
 		id: '12',
 		icon: '💼',
-		iconImageUrl: '../../../static/icons/github.svg',
+		iconImageUrl: '../../../icons/github.svg',
 		title: 'Github',
 		url: 'github.com',
 		description: 'Sales tracking',

@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { Edit2Icon } from 'svelte-feather-icons';
-
 	export let selectedChannelIndex;
 	export let filteredChannels;
 	// change this to a message
@@ -8,7 +7,8 @@
 </script>
 
 <section
-	style="max-height: 500px;"
+	style="max-height: 500px; scroll-behavior: smooth;"
+	id="appDropdown"
 	class="flex flex-col w-full bg-white bg-opacity-10 rounded-b-lg overflow-y-scroll shadow-2xl"
 >
 	<!-- TODO Have 2 states. A) by last used, when b) alpha  -->
@@ -34,7 +34,7 @@
 				1
 					? 'rounded-b-lg'
 					: ''}  {selectedChannelIndex === i
-					? 'bg-white bg-opacity-10 backdrop-blur-md'
+					? 'bg-white bg-opacity-10 backdrop-blur-md selected'
 					: 'bg-transparent'}
             "
 			>

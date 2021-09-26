@@ -42,14 +42,25 @@
 			'keydown',
 			(event) => {
 				let searchInput = document.getElementById('searchInput');
+				// Used for keeping the selected element in the dropdown in view
+				let dropdownContainer = document.getElementById('appDropdown');
+				let selectedHtmlEl = document.getElementsByClassName('selected')[0];
+
 				if (
 					searchIsFocused &&
 					event.key === 'ArrowDown' &&
 					selectedChannelIndex <= filteredChannels.length - 2
 				) {
+					selectedHtmlEl.scrollIntoView({
+						behavior: 'smooth'
+					});
 					selectedChannelIndex = selectedChannelIndex + 1;
 				}
 				if (searchIsFocused && event.key === 'ArrowUp' && selectedChannelIndex > 0) {
+					selectedHtmlEl.scrollIntoView({
+						behavior: 'smooth'
+					});
+
 					selectedChannelIndex = selectedChannelIndex - 1;
 				}
 				if (searchIsFocused && event.key === 'Escape') {
@@ -89,7 +100,9 @@
 				? 'bg-white bg-opacity-10 w-full'
 				: ''}"
 		>
-			<SearchIcon size="48" strokeWidth="1" />
+			<div class="flex-shrink-0">
+				<SearchIcon size="48" strokeWidth="1" />
+			</div>
 			<div class="flex flex-row items-center">
 				<input
 					bind:value={query}
