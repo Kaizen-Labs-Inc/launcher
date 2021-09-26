@@ -5,7 +5,9 @@
 	import Popover from 'svelte-popover';
 	import Tags from 'svelte-tags-input';
 	let popOverIsFocused: boolean = false;
-
+	let query = '';
+	let selectedApp;
+	let stepOneComplete: boolean = false;
 	onMount(() => {
 		document.addEventListener(
 			'keydown',
@@ -42,52 +44,62 @@
 	<div
 		transition:scale={{ duration: 200, opacity: 0, start: 0.9 }}
 		slot="content"
-		style="width: 400px;"
-		class="bg-white backdrop-blur-lg bg-opacity-50 p-6 shadow-lg text-black rounded-lg mr-2"
+		style="width: 340px;"
+		class="bg-white p-6 shadow-xl text-black rounded-xl mr-2"
 	>
-		<h2 class="text-xl font-medium ">Add something</h2>
 		<form>
-			<div class="my-4 flex flex-col">
-				<label for="url" class="font-medium text-gray-500">URL of the app or site</label>
-				<input
-					name="url"
-					autofocus
-					type="url"
-					id="url"
-					placeholder="Paste or type a URL"
-					class="bg-gray-200 rounded p-2"
-				/>
-			</div>
-			<div class="my-4 flex flex-col">
-				<label for="title" class="font-medium text-gray-500">Name it</label>
-				<input name="title" type="text" placeholder="Type a name" class="bg-gray-200 rounded p-2" />
-			</div>
-			<div class="my-4 flex flex-col">
-				<label for="description" class="font-medium text-gray-500">Describe it</label>
-				<textarea
-					name="description"
-					type="text"
-					placeholder="Add an optional description"
-					class="bg-gray-200 rounded p-2"
-				/>
-			</div>
-			<div class="my-4 flex flex-col">
-				<label for="tags" class="font-medium text-gray-500">Tag it</label>
-				<div class="tagsContainer">
-					<Tags onlyUnique />
+			{#if !stepOneComplete}
+				<div class="mb-4 flex flex-col">
+					<input
+						bind:value={query}
+						name="url"
+						autofocus
+						type="url"
+						id="url"
+						placeholder="Search for an app or paste a URL"
+						class="bg-gray-200 rounded p-2"
+					/>
 				</div>
-				<!-- <input
-					name="tags"
-					type="text"
-					placeholder="Add tags to help you and others find it"
-					class="bg-gray-200 rounded p-2"
-				/> -->
-			</div>
-			<div
-				class="flex cursor-pointer justify-center items-center rounded bg-black text-white font-medium py-2 text-lg"
-			>
-				Add
-			</div>
+				<div
+					on:click={() => {
+						stepOneComplete = true;
+					}}
+					class="flex cursor-pointer justify-center items-center rounded bg-black text-white font-medium py-2 text-lg"
+				>
+					Continue
+				</div>
+			{:else}
+				<div class="my-4 flex flex-col">
+					<label for="title" class="font-medium text-gray-500">Name it</label>
+					<input
+						name="title"
+						type="text"
+						placeholder="Type a name"
+						class="bg-gray-200 rounded p-2"
+					/>
+				</div>
+				<div class="my-4 flex flex-col">
+					<label for="description" class="font-medium text-gray-500">Describe it</label>
+					<textarea
+						name="description"
+						type="text"
+						placeholder="Add an optional description"
+						class="bg-gray-200 rounded p-2"
+					/>
+				</div>
+				<div class="my-4 flex flex-col">
+					<label for="tags" class="font-medium text-gray-500">Tag it</label>
+					<div class="tagsContainer">
+						<Tags onlyUnique />
+					</div>
+					<input
+						name="tags"
+						type="text"
+						placeholder="Add tags to help you and others find it"
+						class="bg-gray-200 rounded p-2"
+					/>
+				</div>
+			{/if}
 		</form>
 	</div>
 </Popover>

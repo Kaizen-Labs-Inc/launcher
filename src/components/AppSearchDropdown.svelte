@@ -50,7 +50,7 @@
 					</div>
 				</div>
 				{#if channel.description}
-					<div class={selectedChannelIndex === i ? 'opacity-50' : 'opacity-25'}>
+					<div class={selectedChannelIndex === i ? 'opacity-60' : 'opacity-30'}>
 						{channel.description}
 					</div>
 				{:else}
