@@ -69,13 +69,15 @@
 				{:else}
 					<div />
 				{/if}
-				<div
-					on:click|preventDefault={() => {
-						console.log('edit clicked');
-					}}
-					class="w-12 h-12 hover:bg-white hover:bg-opacity-10 rounded-md flex justify-center items-center"
-				>
-					<Edit2Icon size="20" strokeWidth="1" />
+				<div class="w-full flex justify-end">
+					<div
+						on:click|preventDefault={() => {
+							console.log('edit clicked');
+						}}
+						class="w-12 h-12 hover:bg-white hover:bg-opacity-10 rounded-md flex justify-center items-center"
+					>
+						<Edit2Icon size="20" strokeWidth="1" />
+					</div>
 				</div>
 			</div>
 		{/each}
