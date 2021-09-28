@@ -9,7 +9,6 @@
 	let query = '';
 	let selectedApp;
 	let stepOneComplete: boolean = false;
-	const picker = new Picker();
 	onMount(() => {
 		document.addEventListener(
 			'keydown',
@@ -43,7 +42,6 @@
 		><PlusCircleIcon size="48" strokeWidth="1" /></button
 	>
 	<!-- TODO add icon/image upload -->
-
 	<div
 		transition:scale={{ duration: 200, opacity: 0, start: 0.9 }}
 		slot="content"
@@ -72,18 +70,22 @@
 					Continue
 				</div>
 			{:else}
-				<div class="cursor-pointer rounded-lg w-12 h-12 bg-gray-300">
-					<!-- Add icon or emoji here -->
-				</div>
-				<div class="mb-4 flex flex-col">
-					<label for="title" class="font-medium text-gray-500">Name it</label>
-					<input
-						autofocus
-						name="title"
-						type="text"
-						placeholder="Type a name"
-						class="bg-gray-200 rounded p-2"
-					/>
+				<div class="flex flex-row items-end justify-between mb-4 ">
+					<div class=" flex flex-col">
+						<label for="title" class="font-medium text-gray-500">Name it</label>
+						<input
+							autofocus
+							name="title"
+							type="text"
+							placeholder="Type a name"
+							class="bg-gray-200 rounded p-2"
+						/>
+					</div>
+					<div
+						class="cursor-pointer rounded-lg w-12 h-12 bg-gray-300 ml-4 transition duration-200 ease-in-out hover:scale-105"
+					>
+						<!-- Add icon or emoji here -->
+					</div>
 				</div>
 				<div class="my-4 flex flex-col">
 					<label for="description" class="font-medium text-gray-500">Describe it</label>
