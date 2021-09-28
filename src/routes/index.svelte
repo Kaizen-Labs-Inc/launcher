@@ -94,16 +94,16 @@
 			<li class="cursor-pointer mr-6 hover:text-white">Jordan</li>
 		</ul>
 	</nav>
-	<section class="w-full mt-16 flex justify-between">
+	<section class="mt-16 flex justify-between items-center w-full">
 		<div
-			class="flex flex-row p-4 rounded-t-lg  {searchIsFocused
-				? 'bg-white bg-opacity-10 w-full'
+			class="flex flex-row p-4 rounded-t-lg w-full  {searchIsFocused
+				? 'bg-white bg-opacity-10'
 				: ''}"
 		>
 			<div class="flex-shrink-0">
 				<SearchIcon size="48" strokeWidth="1" />
 			</div>
-			<div class="flex flex-row items-center">
+			<div class="flex flex-row items-center justify-between w-full">
 				<input
 					bind:value={query}
 					on:focus={() => {
@@ -125,12 +125,10 @@
 						class="absolute ml-48 border-2 border-white border-opacity-50 w-10 h-10 opacity-50 flex items-center justify-center rounded-md"
 						>⌘K</span
 					>
+					<AddFormPopover />
 				{/if}
 			</div>
 		</div>
-		{#if !searchIsFocused}
-			<AddFormPopover />
-		{/if}
 	</section>
 	{#if !searchIsFocused}
 		<section class="grid lg:grid-cols-6 md:grid-cols-4 grid-cols-2 gap-8 md:gap-12 lg:gap-16 mt-16">

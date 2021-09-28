@@ -2,12 +2,14 @@
 	import { onMount } from 'svelte';
 	import { scale } from 'svelte/transition';
 	import { PlusCircleIcon } from 'svelte-feather-icons';
+	import { Picker } from 'emoji-picker-element';
 	import Popover from 'svelte-popover';
 	import Tags from 'svelte-tags-input';
 	let popOverIsFocused: boolean = false;
 	let query = '';
 	let selectedApp;
 	let stepOneComplete: boolean = false;
+	const picker = new Picker();
 	onMount(() => {
 		document.addEventListener(
 			'keydown',
@@ -30,6 +32,7 @@
 	}}
 	on:close={() => {
 		popOverIsFocused = false;
+		stepOneComplete = false;
 	}}
 >
 	<button
@@ -69,9 +72,13 @@
 					Continue
 				</div>
 			{:else}
-				<div class="my-4 flex flex-col">
+				<div class="cursor-pointer rounded-lg w-12 h-12 bg-gray-300">
+					<!-- Add icon or emoji here -->
+				</div>
+				<div class="mb-4 flex flex-col">
 					<label for="title" class="font-medium text-gray-500">Name it</label>
 					<input
+						autofocus
 						name="title"
 						type="text"
 						placeholder="Type a name"
@@ -90,14 +97,16 @@
 				<div class="my-4 flex flex-col">
 					<label for="tags" class="font-medium text-gray-500">Tag it</label>
 					<div class="tagsContainer">
-						<Tags onlyUnique />
+						<Tags onlyUnique placeholder="Add tags" />
 					</div>
-					<input
-						name="tags"
-						type="text"
-						placeholder="Add tags to help you and others find it"
-						class="bg-gray-200 rounded p-2"
-					/>
+				</div>
+				<div
+					on:click={() => {
+						stepOneComplete = true;
+					}}
+					class="flex cursor-pointer justify-center items-center rounded bg-black text-white font-medium py-2 text-lg"
+				>
+					Add it
 				</div>
 			{/if}
 		</form>
