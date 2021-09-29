@@ -168,7 +168,14 @@
 								src={channel.iconImageUrl}
 							/>
 						{:else}
-							<div class="text-black font-light">{channel.title.charAt(0)}</div>
+							<div
+								class="text-black font-light transition w-16 h-16 duration-300 ease-in-out {selectedChannelIndex ===
+								i
+									? ' rotate-3 scale-110'
+									: ''}"
+							>
+								{channel.title.charAt(0)}
+							</div>
 						{/if}
 					</div>
 					<div class="text-2xl">{channel.title}</div>
