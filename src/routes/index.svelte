@@ -123,7 +123,7 @@
 					autocomplete="false"
 					id="searchInput"
 					placeholder="Search"
-					class="ml-4 text-5xl border-0 outline-none bg-transparent text-white font-light"
+					class="ml-4 text-5xl w-2/3 border-0 outline-none bg-transparent text-white font-light"
 				/>
 				{#if !searchIsFocused}
 					<span
@@ -131,6 +131,7 @@
 						>⌘K</span
 					>
 					<AddFormPopover
+						channels={mockChannels}
 						on:channelAdded={(e) => {
 							handleChannelAdded(e.detail.channel);
 						}}

@@ -7,8 +7,15 @@
 	import Tags from 'svelte-tags-input';
 	import type Channel from 'src/models/Channel';
 	import { v4 as uuidv4 } from 'uuid';
-	const dispatch = createEventDispatcher();
 
+	export let channels = [];
+
+	const dispatch = createEventDispatcher();
+	let query = '';
+	$: filteredChannels = channels.filter(
+		// TODO also filter by description, tags, and URL
+		(channel) => channel.title.toLowerCase().indexOf(query.toLowerCase()) !== -1
+	);
 	let newChannel: Channel = {
 		title: '',
 		description: '',
@@ -18,6 +25,10 @@
 	};
 	let popOverIsFocused: boolean = false;
 	let stepOneComplete: boolean = false;
+
+	const isEmptyOrSpaces = (str) => {
+		return str === null || str.match(/^ *$/) !== null;
+	};
 	onMount(() => {
 		document.addEventListener(
 			'keydown',
@@ -75,6 +86,7 @@
 			{#if !stepOneComplete}
 				<div class="mb-4 flex flex-col">
 					<input
+						bind:value={query}
 						name="url"
 						autofocus
 						type="url"
@@ -83,14 +95,28 @@
 						class="bg-gray-200 rounded p-2"
 					/>
 				</div>
-				<div
-					on:click={() => {
-						stepOneComplete = true;
-					}}
-					class="flex cursor-pointer justify-center items-center rounded bg-black text-white font-medium py-2 text-lg"
-				>
-					Continue
-				</div>
+				{#if !isEmptyOrSpaces(query)}
+					<ul>
+						{#each filteredChannels as channel}
+							<li class="my-1 hover:bg-gray-100 rounded cursor-pointer py-2 flex items-center">
+								<div class="w-10 h-10 rounded-md  flex items-center justify-center mr-2">
+									<img src={channel.iconImageUrl} class="w-6 h-6" alt={channel.title} />
+								</div>
+								<div>{channel.title}</div>
+							</li>
+						{/each}
+					</ul>
+				{:else}
+					<!-- TODO handle URL detection in input, then show this -->
+					<!-- <div
+						on:click={() => {
+							stepOneComplete = true;
+						}}
+						class="flex cursor-pointer justify-center items-center rounded bg-black text-white font-medium py-2 mt-3 text-lg"
+					>
+						Continue
+					</div> -->
+				{/if}
 			{:else}
 				<div class="flex flex-row items-end justify-between mb-4 ">
 					<div class=" flex flex-col">
