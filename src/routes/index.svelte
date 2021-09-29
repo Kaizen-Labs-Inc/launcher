@@ -11,8 +11,8 @@
 	let query = '';
 	let searchIsFocused: boolean = false;
 	let selectedChannelIndex;
-
-	$: filteredChannels = mockChannels.filter(
+	let channels = mockChannels;
+	$: filteredChannels = channels.filter(
 		// TODO also filter by description, tags, and URL
 		(channel) => channel.title.toLowerCase().indexOf(query.toLowerCase()) !== -1
 	);
@@ -36,7 +36,10 @@
 	const handleInput = () => {
 		selectedChannelIndex = 0;
 	};
-
+	const handleChannelAdded = (channel) => {
+		channels.unshift(channel);
+		channels = channels;
+	};
 	onMount(() => {
 		document.addEventListener(
 			'keydown',
@@ -126,7 +129,11 @@
 						class="absolute ml-48 border-2 border-white border-opacity-50 w-10 h-10 opacity-50 flex items-center justify-center rounded-md"
 						>⌘K</span
 					>
-					<AddFormPopover />
+					<AddFormPopover
+						on:channelAdded={(e) => {
+							handleChannelAdded(e.detail.channel);
+						}}
+					/>
 				{/if}
 			</div>
 		</div>
@@ -136,7 +143,7 @@
 			<!-- TODO allow user to rearrange the channels -->
 			<!-- TODO create icons for top ~100 saas apps -->
 			<!-- Make beautiful, 3 dimensional, follow cursor -->
-			{#each mockChannels as channel, i}
+			{#each channels as channel, i}
 				<div
 					on:focus
 					on:blur

@@ -1,5 +1,5 @@
 export default interface Channel {
-	id: string;
+	id?: string;
 	title: string;
 	url: string;
 	description?: string;

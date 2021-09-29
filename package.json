@@ -40,6 +40,7 @@
 		"cookie": "^0.4.1",
 		"emoji-picker-element": "^1.8.2",
 		"stripe": "^8.177.0",
-		"svelte-tags-input": "^2.8.0"
+		"svelte-tags-input": "^2.8.0",
+		"uuid": "^8.3.2"
 	}
 }

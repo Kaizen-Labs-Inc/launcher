@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { Edit2Icon } from 'svelte-feather-icons';
 	import { createEventDispatcher } from 'svelte';
+	import { Edit2Icon } from 'svelte-feather-icons';
 	export let selectedChannelIndex;
 	export let filteredChannels;
 	const dispatch = createEventDispatcher();

@@ -1,10 +1,14 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+	import { onMount, createEventDispatcher } from 'svelte';
+
 	import { scale } from 'svelte/transition';
 	import { PlusCircleIcon } from 'svelte-feather-icons';
 	import Popover from 'svelte-popover';
 	import Tags from 'svelte-tags-input';
 	import type Channel from 'src/models/Channel';
+	import { v4 as uuidv4 } from 'uuid';
+	const dispatch = createEventDispatcher();
+
 	let newChannel: Channel = {
 		title: '',
 		description: '',
@@ -31,7 +35,16 @@
 	};
 	const handleTags = (event: any) => {
 		newChannel.tags = event.detail.tags;
-		console.log(newChannel);
+	};
+	const handleAdd = (channel: Channel) => {
+		// Generate a new UUID
+		channel.id = uuidv4();
+		// Pass this channel back to the parent as an event
+		dispatch('channelAdded', {
+			channel: channel
+		});
+		// Close the popover
+		handleClose();
 	};
 </script>
 
@@ -121,8 +134,7 @@
 				</div>
 				<div
 					on:click={() => {
-						// TODO wire this up
-						handleClose();
+						handleAdd(newChannel);
 					}}
 					class="flex mt-2 cursor-pointer justify-center items-center rounded bg-black text-white font-medium py-2 text-lg"
 				>
