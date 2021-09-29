@@ -9,13 +9,16 @@
 	import { v4 as uuidv4 } from 'uuid';
 
 	export let channels = [];
-
+	let selectedChannelIndex = 0;
 	const dispatch = createEventDispatcher();
 	let query = '';
-	$: filteredChannels = channels.filter(
-		// TODO also filter by description, tags, and URL
-		(channel) => channel.title.toLowerCase().indexOf(query.toLowerCase()) !== -1
-	);
+	$: filteredChannels = channels
+		.filter(
+			// TODO also filter by description, tags, and URL
+			(channel) => channel.title.toLowerCase().indexOf(query.toLowerCase()) !== -1
+		)
+		// HACK dedupe - should do this by ID or just pull directly from airtable cache
+		.filter((c, i, a) => a.findIndex((t) => t.title === c.title) === i);
 	let newChannel: Channel = {
 		title: '',
 		description: '',
@@ -30,11 +33,33 @@
 		return str === null || str.match(/^ *$/) !== null;
 	};
 	onMount(() => {
+		// let selectedHtmlEl = document.getElementsByClassName('selected')[0];
+
 		document.addEventListener(
 			'keydown',
 			(event) => {
 				if (popOverIsFocused && event.key === 'Escape') {
 					popOverIsFocused = false;
+				}
+				if (
+					popOverIsFocused &&
+					event.key === 'ArrowDown' &&
+					selectedChannelIndex <= filteredChannels.length - 2
+				) {
+					// selectedHtmlEl.scrollIntoView({
+					// 	behavior: 'smooth'
+					// });
+					selectedChannelIndex = selectedChannelIndex + 1;
+				}
+				if (popOverIsFocused && event.key === 'ArrowUp' && selectedChannelIndex > 0) {
+					// selectedHtmlEl.scrollIntoView({
+					// 	behavior: 'smooth'
+					// });
+					selectedChannelIndex = selectedChannelIndex - 1;
+				}
+
+				if (popOverIsFocused && event.key === 'Enter') {
+					handleAdd(filteredChannels[selectedChannelIndex]);
 				}
 			},
 			false
@@ -98,12 +123,19 @@
 				</div>
 				{#if !isEmptyOrSpaces(query)}
 					<ul class="mt-4">
-						{#each filteredChannels as channel}
+						{#each filteredChannels as channel, i}
 							<li
+								on:focus
+								on:mouseover={() => {
+									selectedChannelIndex = i;
+								}}
 								on:click={() => {
 									handleAdd(channel);
 								}}
-								class="my-1 hover:bg-white hover:bg-opacity-10 rounded-lg cursor-pointer p-2 flex items-center"
+								class="my-1 hover:bg-white hover:bg-opacity-10 rounded-lg cursor-pointer p-2 flex items-center {selectedChannelIndex ===
+								i
+									? 'bg-opacity-10 bg-white selected'
+									: ''}"
 							>
 								<div class="w-10 h-10 bg-white rounded-md flex items-center justify-center mr-4">
 									<img src={channel.iconImageUrl} class="w-6 h-6" alt={channel.title} />

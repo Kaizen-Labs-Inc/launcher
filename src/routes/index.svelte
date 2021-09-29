@@ -47,7 +47,6 @@
 			(event) => {
 				let searchInput = document.getElementById('searchInput');
 				// Used for keeping the selected element in the dropdown in view
-				let dropdownContainer = document.getElementById('appDropdown');
 				let selectedHtmlEl = document.getElementsByClassName('selected')[0];
 
 				if (
