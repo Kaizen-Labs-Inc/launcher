@@ -8,6 +8,7 @@
 	import AppSearchDropdown from '../components/AppSearchDropdown.svelte';
 	import Channel, { mockChannels } from '../models/Channel';
 	import { SearchIcon } from 'svelte-feather-icons';
+
 	let query = '';
 	let searchIsFocused: boolean = false;
 	let selectedChannelIndex;
