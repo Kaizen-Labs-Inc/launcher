@@ -82,7 +82,7 @@
 						/>
 					</div>
 					<div
-						class="cursor-pointer rounded-lg w-12 h-12 bg-gray-300 ml-4 transition duration-200 ease-in-out hover:scale-105"
+						class="cursor-pointer rounded-lg w-14 h-14 bg-gray-300 transition duration-200 ease-in-out hover:scale-105"
 					>
 						<!-- Add icon or emoji here -->
 					</div>
@@ -106,7 +106,7 @@
 					on:click={() => {
 						stepOneComplete = true;
 					}}
-					class="flex cursor-pointer justify-center items-center rounded bg-black text-white font-medium py-2 text-lg"
+					class="flex mt-2 cursor-pointer justify-center items-center rounded bg-black text-white font-medium py-2 text-lg"
 				>
 					Add it
 				</div>

@@ -87,7 +87,7 @@
 <svelte:head>
 	<title>Springboard</title>
 </svelte:head>
-<div class="container mx-auto">
+<div class="container mx-auto pb-12">
 	<nav class="mt-4">
 		<ul class="flex flex-row justify-end text-gray-500">
 			<li class="cursor-pointer mr-6 hover:text-white">Kaizen Labs</li>
@@ -175,8 +175,8 @@
 		<AppSearchDropdown
 			bind:selectedChannelIndex
 			bind:filteredChannels
-			on:select={() => {
-				handleProceed(channel);
+			on:appSelected={(event) => {
+				handleProceed(event.detail.channel);
 			}}
 		/>
 	{/if}

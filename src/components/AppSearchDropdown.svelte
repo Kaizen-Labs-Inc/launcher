@@ -1,9 +1,15 @@
 <script lang="ts">
 	import { Edit2Icon } from 'svelte-feather-icons';
+	import { createEventDispatcher } from 'svelte';
 	export let selectedChannelIndex;
 	export let filteredChannels;
-	// change this to a message
-	// export const onSelect = (channel) => void;
+	const dispatch = createEventDispatcher();
+
+	const onSelect = (channel) => {
+		dispatch('appSelected', {
+			channel: channel
+		});
+	};
 </script>
 
 <section
@@ -22,8 +28,7 @@
 	{:else}
 		{#each filteredChannels.sort((a, b) => a.title.localeCompare(b.title)) as channel, i}
 			<div
-				on:click|preventDefault={() => {
-					// TODO this click is getting intercepted somehow
+				on:mousedown|preventDefault={() => {
 					onSelect(channel);
 				}}
 				on:mouseover={() => {
