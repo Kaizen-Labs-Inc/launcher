@@ -16,6 +16,10 @@
 			channel: channel
 		});
 	};
+
+	const onAdd = () => {
+		dispatch('addClicked');
+	};
 </script>
 
 <section
@@ -27,7 +31,10 @@
 	{#if filteredChannels.length === 0}
 		<div class="mt-16 mb-16 flex flex-col justify-center items-center">
 			<p class="text-2xl ">🤷‍♂️ Nothing found.</p>
-			<div class="bg-white bg-opacity-20 cursor-pointer text-lg font-medium mt-8 p-3 rounded">
+			<div
+				on:mousedown={onAdd}
+				class="bg-white bg-opacity-20 cursor-pointer text-lg font-medium mt-8 p-3 rounded"
+			>
 				Add something
 			</div>
 		</div>

@@ -26,7 +26,7 @@
 		icon: '',
 		tags: []
 	};
-	let popOverIsFocused: boolean = false;
+	export let popOverIsFocused: boolean = false;
 	let stepOneComplete: boolean = false;
 
 	const isEmptyOrSpaces = (str) => {

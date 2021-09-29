@@ -11,6 +11,7 @@
 
 	let query = '';
 	let searchIsFocused: boolean = false;
+	let addFormIsFocused: boolean = false;
 	let selectedChannelIndex;
 	let channels = mockChannels;
 	$: filteredChannels = channels.filter(
@@ -40,6 +41,12 @@
 	const handleChannelAdded = (channel) => {
 		channels.unshift(channel);
 		channels = channels;
+	};
+	const toggleAddForm = () => {
+		// This prevents the popover from appearing in a strange place
+		setTimeout(function () {
+			addFormIsFocused = !addFormIsFocused;
+		}, 200);
 	};
 	onMount(() => {
 		document.addEventListener(
@@ -131,6 +138,7 @@
 					>
 					<AddFormPopover
 						channels={mockChannels}
+						bind:popOverIsFocused={addFormIsFocused}
 						on:channelAdded={(e) => {
 							handleChannelAdded(e.detail.channel);
 						}}
@@ -194,6 +202,7 @@
 			on:editClicked={(event) => {
 				console.log('edit clicked', event.detail.channel);
 			}}
+			on:addClicked={toggleAddForm}
 		/>
 	{/if}
 </div>
