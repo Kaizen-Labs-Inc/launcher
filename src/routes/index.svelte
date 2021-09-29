@@ -89,14 +89,15 @@
 </svelte:head>
 <div class="container mx-auto pb-12">
 	<nav class="mt-4">
-		<ul class="flex flex-row justify-end text-gray-500">
+		<ul class="flex flex-row justify-end text-gray-400">
+			<li class="cursor-pointer mr-6 hover:text-white">Invite someone</li>
 			<li class="cursor-pointer mr-6 hover:text-white">Kaizen Labs</li>
-			<li class="cursor-pointer mr-6 hover:text-white">Jordan</li>
+			<li class="cursor-pointer mr-6 hover:text-white">Sign out</li>
 		</ul>
 	</nav>
 	<section class="mt-16 flex justify-between items-center w-full">
 		<div
-			class="flex flex-row p-4 rounded-t-lg w-full  {searchIsFocused
+			class="flex flex-row p-4 rounded-t-lg w-full {searchIsFocused
 				? 'bg-white bg-opacity-10'
 				: ''}"
 		>
@@ -151,17 +152,10 @@
 					class="cursor-pointer flex items-center justify-between flex-col text-center transition duration-200 ease-in-out hover:-translate-y-1 hover:scale-110"
 				>
 					<div class="text-6xl mb-4 icon flex items-center justify-center">
-						<!-- <span
-							class="transition duration-300 ease-in-out {selectedChannelIndex === i
-								? 'rotate-6 scale-110'
-								: ''}"
-						>
-							{channel.icon}
-						</span> -->
 						<img
 							alt={channel.title}
 							class="transition w-16 h-16 duration-300 ease-in-out {selectedChannelIndex === i
-								? 'rotate-6 scale-110'
+								? ' rotate-3 scale-110'
 								: ''}"
 							src={channel.iconImageUrl}
 						/>
@@ -178,6 +172,9 @@
 			on:appSelected={(event) => {
 				handleProceed(event.detail.channel);
 			}}
+			on:editClicked={(event) => {
+				console.log('edit clicked', event.detail.channel);
+			}}
 		/>
 	{/if}
 </div>
@@ -186,7 +183,7 @@
 	.icon {
 		width: 120px;
 		height: 120px;
-		background: linear-gradient(25.13deg, #dbdbdb 15.69%, #fcfcfc 93.91%);
+		background: linear-gradient(25.13deg, #dbdbdb 15.69%, #ffffff 93.91%);
 		border-radius: 40px;
 	}
 </style>
