@@ -2,12 +2,17 @@
 	import { onMount } from 'svelte';
 	import { scale } from 'svelte/transition';
 	import { PlusCircleIcon } from 'svelte-feather-icons';
-	import { Picker } from 'emoji-picker-element';
 	import Popover from 'svelte-popover';
 	import Tags from 'svelte-tags-input';
+	import type Channel from 'src/models/Channel';
+	let newChannel: Channel = {
+		title: '',
+		description: '',
+		url: '',
+		icon: '',
+		tags: []
+	};
 	let popOverIsFocused: boolean = false;
-	let query = '';
-	let selectedApp;
 	let stepOneComplete: boolean = false;
 	onMount(() => {
 		document.addEventListener(
@@ -20,6 +25,14 @@
 			false
 		);
 	});
+	const handleClose = () => {
+		popOverIsFocused = false;
+		stepOneComplete = false;
+	};
+	const handleTags = (event: any) => {
+		newChannel.tags = event.detail.tags;
+		console.log(newChannel);
+	};
 </script>
 
 <Popover
@@ -29,10 +42,7 @@
 	on:open={() => {
 		popOverIsFocused = true;
 	}}
-	on:close={() => {
-		popOverIsFocused = false;
-		stepOneComplete = false;
-	}}
+	on:close={handleClose}
 >
 	<button
 		slot="target"
@@ -52,7 +62,6 @@
 			{#if !stepOneComplete}
 				<div class="mb-4 flex flex-col">
 					<input
-						bind:value={query}
 						name="url"
 						autofocus
 						type="url"
@@ -75,6 +84,7 @@
 						<label for="title" class="font-medium text-gray-500">Name it</label>
 						<input
 							autofocus
+							bind:value={newChannel.title}
 							name="title"
 							type="text"
 							placeholder="Type a name"
@@ -90,6 +100,7 @@
 				<div class="my-4 flex flex-col">
 					<label for="description" class="font-medium text-gray-500">Describe it</label>
 					<textarea
+						bind:value={newChannel.description}
 						name="description"
 						type="text"
 						placeholder="Add an optional description"
@@ -99,12 +110,19 @@
 				<div class="my-4 flex flex-col">
 					<label for="tags" class="font-medium text-gray-500">Tag it</label>
 					<div class="tagsContainer">
-						<Tags onlyUnique placeholder="Add tags" />
+						<Tags
+							on:tags={(e) => {
+								handleTags(e);
+							}}
+							onlyUnique
+							placeholder="Add tags"
+						/>
 					</div>
 				</div>
 				<div
 					on:click={() => {
-						stepOneComplete = true;
+						// TODO wire this up
+						handleClose();
 					}}
 					class="flex mt-2 cursor-pointer justify-center items-center rounded bg-black text-white font-medium py-2 text-lg"
 				>
