@@ -43,6 +43,7 @@
 	const handleClose = () => {
 		popOverIsFocused = false;
 		stepOneComplete = false;
+		query = '';
 	};
 	const handleTags = (event: any) => {
 		newChannel.tags = event.detail.tags;
@@ -80,11 +81,11 @@
 		transition:scale={{ duration: 200, opacity: 0, start: 0.9 }}
 		slot="content"
 		style="width: 340px;"
-		class="bg-white p-6 shadow-xl text-black rounded-xl mr-2"
+		class="bg-white backdrop-blur-lg bg-opacity-10 p-6 shadow-xl rounded-xl mr-2"
 	>
 		<form>
 			{#if !stepOneComplete}
-				<div class="mb-4 flex flex-col">
+				<div class="flex flex-col">
 					<input
 						bind:value={query}
 						name="url"
@@ -92,14 +93,19 @@
 						type="url"
 						id="url"
 						placeholder="Search for an app or paste a URL"
-						class="bg-gray-200 rounded p-2"
+						class="bg-white bg-opacity-10 rounded p-2"
 					/>
 				</div>
 				{#if !isEmptyOrSpaces(query)}
-					<ul>
+					<ul class="mt-4">
 						{#each filteredChannels as channel}
-							<li class="my-1 hover:bg-gray-100 rounded cursor-pointer py-2 flex items-center">
-								<div class="w-10 h-10 rounded-md  flex items-center justify-center mr-2">
+							<li
+								on:click={() => {
+									handleAdd(channel);
+								}}
+								class="my-1 hover:bg-white hover:bg-opacity-10 rounded-lg cursor-pointer p-2 flex items-center"
+							>
+								<div class="w-10 h-10 bg-white rounded-md flex items-center justify-center mr-4">
 									<img src={channel.iconImageUrl} class="w-6 h-6" alt={channel.title} />
 								</div>
 								<div>{channel.title}</div>
