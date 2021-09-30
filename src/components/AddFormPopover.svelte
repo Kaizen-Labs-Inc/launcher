@@ -184,36 +184,36 @@
 					</div>
 				{/if}
 			{:else}
-				<div class="flex flex-row items-end justify-between mb-4 ">
+				<div class="flex flex-row items-end justify-between mb-4 text-white ">
 					<div class=" flex flex-col">
-						<label for="title" class="font-medium text-gray-500">Name it</label>
+						<label for="title" class="font-medium ">Name it</label>
 						<input
 							autofocus
 							bind:value={newChannel.title}
 							name="title"
 							type="text"
 							placeholder="Type a name"
-							class="bg-gray-200 rounded p-2"
+							class="bg-white bg-opacity-10 rounded p-2"
 						/>
 					</div>
 					<div
-						class="cursor-pointer rounded-lg w-14 h-14 bg-gray-300 transition duration-200 ease-in-out hover:scale-105"
+						class="cursor-pointer rounded-lg w-14 h-14 bg-white flex items-center justify-center text-2xl bg-opacity-10 transition duration-200 ease-in-out hover:scale-105"
 					>
-						<!-- Add icon or emoji here -->
+						😀
 					</div>
 				</div>
 				<div class="my-4 flex flex-col">
-					<label for="description" class="font-medium text-gray-500">Describe it</label>
+					<label for="description" class="font-medium ">Describe it</label>
 					<textarea
 						bind:value={newChannel.description}
 						name="description"
 						type="text"
 						placeholder="Add an optional description"
-						class="bg-gray-200 rounded p-2"
+						class="bg-white bg-opacity-10  rounded p-2"
 					/>
 				</div>
 				<div class="my-4 flex flex-col">
-					<label for="tags" class="font-medium text-gray-500">Tag it</label>
+					<label for="tags" class="font-medium ">Tag it</label>
 					<div class="tagsContainer">
 						<Tags
 							on:tags={(e) => {
@@ -246,7 +246,7 @@
 	}
 	.tagsContainer :global(.svelte-tags-input-tag) {
 		border-radius: 3px;
-		background: rgba(0, 0, 0, 0.8);
+		background: rgba(255, 255, 255, 0.1);
 		font-size: 16px;
 		padding: 4px;
 	}
@@ -255,7 +255,7 @@
 		margin-left: 5px;
 	}
 	.tagsContainer :global(.svelte-tags-input-layout) {
-		background-color: #e5e7eb;
+		background-color: rgba(255, 255, 255, 0.1);
 		border: none;
 		outline: none;
 	}
