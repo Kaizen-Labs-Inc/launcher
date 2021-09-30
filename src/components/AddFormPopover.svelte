@@ -2,14 +2,14 @@
 	import { onMount, createEventDispatcher } from 'svelte';
 
 	import { scale } from 'svelte/transition';
-	import { PlusCircleIcon } from 'svelte-feather-icons';
+	import { PlusCircleIcon, PlusIcon } from 'svelte-feather-icons';
 	import Popover from 'svelte-popover';
 	import Tags from 'svelte-tags-input';
 	import type Channel from 'src/models/Channel';
 	import { v4 as uuidv4 } from 'uuid';
 
 	export let channels = [];
-	let selectedChannelIndex = 0;
+	let selectedChannelIndex: number = 0;
 	const dispatch = createEventDispatcher();
 	let query = '';
 	$: filteredChannels = channels
@@ -28,48 +28,51 @@
 	};
 	export let popOverIsFocused: boolean = false;
 	let stepOneComplete: boolean = false;
-
+	const resetPopover = () => {
+		popOverIsFocused = false;
+		selectedChannelIndex = null;
+		query = '';
+		stepOneComplete = false;
+	};
 	const isEmptyOrSpaces = (str) => {
 		return str === null || str.match(/^ *$/) !== null;
 	};
 	onMount(() => {
-		// let selectedHtmlEl = document.getElementsByClassName('selected')[0];
-
 		document.addEventListener(
 			'keydown',
 			(event) => {
 				if (popOverIsFocused && event.key === 'Escape') {
-					popOverIsFocused = false;
+					resetPopover();
 				}
 				if (
 					popOverIsFocused &&
 					event.key === 'ArrowDown' &&
-					selectedChannelIndex <= filteredChannels.length - 2
+					selectedChannelIndex <= filteredChannels.length
 				) {
-					// selectedHtmlEl.scrollIntoView({
-					// 	behavior: 'smooth'
-					// });
-					selectedChannelIndex = selectedChannelIndex + 1;
+					if (selectedChannelIndex <= filteredChannels.length - 2) {
+						selectedChannelIndex = selectedChannelIndex + 1;
+					} else {
+						selectedChannelIndex = filteredChannels.length + 1;
+					}
 				}
-				if (popOverIsFocused && event.key === 'ArrowUp' && selectedChannelIndex > 0) {
-					// selectedHtmlEl.scrollIntoView({
-					// 	behavior: 'smooth'
-					// });
+
+				if (popOverIsFocused && event.key === 'ArrowUp' && selectedChannelIndex >= 1) {
 					selectedChannelIndex = selectedChannelIndex - 1;
 				}
 
 				if (popOverIsFocused && event.key === 'Enter') {
-					handleAdd(filteredChannels[selectedChannelIndex]);
+					if (selectedChannelIndex < filteredChannels.length) {
+						resetPopover();
+						handleAdd(filteredChannels[selectedChannelIndex]);
+					} else {
+						handleContinue();
+					}
 				}
 			},
 			false
 		);
 	});
-	const handleClose = () => {
-		popOverIsFocused = false;
-		stepOneComplete = false;
-		query = '';
-	};
+
 	const handleTags = (event: any) => {
 		newChannel.tags = event.detail.tags;
 	};
@@ -80,8 +83,12 @@
 		dispatch('channelAdded', {
 			channel: channel
 		});
-		// Close the popover
-		handleClose();
+		resetPopover();
+	};
+	const handleContinue = () => {
+		stepOneComplete = true;
+		selectedChannelIndex = null;
+		addNewChannelSelected = false;
 	};
 </script>
 
@@ -92,7 +99,7 @@
 	on:open={() => {
 		popOverIsFocused = true;
 	}}
-	on:close={handleClose}
+	on:close={resetPopover}
 >
 	<button
 		slot="target"
@@ -117,8 +124,8 @@
 						autofocus
 						type="url"
 						id="url"
-						placeholder="Search for an app or paste a URL"
-						class="bg-white bg-opacity-10 rounded p-2"
+						placeholder="Search for an app"
+						class="bg-white bg-opacity-10 rounded p-2 outline-none"
 					/>
 				</div>
 				{#if !isEmptyOrSpaces(query)}
@@ -132,7 +139,7 @@
 								on:click={() => {
 									handleAdd(channel);
 								}}
-								class="my-1 hover:bg-white hover:bg-opacity-10 rounded-lg cursor-pointer p-2 flex items-center {selectedChannelIndex ===
+								class="my-1 rounded-lg cursor-pointer p-2 flex items-center {selectedChannelIndex ===
 								i
 									? 'bg-opacity-10 bg-white selected'
 									: ''}"
@@ -140,20 +147,35 @@
 								<div class="w-10 h-10 bg-white rounded-md flex items-center justify-center mr-4">
 									<img src={channel.iconImageUrl} class="w-6 h-6" alt={channel.title} />
 								</div>
-								<div>{channel.title}</div>
+								<div>
+									{channel.title} - {i} - {selectedChannelIndex} - {filteredChannels.length}
+								</div>
 							</li>
 						{/each}
 					</ul>
-				{:else}
-					<!-- TODO handle URL detection in input, then show this -->
-					<!-- <div
-						on:click={() => {
-							stepOneComplete = true;
+					{#if filteredChannels.length === 0}
+						<div class="w-full mx-auto text-center opacity-50 text-sm mb-4">
+							We couldn't find anything.
+						</div>
+					{/if}
+					<div
+						on:focus
+						on:blur
+						on:mouseover={() => {
+							selectedChannelIndex = filteredChannels.length;
 						}}
-						class="flex cursor-pointer justify-center items-center rounded bg-black text-white font-medium py-2 mt-3 text-lg"
+						on:click={handleContinue}
+						class="my-1 {selectedChannelIndex === filteredChannels.length
+							? 'bg-opacity-10 bg-white selected'
+							: ''} rounded-lg cursor-pointer p-2 flex items-center "
 					>
-						Continue
-					</div> -->
+						<div
+							class="w-10 h-10 bg-white rounded-md flex items-center justify-center mr-4 text-black"
+						>
+							<PlusIcon strokeWidth="2" size="20" />
+						</div>
+						<div>Add a new app</div>
+					</div>
 				{/if}
 			{:else}
 				<div class="flex flex-row items-end justify-between mb-4 ">
