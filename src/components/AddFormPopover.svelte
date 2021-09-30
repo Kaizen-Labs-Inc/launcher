@@ -19,6 +19,7 @@
 		)
 		// HACK dedupe - should do this by ID or just pull directly from airtable cache
 		.filter((c, i, a) => a.findIndex((t) => t.title === c.title) === i);
+
 	let newChannel: Channel = {
 		title: '',
 		description: '',
@@ -52,7 +53,7 @@
 					if (selectedChannelIndex <= filteredChannels.length - 2) {
 						selectedChannelIndex = selectedChannelIndex + 1;
 					} else {
-						selectedChannelIndex = filteredChannels.length + 1;
+						selectedChannelIndex = filteredChannels.length;
 					}
 				}
 
@@ -88,7 +89,6 @@
 	const handleContinue = () => {
 		stepOneComplete = true;
 		selectedChannelIndex = null;
-		addNewChannelSelected = false;
 	};
 </script>
 
@@ -113,7 +113,7 @@
 		transition:scale={{ duration: 200, opacity: 0, start: 0.9 }}
 		slot="content"
 		style="width: 340px;"
-		class="bg-white backdrop-blur-lg bg-opacity-10 p-6 shadow-xl rounded-xl mr-2"
+		class="bg-white backdrop-blur-lg bg-opacity-10 p-4 shadow-xl rounded-xl mr-2"
 	>
 		<form>
 			{#if !stepOneComplete}
@@ -126,6 +126,12 @@
 						id="url"
 						placeholder="Search for an app"
 						class="bg-white bg-opacity-10 rounded p-2 outline-none"
+						on:input={() => {
+							if (isEmptyOrSpaces(query)) {
+								console.log('hey');
+								selectedChannelIndex = 0;
+							}
+						}}
 					/>
 				</div>
 				{#if !isEmptyOrSpaces(query)}
@@ -148,7 +154,7 @@
 									<img src={channel.iconImageUrl} class="w-6 h-6" alt={channel.title} />
 								</div>
 								<div>
-									{channel.title} - {i} - {selectedChannelIndex} - {filteredChannels.length}
+									{channel.title}
 								</div>
 							</li>
 						{/each}
