@@ -7,7 +7,7 @@
 	import AddFormPopover from '../components/AddFormPopover.svelte';
 	import AppSearchDropdown from '../components/AppSearchDropdown.svelte';
 	import Channel, { mockChannels } from '../models/Channel';
-	import { SearchIcon } from 'svelte-feather-icons';
+	import { SearchIcon, GridIcon } from 'svelte-feather-icons';
 
 	let query = '';
 	let searchIsFocused: boolean = false;
@@ -117,15 +117,9 @@
 			<div class="flex flex-row items-center justify-between w-full">
 				<input
 					bind:value={query}
-					on:focus={() => {
-						handleFocus();
-					}}
-					on:blur={() => {
-						handleBlur();
-					}}
-					on:input={() => {
-						handleInput();
-					}}
+					on:focus={handleFocus}
+					on:blur={handleBlur}
+					on:input={handleInput}
 					autocomplete="false"
 					id="searchInput"
 					placeholder="Search"
@@ -135,6 +129,10 @@
 					<span
 						class="absolute ml-48 border-2 border-white border-opacity-50 w-10 h-10 opacity-50 flex items-center justify-center rounded-md"
 						>⌘K</span
+					>
+					<button
+						class="cursor-pointer transition duration-200 ease-in-out hover:scale-110 hover:opacity-100 opacity-75"
+						><GridIcon size="48" strokeWidth="1" /></button
 					>
 					<AddFormPopover
 						channels={mockChannels}
