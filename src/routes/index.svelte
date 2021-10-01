@@ -176,6 +176,14 @@
 									: ''}"
 								src={channel.iconImageUrl}
 							/>
+						{:else if channel.emoji}
+							<div
+								class=" transition w-16 h-16 duration-300 ease-in-out {selectedChannelIndex === i
+									? ' rotate-3 scale-110'
+									: ''}"
+							>
+								{channel.emoji}
+							</div>
 						{:else}
 							<div
 								class="text-black font-light transition w-16 h-16 duration-300 ease-in-out {selectedChannelIndex ===

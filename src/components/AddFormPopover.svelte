@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount, createEventDispatcher } from 'svelte';
-
 	import { scale } from 'svelte/transition';
+	import { EmojiButton } from '@joeattardi/emoji-button';
 	import { PlusCircleIcon, PlusIcon } from 'svelte-feather-icons';
 	import Popover from 'svelte-popover';
 	import Tags from 'svelte-tags-input';
@@ -11,7 +11,10 @@
 	export let channels = [];
 	let selectedChannelIndex: number = 0;
 	const dispatch = createEventDispatcher();
+	let picker;
 	let query = '';
+	let emoji = '😀';
+
 	$: filteredChannels = channels
 		.filter(
 			// TODO also filter by description, tags, and URL
@@ -35,10 +38,18 @@
 		query = '';
 		stepOneComplete = false;
 	};
+
 	const isEmptyOrSpaces = (str) => {
 		return str === null || str.match(/^ *$/) !== null;
 	};
 	onMount(() => {
+		picker = new EmojiButton({
+			zIndex: 10000,
+			rootElement: document.getElementById('addModal')
+		});
+		picker.on('emoji', (selection) => {
+			emoji = selection.emoji;
+		});
 		document.addEventListener(
 			'keydown',
 			(event) => {
@@ -80,6 +91,7 @@
 	const handleAdd = (channel: Channel) => {
 		// Generate a new UUID
 		channel.id = uuidv4();
+		channel.emoji = emoji;
 		// Pass this channel back to the parent as an event
 		dispatch('channelAdded', {
 			channel: channel
@@ -112,6 +124,7 @@
 	<div
 		transition:scale={{ duration: 200, opacity: 0, start: 0.9 }}
 		slot="content"
+		id="addModal"
 		style="width: 340px;"
 		class="bg-white backdrop-blur-lg bg-opacity-10 p-4 shadow-xl rounded-xl mr-2"
 	>
@@ -197,9 +210,13 @@
 						/>
 					</div>
 					<div
+						id="emoji-trigger"
+						on:click={() => {
+							picker.togglePicker(document.querySelector('#emoji-trigger'));
+						}}
 						class="cursor-pointer rounded-lg w-14 h-14 bg-white flex items-center justify-center text-2xl bg-opacity-10 transition duration-200 ease-in-out hover:scale-105"
 					>
-						😀
+						{emoji}
 					</div>
 				</div>
 				<div class="my-4 flex flex-col">
