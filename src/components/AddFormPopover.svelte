@@ -2,7 +2,7 @@
 	import { onMount, createEventDispatcher } from 'svelte';
 	import { scale } from 'svelte/transition';
 	import { EmojiButton } from '@joeattardi/emoji-button';
-	import { PlusCircleIcon, PlusIcon } from 'svelte-feather-icons';
+	import { PlusCircleIcon, PlusIcon, SmileIcon } from 'svelte-feather-icons';
 	import Popover from 'svelte-popover';
 	import Tags from 'svelte-tags-input';
 	import type Channel from 'src/models/Channel';
@@ -13,7 +13,7 @@
 	const dispatch = createEventDispatcher();
 	let picker;
 	let query = '';
-	let emoji = '😀';
+	let emoji;
 
 	$: filteredChannels = channels
 		.filter(
@@ -163,8 +163,16 @@
 									? 'bg-opacity-10 bg-white selected'
 									: ''}"
 							>
-								<div class="w-10 h-10 bg-white rounded-md flex items-center justify-center mr-4">
-									<img src={channel.iconImageUrl} class="w-6 h-6" alt={channel.title} />
+								<div
+									class="w-10 h-10 bg-white text-lg text-black rounded-md flex items-center justify-center mr-4"
+								>
+									{#if channel.iconImageUrl}
+										<img src={channel.iconImageUrl} class="w-6 h-6" alt={channel.title} />
+									{:else if channel.emoji}
+										{channel.emoji}
+									{:else}
+										{channel.title.charAt(0)}
+									{/if}
 								</div>
 								<div>
 									{channel.title}
@@ -216,8 +224,22 @@
 						}}
 						class="cursor-pointer rounded-lg w-14 h-14 bg-white flex items-center justify-center text-2xl bg-opacity-10 transition duration-200 ease-in-out hover:scale-105"
 					>
-						{emoji}
+						{#if emoji}
+							{emoji}
+						{:else}
+							<SmileIcon size="26" strokeWidth="2" />
+						{/if}
 					</div>
+				</div>
+				<div class="my-4 flex flex-col">
+					<label for="url" class="font-medium ">Paste the URL</label>
+					<input
+						bind:value={newChannel.url}
+						name="description"
+						type="url"
+						placeholder="Paste the link here"
+						class="bg-white bg-opacity-10  rounded p-2"
+					/>
 				</div>
 				<div class="my-4 flex flex-col">
 					<label for="description" class="font-medium ">Describe it</label>
