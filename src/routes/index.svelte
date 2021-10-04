@@ -138,13 +138,7 @@
 			{/if}
 		</div>
 	{/if}
-	<nav class="mt-4">
-		<ul class="flex flex-row justify-end text-gray-400">
-			<li class="cursor-pointer mr-6 hover:text-white">Invite someone</li>
-			<li class="cursor-pointer mr-6 hover:text-white">Kaizen Labs</li>
-			<li class="cursor-pointer mr-6 hover:text-white">Sign out</li>
-		</ul>
-	</nav>
+
 	<section class="mt-16 flex justify-between items-center w-full">
 		<div
 			class="flex flex-row p-4 rounded-t-lg w-full {searchIsFocused
