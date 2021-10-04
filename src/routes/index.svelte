@@ -4,6 +4,8 @@
 
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import { flip } from 'svelte/animate';
+	import { dndzone } from 'svelte-dnd-action';
 	import AddFormPopover from '../components/AddFormPopover.svelte';
 	import AppSearchDropdown from '../components/AppSearchDropdown.svelte';
 	import Channel, { mockChannels } from '../models/Channel';
@@ -14,10 +16,18 @@
 	let addFormIsFocused: boolean = false;
 	let selectedChannelIndex;
 	let channels = mockChannels;
+	const flipDurationMs = 200;
 	$: filteredChannels = channels.filter(
 		// TODO also filter by description, tags, and URL
 		(channel) => channel.title.toLowerCase().indexOf(query.toLowerCase()) !== -1
 	);
+	const handleDndConsider = (e) => {
+		channels = e.detail.items;
+		// TODO remove mouseover hover effect of all channels
+	};
+	const handleDndFinalize = (e) => {
+		channels = e.detail.items;
+	};
 
 	const handleProceed = (channel: Channel) => {
 		// TODO popover/content blockers are getting in the way of this
@@ -146,12 +156,21 @@
 		</div>
 	</section>
 	{#if !searchIsFocused}
-		<section class="grid lg:grid-cols-6 md:grid-cols-4 grid-cols-2 gap-8 md:gap-12 lg:gap-16 mt-16">
-			<!-- TODO allow user to rearrange the channels -->
-			<!-- TODO create icons for top ~100 saas apps -->
-			<!-- Make beautiful, 3 dimensional, follow cursor -->
-			{#each channels as channel, i}
+		<section
+			class="grid lg:grid-cols-6 md:grid-cols-4 grid-cols-2 gap-8 md:gap-12 lg:gap-16 mt-16"
+			use:dndzone={{
+				items: channels,
+				flipDurationMs,
+
+				dropTargetClasses: ['target'],
+				dropTargetStyle: { outline: 'none' }
+			}}
+			on:consider={handleDndConsider}
+			on:finalize={handleDndFinalize}
+		>
+			{#each channels as channel, i (channel.id)}
 				<div
+					animate:flip={{ duration: flipDurationMs }}
 					on:focus
 					on:blur
 					on:mouseover={() => {
@@ -160,10 +179,10 @@
 					on:mouseout={() => {
 						selectedChannelIndex = null;
 					}}
-					on:click|preventDefault={() => {
+					on:click={() => {
 						handleProceed(channel);
 					}}
-					class="cursor-pointer flex items-center justify-between flex-col text-center transition duration-200 ease-in-out hover:-translate-y-1 hover:scale-110"
+					class="channel cursor-pointer flex items-center justify-between flex-col text-center transition duration-200 ease-in-out hover:-translate-y-1 hover:scale-110"
 				>
 					<div class="text-6xl mb-4 icon flex items-center justify-center">
 						{#if channel.iconImageUrl}
@@ -219,5 +238,10 @@
 		height: 120px;
 		background: linear-gradient(25.13deg, #dbdbdb 15.69%, #ffffff 93.91%);
 		border-radius: 40px;
+	}
+	/* This will remove the blue outline on drag */
+	:focus {
+		outline: 0 !important;
+		box-shadow: 0 0 0 0 rgba(0, 0, 0, 0) !important;
 	}
 </style>
