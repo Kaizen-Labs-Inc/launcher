@@ -11,7 +11,7 @@
 	import AddFormPopover from '../components/AddFormPopover.svelte';
 	import AppSearchDropdown from '../components/AppSearchDropdown.svelte';
 	import Channel, { mockChannels } from '../models/Channel';
-	import { SearchIcon, TrashIcon, Trash2Icon } from 'svelte-feather-icons';
+	import { SearchIcon, TrashIcon, Trash2Icon, Edit2Icon } from 'svelte-feather-icons';
 
 	let query = '';
 	let searchIsFocused: boolean = false;
@@ -116,26 +116,41 @@
 </svelte:head>
 <div class="container mx-auto pb-12">
 	{#if isConsidering}
-		<div class="z-50" />
 		<div
-			on:focus
-			on:blur
-			transition:scale={{ duration: 200, opacity: 0, start: 0.9 }}
-			on:mouseover={() => {
-				console.log('hoverin');
-				hoveredOverTrashIcon = true;
-			}}
-			on:mouseout={() => {
-				console.log('not hovering');
-				hoveredOverTrashIcon = false;
-			}}
-			class="absolute z-40 icon-trash bg-white bg-opacity-10 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bottom-10 cursor-pointer flex items-center justify-center"
+			class="flex flex-row absolute left-1/2 bottom-10 transform -translate-x-1/2 -translate-y-1/2"
 		>
-			{#if hoveredOverTrashIcon}
-				<Trash2Icon size="48" strokeWidth="1" />
-			{:else}
-				<TrashIcon size="48" strokeWidth="1" />
-			{/if}
+			<div
+				on:focus
+				on:blur
+				transition:scale={{ duration: 200, opacity: 0, start: 0.9 }}
+				on:mouseover={() => {
+					hoveredOverTrashIcon = true;
+				}}
+				on:mouseout={() => {
+					hoveredOverTrashIcon = false;
+				}}
+				class="mx-4 z-40 icon-trash bg-white bg-opacity-10   flex items-center justify-center"
+			>
+				<Edit2Icon size="40" strokeWidth="1" />
+			</div>
+			<div
+				on:focus
+				on:blur
+				transition:scale={{ duration: 200, opacity: 0, start: 0.9 }}
+				on:mouseover={() => {
+					hoveredOverTrashIcon = true;
+				}}
+				on:mouseout={() => {
+					hoveredOverTrashIcon = false;
+				}}
+				class="mx-4 z-40 icon-trash bg-white bg-opacity-10  flex items-center justify-center"
+			>
+				{#if hoveredOverTrashIcon}
+					<Trash2Icon size="48" strokeWidth="1" />
+				{:else}
+					<TrashIcon size="48" strokeWidth="1" />
+				{/if}
+			</div>
 		</div>
 	{/if}
 
