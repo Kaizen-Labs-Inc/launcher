@@ -3,7 +3,8 @@ export default interface Channel {
 	title: string;
 	url: string;
 	description?: string;
-	icon?: string; // TODO support image paths and/or emojis
+	icon?: string;
+	emoji?: string;
 	iconImageUrl?: string;
 	tags?: string[];
 }
@@ -11,7 +12,7 @@ export default interface Channel {
 export const mockChannels = [
 	{
 		id: '1',
-		icon: '✉️',
+		emoji: '✉️',
 		iconImageUrl: '../../../icons/gmail.svg',
 		title: 'Gmail',
 		url: 'mail.google.com',
@@ -19,7 +20,7 @@ export const mockChannels = [
 	},
 	{
 		id: '2',
-		icon: '🗓',
+		emoji: '🗓',
 		iconImageUrl: '../../../icons/gcal.svg',
 		title: 'Calendar',
 		url: 'calendar.google.com',
@@ -28,7 +29,7 @@ export const mockChannels = [
 
 	{
 		id: '3',
-		icon: '💬',
+		emoji: '💬',
 		iconImageUrl: '../../../icons/slack.svg',
 		title: 'Slack',
 		url: 'slack.com',
@@ -36,7 +37,7 @@ export const mockChannels = [
 	},
 	{
 		id: '4',
-		icon: '📓',
+		emoji: '📓',
 		iconImageUrl: '../../../icons/notion.svg',
 		title: 'Notion',
 		url: 'notion.so',
@@ -45,7 +46,7 @@ export const mockChannels = [
 	},
 	{
 		id: '5',
-		icon: '📬',
+		emoji: '📬',
 		iconImageUrl: '../../../icons/intercom.svg',
 		title: 'Intercom',
 		url: 'intercom.io',
@@ -54,7 +55,7 @@ export const mockChannels = [
 	},
 	{
 		id: '6',
-		icon: '🖇',
+		emoji: '🖇',
 		iconImageUrl: '../../../icons/trello.svg',
 		title: 'Trello',
 		url: 'trello.com',
@@ -63,7 +64,7 @@ export const mockChannels = [
 	},
 	{
 		id: '7',
-		icon: '📈',
+		emoji: '📈',
 		iconImageUrl: '../../../icons/tableau.svg',
 		title: 'Tableau',
 		url: 'tableau.com',
@@ -72,7 +73,7 @@ export const mockChannels = [
 	},
 	{
 		id: '8',
-		icon: '💸',
+		emoji: '💸',
 		iconImageUrl: '../../../icons/workday.svg',
 		title: 'Workday',
 		url: 'workday.com',
@@ -81,7 +82,7 @@ export const mockChannels = [
 	},
 	{
 		id: '9',
-		icon: '☎',
+		emoji: '☎',
 		iconImageUrl: '../../../icons/zendesk.svg',
 		title: 'Zendesk',
 		url: 'zendesk.com',
@@ -90,7 +91,7 @@ export const mockChannels = [
 	},
 	{
 		id: '10',
-		icon: '💼',
+		emoji: '💼',
 		iconImageUrl: '../../../icons/figma.svg',
 		title: 'Figma',
 		url: 'figma.com',
@@ -100,7 +101,7 @@ export const mockChannels = [
 
 	{
 		id: '11',
-		icon: '💼',
+		emoji: '💼',
 		iconImageUrl: '../../../icons/marketo.svg',
 		title: 'Marketo',
 		url: 'marketo.com',
@@ -109,7 +110,7 @@ export const mockChannels = [
 	},
 	{
 		id: '12',
-		icon: '💼',
+		emoji: '💼',
 		iconImageUrl: '../../../icons/github.svg',
 		title: 'Github',
 		url: 'github.com',

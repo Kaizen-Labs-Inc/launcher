@@ -1,17 +1,20 @@
 <script lang="ts">
 	import { onMount, createEventDispatcher } from 'svelte';
-
 	import { scale } from 'svelte/transition';
-	import { PlusCircleIcon } from 'svelte-feather-icons';
+	import { EmojiButton } from '@joeattardi/emoji-button';
+	import { PlusCircleIcon, PlusIcon, SmileIcon } from 'svelte-feather-icons';
 	import Popover from 'svelte-popover';
 	import Tags from 'svelte-tags-input';
 	import type Channel from 'src/models/Channel';
 	import { v4 as uuidv4 } from 'uuid';
 
 	export let channels = [];
-	let selectedChannelIndex = 0;
+	let selectedChannelIndex: number = 0;
 	const dispatch = createEventDispatcher();
+	let picker;
 	let query = '';
+	let emoji;
+
 	$: filteredChannels = channels
 		.filter(
 			// TODO also filter by description, tags, and URL
@@ -19,6 +22,7 @@
 		)
 		// HACK dedupe - should do this by ID or just pull directly from airtable cache
 		.filter((c, i, a) => a.findIndex((t) => t.title === c.title) === i);
+
 	let newChannel: Channel = {
 		title: '',
 		description: '',
@@ -28,60 +32,75 @@
 	};
 	export let popOverIsFocused: boolean = false;
 	let stepOneComplete: boolean = false;
+	const resetPopover = () => {
+		popOverIsFocused = false;
+		selectedChannelIndex = null;
+		query = '';
+		stepOneComplete = false;
+	};
 
 	const isEmptyOrSpaces = (str) => {
 		return str === null || str.match(/^ *$/) !== null;
 	};
 	onMount(() => {
-		// let selectedHtmlEl = document.getElementsByClassName('selected')[0];
-
+		picker = new EmojiButton({
+			zIndex: 10000,
+			rootElement: document.getElementById('addModal')
+		});
+		picker.on('emoji', (selection) => {
+			emoji = selection.emoji;
+		});
 		document.addEventListener(
 			'keydown',
 			(event) => {
 				if (popOverIsFocused && event.key === 'Escape') {
-					popOverIsFocused = false;
+					resetPopover();
 				}
 				if (
 					popOverIsFocused &&
 					event.key === 'ArrowDown' &&
-					selectedChannelIndex <= filteredChannels.length - 2
+					selectedChannelIndex <= filteredChannels.length
 				) {
-					// selectedHtmlEl.scrollIntoView({
-					// 	behavior: 'smooth'
-					// });
-					selectedChannelIndex = selectedChannelIndex + 1;
+					if (selectedChannelIndex <= filteredChannels.length - 2) {
+						selectedChannelIndex = selectedChannelIndex + 1;
+					} else {
+						selectedChannelIndex = filteredChannels.length;
+					}
 				}
-				if (popOverIsFocused && event.key === 'ArrowUp' && selectedChannelIndex > 0) {
-					// selectedHtmlEl.scrollIntoView({
-					// 	behavior: 'smooth'
-					// });
+
+				if (popOverIsFocused && event.key === 'ArrowUp' && selectedChannelIndex >= 1) {
 					selectedChannelIndex = selectedChannelIndex - 1;
 				}
 
 				if (popOverIsFocused && event.key === 'Enter') {
-					handleAdd(filteredChannels[selectedChannelIndex]);
+					if (selectedChannelIndex < filteredChannels.length) {
+						resetPopover();
+						handleAdd(filteredChannels[selectedChannelIndex]);
+					} else {
+						handleContinue();
+					}
 				}
 			},
 			false
 		);
 	});
-	const handleClose = () => {
-		popOverIsFocused = false;
-		stepOneComplete = false;
-		query = '';
-	};
+
 	const handleTags = (event: any) => {
 		newChannel.tags = event.detail.tags;
 	};
 	const handleAdd = (channel: Channel) => {
 		// Generate a new UUID
 		channel.id = uuidv4();
+		channel.emoji = emoji;
 		// Pass this channel back to the parent as an event
 		dispatch('channelAdded', {
 			channel: channel
 		});
-		// Close the popover
-		handleClose();
+		resetPopover();
+	};
+	const handleContinue = () => {
+		stepOneComplete = true;
+		selectedChannelIndex = null;
 	};
 </script>
 
@@ -92,7 +111,7 @@
 	on:open={() => {
 		popOverIsFocused = true;
 	}}
-	on:close={handleClose}
+	on:close={resetPopover}
 >
 	<button
 		slot="target"
@@ -105,8 +124,9 @@
 	<div
 		transition:scale={{ duration: 200, opacity: 0, start: 0.9 }}
 		slot="content"
+		id="addModal"
 		style="width: 340px;"
-		class="bg-white backdrop-blur-lg bg-opacity-10 p-6 shadow-xl rounded-xl mr-2"
+		class="bg-white backdrop-blur-lg bg-opacity-10 p-4 shadow-xl rounded-xl mr-2"
 	>
 		<form>
 			{#if !stepOneComplete}
@@ -117,8 +137,14 @@
 						autofocus
 						type="url"
 						id="url"
-						placeholder="Search for an app or paste a URL"
-						class="bg-white bg-opacity-10 rounded p-2"
+						placeholder="Search for an app"
+						class="bg-white bg-opacity-10 rounded p-2 outline-none"
+						on:input={() => {
+							if (isEmptyOrSpaces(query)) {
+								console.log('hey');
+								selectedChannelIndex = 0;
+							}
+						}}
 					/>
 				</div>
 				{#if !isEmptyOrSpaces(query)}
@@ -132,60 +158,101 @@
 								on:click={() => {
 									handleAdd(channel);
 								}}
-								class="my-1 hover:bg-white hover:bg-opacity-10 rounded-lg cursor-pointer p-2 flex items-center {selectedChannelIndex ===
+								class="my-1 rounded-lg cursor-pointer p-2 flex items-center {selectedChannelIndex ===
 								i
 									? 'bg-opacity-10 bg-white selected'
 									: ''}"
 							>
-								<div class="w-10 h-10 bg-white rounded-md flex items-center justify-center mr-4">
-									<img src={channel.iconImageUrl} class="w-6 h-6" alt={channel.title} />
+								<div
+									class="w-10 h-10 bg-white text-lg text-black rounded-md flex items-center justify-center mr-4"
+								>
+									{#if channel.iconImageUrl}
+										<img src={channel.iconImageUrl} class="w-6 h-6" alt={channel.title} />
+									{:else if channel.emoji}
+										{channel.emoji}
+									{:else}
+										{channel.title.charAt(0)}
+									{/if}
 								</div>
-								<div>{channel.title}</div>
+								<div>
+									{channel.title}
+								</div>
 							</li>
 						{/each}
 					</ul>
-				{:else}
-					<!-- TODO handle URL detection in input, then show this -->
-					<!-- <div
-						on:click={() => {
-							stepOneComplete = true;
+					{#if filteredChannels.length === 0}
+						<div class="w-full mx-auto text-center opacity-50 text-sm mb-4">
+							We couldn't find anything.
+						</div>
+					{/if}
+					<div
+						on:focus
+						on:blur
+						on:mouseover={() => {
+							selectedChannelIndex = filteredChannels.length;
 						}}
-						class="flex cursor-pointer justify-center items-center rounded bg-black text-white font-medium py-2 mt-3 text-lg"
+						on:click={handleContinue}
+						class="my-1 {selectedChannelIndex === filteredChannels.length
+							? 'bg-opacity-10 bg-white selected'
+							: ''} rounded-lg cursor-pointer p-2 flex items-center "
 					>
-						Continue
-					</div> -->
+						<div
+							class="w-10 h-10 bg-white rounded-md flex items-center justify-center mr-4 text-black"
+						>
+							<PlusIcon strokeWidth="2" size="20" />
+						</div>
+						<div>Add a new app</div>
+					</div>
 				{/if}
 			{:else}
-				<div class="flex flex-row items-end justify-between mb-4 ">
+				<div class="flex flex-row items-end justify-between mb-4 text-white ">
 					<div class=" flex flex-col">
-						<label for="title" class="font-medium text-gray-500">Name it</label>
+						<label for="title" class="font-medium ">Name it</label>
 						<input
 							autofocus
 							bind:value={newChannel.title}
 							name="title"
 							type="text"
 							placeholder="Type a name"
-							class="bg-gray-200 rounded p-2"
+							class="bg-white bg-opacity-10 rounded p-2"
 						/>
 					</div>
 					<div
-						class="cursor-pointer rounded-lg w-14 h-14 bg-gray-300 transition duration-200 ease-in-out hover:scale-105"
+						id="emoji-trigger"
+						on:click={() => {
+							picker.togglePicker(document.querySelector('#emoji-trigger'));
+						}}
+						class="cursor-pointer rounded-lg w-14 h-14 bg-white flex items-center justify-center text-2xl bg-opacity-10 transition duration-200 ease-in-out hover:scale-105"
 					>
-						<!-- Add icon or emoji here -->
+						{#if emoji}
+							{emoji}
+						{:else}
+							<SmileIcon size="26" strokeWidth="2" />
+						{/if}
 					</div>
 				</div>
 				<div class="my-4 flex flex-col">
-					<label for="description" class="font-medium text-gray-500">Describe it</label>
+					<label for="url" class="font-medium ">Paste the URL</label>
+					<input
+						bind:value={newChannel.url}
+						name="description"
+						type="url"
+						placeholder="Paste the link here"
+						class="bg-white bg-opacity-10  rounded p-2"
+					/>
+				</div>
+				<div class="my-4 flex flex-col">
+					<label for="description" class="font-medium ">Describe it</label>
 					<textarea
 						bind:value={newChannel.description}
 						name="description"
 						type="text"
 						placeholder="Add an optional description"
-						class="bg-gray-200 rounded p-2"
+						class="bg-white bg-opacity-10  rounded p-2"
 					/>
 				</div>
 				<div class="my-4 flex flex-col">
-					<label for="tags" class="font-medium text-gray-500">Tag it</label>
+					<label for="tags" class="font-medium ">Tag it</label>
 					<div class="tagsContainer">
 						<Tags
 							on:tags={(e) => {
@@ -218,7 +285,7 @@
 	}
 	.tagsContainer :global(.svelte-tags-input-tag) {
 		border-radius: 3px;
-		background: rgba(0, 0, 0, 0.8);
+		background: rgba(255, 255, 255, 0.1);
 		font-size: 16px;
 		padding: 4px;
 	}
@@ -227,7 +294,7 @@
 		margin-left: 5px;
 	}
 	.tagsContainer :global(.svelte-tags-input-layout) {
-		background-color: #e5e7eb;
+		background-color: rgba(255, 255, 255, 0.1);
 		border: none;
 		outline: none;
 	}
