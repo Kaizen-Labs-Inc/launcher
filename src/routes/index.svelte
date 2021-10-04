@@ -5,11 +5,13 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { flip } from 'svelte/animate';
+	import { scale } from 'svelte/transition';
+
 	import { dndzone } from 'svelte-dnd-action';
 	import AddFormPopover from '../components/AddFormPopover.svelte';
 	import AppSearchDropdown from '../components/AppSearchDropdown.svelte';
 	import Channel, { mockChannels } from '../models/Channel';
-	import { SearchIcon, GridIcon } from 'svelte-feather-icons';
+	import { SearchIcon, TrashIcon, Trash2Icon } from 'svelte-feather-icons';
 
 	let query = '';
 	let searchIsFocused: boolean = false;
@@ -17,21 +19,26 @@
 	let selectedChannelIndex;
 	let channels = mockChannels;
 	const flipDurationMs = 200;
+	let isConsidering = false;
+	let hoveredOverTrashIcon = false;
 	$: filteredChannels = channels.filter(
 		// TODO also filter by description, tags, and URL
 		(channel) => channel.title.toLowerCase().indexOf(query.toLowerCase()) !== -1
 	);
 	const handleDndConsider = (e) => {
+		isConsidering = true;
+		hoveredOverTrashIcon = false;
 		channels = e.detail.items;
 		// TODO remove mouseover hover effect of all channels
+		// TODO wireup trash drop
 	};
 	const handleDndFinalize = (e) => {
+		isConsidering = false;
+		hoveredOverTrashIcon = false;
 		channels = e.detail.items;
 	};
 
 	const handleProceed = (channel: Channel) => {
-		// TODO popover/content blockers are getting in the way of this
-		// https://stackoverflow.com/questions/2587677/avoid-browser-popup-blockers
 		window.open('https://' + channel.url, '_blank').focus();
 	};
 	const handleBlur = () => {
@@ -108,6 +115,29 @@
 	<title>Springboard</title>
 </svelte:head>
 <div class="container mx-auto pb-12">
+	{#if isConsidering}
+		<div class="z-50" />
+		<div
+			on:focus
+			on:blur
+			transition:scale={{ duration: 200, opacity: 0, start: 0.9 }}
+			on:mouseover={() => {
+				console.log('hoverin');
+				hoveredOverTrashIcon = true;
+			}}
+			on:mouseout={() => {
+				console.log('not hovering');
+				hoveredOverTrashIcon = false;
+			}}
+			class="absolute z-40 icon-trash bg-white bg-opacity-10 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bottom-10 cursor-pointer flex items-center justify-center"
+		>
+			{#if hoveredOverTrashIcon}
+				<Trash2Icon size="48" strokeWidth="1" />
+			{:else}
+				<TrashIcon size="48" strokeWidth="1" />
+			{/if}
+		</div>
+	{/if}
 	<nav class="mt-4">
 		<ul class="flex flex-row justify-end text-gray-400">
 			<li class="cursor-pointer mr-6 hover:text-white">Invite someone</li>
@@ -140,10 +170,7 @@
 						class="absolute ml-48 border-2 border-white border-opacity-50 w-10 h-10 opacity-50 flex items-center justify-center rounded-md"
 						>⌘K</span
 					>
-					<button
-						class="cursor-pointer transition duration-200 ease-in-out hover:scale-110 hover:opacity-100 opacity-75"
-						><GridIcon size="48" strokeWidth="1" /></button
-					>
+
 					<AddFormPopover
 						channels={mockChannels}
 						bind:popOverIsFocused={addFormIsFocused}
@@ -237,6 +264,13 @@
 		width: 120px;
 		height: 120px;
 		background: linear-gradient(25.13deg, #dbdbdb 15.69%, #ffffff 93.91%);
+		border-radius: 40px;
+	}
+
+	.icon-trash {
+		width: 120px;
+		height: 120px;
+
 		border-radius: 40px;
 	}
 	/* This will remove the blue outline on drag */
