@@ -38,6 +38,7 @@
 		"@fontsource/fira-mono": "^4.5.0",
 		"@lukeed/uuid": "^2.0.0",
 		"cookie": "^0.4.1",
+		"firebase": "^9.1.1",
 		"stripe": "^8.177.0",
 		"svelte-tags-input": "^2.8.0",
 		"uuid": "^8.3.2"
