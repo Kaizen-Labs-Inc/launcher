@@ -113,6 +113,7 @@
 	}}
 	on:close={resetPopover}
 	overlayColor="rgba(0, 0, 0, 0.0)"
+	zIndex="10000"
 >
 	<button
 		slot="target"
