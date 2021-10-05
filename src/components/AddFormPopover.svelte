@@ -1,6 +1,10 @@
 <script lang="ts">
 	import { onMount, createEventDispatcher } from 'svelte';
 	import { scale } from 'svelte/transition';
+	import tippy from 'tippy.js';
+	import 'tippy.js/dist/tippy.css';
+	import 'tippy.js/themes/translucent.css';
+
 	import { EmojiButton } from '@joeattardi/emoji-button';
 	import { PlusCircleIcon, PlusIcon, SmileIcon } from 'svelte-feather-icons';
 	import Popover from 'svelte-popover';
@@ -43,6 +47,12 @@
 		return str === null || str.match(/^ *$/) !== null;
 	};
 	onMount(() => {
+		tippy('#target', {
+			content: 'Add an app',
+			arrow: false,
+			theme: 'translucent'
+		});
+
 		picker = new EmojiButton({
 			zIndex: 10000,
 			rootElement: document.getElementById('addModal')
@@ -117,6 +127,7 @@
 >
 	<button
 		slot="target"
+		id="target"
 		class="cursor-pointer transition duration-200 ease-in-out {popOverIsFocused
 			? 'rotate-45'
 			: 'hover:scale-110 hover:opacity-100 opacity-75'}"
@@ -128,7 +139,7 @@
 		slot="content"
 		id="addModal"
 		style="width: 340px;"
-		class="bg-white backdrop-blur-lg bg-opacity-10 p-4 shadow-xl rounded-xl mr-2"
+		class="bg-white backdrop-blur-2xl bg-opacity-5 p-4 shadow-xl rounded-xl mr-2"
 	>
 		<form>
 			{#if !stepOneComplete}
@@ -264,6 +275,10 @@
 							placeholder="Add tags"
 						/>
 					</div>
+				</div>
+				<div class="my-4 flex flex-row align-center cursor-pointer">
+					<input name="homescreen" id="homescreen" type="checkbox" checked class="w-4 h-4 mr-3" />
+					<label for="homescreen" class="cursor-pointer"> Add to my homescreen </label>
 				</div>
 				<div
 					on:click={() => {

@@ -9,7 +9,10 @@
 	import AddFormPopover from '../components/AddFormPopover.svelte';
 	import AppSearchDropdown from '../components/AppSearchDropdown.svelte';
 	import Channel, { mockChannels } from '../models/Channel';
-	import { SearchIcon, GridIcon, Trash2Icon, Edit2Icon, XIcon } from 'svelte-feather-icons';
+	import tippy from 'tippy.js';
+	import 'tippy.js/dist/tippy.css';
+	import 'tippy.js/themes/translucent.css';
+	import { SearchIcon, GridIcon, Edit2Icon, XIcon } from 'svelte-feather-icons';
 
 	let query = '';
 	let searchIsFocused: boolean = false;
@@ -77,6 +80,12 @@
 	};
 
 	onMount(() => {
+		tippy('#editToggle', {
+			content: 'Edit your Springboard',
+			arrow: false,
+			theme: 'translucent'
+		});
+
 		document.addEventListener(
 			'keydown',
 			(event) => {
@@ -203,7 +212,7 @@
 	</section>
 	{#if !searchIsFocused}
 		<section
-			style="z-index: -1"
+			style="z-index: -3"
 			class="grid lg:grid-cols-6 md:grid-cols-4 grid-cols-2 gap-8 md:gap-12 lg:gap-16 transition duration-200 ease-in-out {editModeEnabled
 				? 'mt-0'
 				: 'mt-16'}"
@@ -237,6 +246,7 @@
 							handleProceed(channel);
 						}
 					}}
+					style={editModeEnabled ? '' : 'z-index: -2;'}
 					class="channel cursor-pointer flex items-center justify-between flex-col text-center transition duration-200 ease-in-out {selectedChannelIndex ===
 					i
 						? '-translate-y-1 scale-110'
@@ -257,6 +267,7 @@
 						{#if channel.iconImageUrl}
 							<img
 								alt={channel.title}
+								style="z-index: 0;"
 								class="transition w-16 h-16 duration-300 ease-in-out {selectedChannelIndex === i &&
 								!isConsidering &&
 								!editModeEnabled
@@ -318,7 +329,9 @@
 				>
 					Done
 				</div>
-				<div class="mt-3 text-center opacity-60">Removing an app affects your homescreen only.</div>
+				<div class="mt-3 text-center opacity-60">
+					Removing or rearranging apps affects your homescreen only.
+				</div>
 			</div>
 		{/if}
 	{:else}
