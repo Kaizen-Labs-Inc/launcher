@@ -77,6 +77,7 @@
 	};
 
 	onMount(() => {
+		document.addEventListener('drag', function (event) {}, false);
 		document.addEventListener(
 			'keydown',
 			(event) => {
