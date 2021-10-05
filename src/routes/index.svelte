@@ -50,8 +50,10 @@
 		query = '';
 	};
 	const handleFocus = () => {
-		searchIsFocused = true;
-		selectedChannelIndex = 0;
+		if (!editModeEnabled) {
+			searchIsFocused = true;
+			selectedChannelIndex = 0;
+		}
 	};
 	const handleInput = () => {
 		selectedChannelIndex = 0;
@@ -101,6 +103,11 @@
 				if (searchIsFocused && event.key === 'Escape') {
 					handleBlur();
 				}
+
+				if (editModeEnabled && event.key === 'Escape') {
+					editModeEnabled = false;
+				}
+
 				if (searchIsFocused && event.key === 'Enter') {
 					handleProceed(filteredChannels[selectedChannelIndex]);
 				}
@@ -108,7 +115,8 @@
 					event.metaKey &&
 					event.key === 'k' &&
 					searchInput !== document.activeElement &&
-					!searchIsFocused
+					!searchIsFocused &&
+					!editModeEnabled
 				) {
 					searchIsFocused = true;
 					searchInput.focus();
@@ -123,56 +131,61 @@
 	<title>Springboard</title>
 </svelte:head>
 <div class="container mx-auto pb-12">
-	<section class="mt-16 flex justify-between items-center w-full">
-		{#if !editModeEnabled}
-			<div
-				class="flex flex-row p-4 rounded-t-lg w-full {searchIsFocused
-					? 'bg-white bg-opacity-10'
-					: ''}"
-			>
-				<div class="flex-shrink-0">
-					<SearchIcon size="48" strokeWidth="1" />
-				</div>
-				<div class="flex flex-row items-center justify-between w-full">
-					<input
-						bind:value={query}
-						on:focus={handleFocus}
-						on:blur={handleBlur}
-						on:input={handleInput}
-						autocomplete="false"
-						id="searchInput"
-						placeholder="Search"
-						class="ml-4 text-5xl w-2/3 border-0 outline-none bg-transparent text-white font-light"
-					/>
-					{#if !searchIsFocused}
-						<span
-							class="absolute ml-48 border-2 border-white border-opacity-50 w-10 h-10 opacity-50 flex items-center justify-center rounded-md"
-							>⌘K</span
-						>
-						<div class="flex flex-row items-center">
-							<div
-								on:click={handleEditModeToggle}
-								class="mr-8 cursor-pointer opacity-75 hover:opacity-100 transition duration-200 ease-in-out hover:scale-110"
-							>
-								<GridIcon size="48" strokeWidth="1" />
-							</div>
-
-							<AddFormPopover
-								channels={mockChannels}
-								bind:popOverIsFocused={addFormIsFocused}
-								on:channelAdded={(e) => {
-									handleChannelAdded(e.detail.channel);
-								}}
-							/>
-						</div>
-					{/if}
-				</div>
+	<section
+		class="mt-16 flex justify-between items-center w-full transition duration-200 ease-in-out {editModeEnabled
+			? 'opacity-10 scale-95'
+			: 'opacity-100 scale-100'}"
+	>
+		<div
+			class="flex flex-row p-4 rounded-t-lg w-full {searchIsFocused
+				? 'bg-white bg-opacity-10'
+				: ''}"
+		>
+			<div class="flex-shrink-0">
+				<SearchIcon size="48" strokeWidth="1" />
 			</div>
-		{/if}
+			<div class="flex flex-row items-center justify-between w-full">
+				<input
+					bind:value={query}
+					on:focus={handleFocus}
+					on:blur={handleBlur}
+					on:input={handleInput}
+					disabled={editModeEnabled}
+					autocomplete="false"
+					id="searchInput"
+					placeholder="Search"
+					class="ml-4 text-5xl w-2/3 border-0 outline-none bg-transparent text-white font-light"
+				/>
+				{#if !searchIsFocused}
+					<span
+						class="absolute ml-48 border-2 border-white border-opacity-50 w-10 h-10 opacity-50 flex items-center justify-center rounded-md"
+						>⌘K</span
+					>
+					<div class="flex flex-row items-center">
+						<div
+							on:click={handleEditModeToggle}
+							class="mr-8 cursor-pointer opacity-75 hover:opacity-100 transition duration-200 ease-in-out hover:scale-110"
+						>
+							<GridIcon size="48" strokeWidth="1" />
+						</div>
+
+						<AddFormPopover
+							channels={mockChannels}
+							bind:popOverIsFocused={addFormIsFocused}
+							on:channelAdded={(e) => {
+								handleChannelAdded(e.detail.channel);
+							}}
+						/>
+					</div>
+				{/if}
+			</div>
+		</div>
 	</section>
 	{#if !searchIsFocused}
 		<section
-			class="grid lg:grid-cols-6 md:grid-cols-4 grid-cols-2 gap-8 md:gap-12 lg:gap-16 mt-16"
+			class="grid lg:grid-cols-6 md:grid-cols-4 grid-cols-2 gap-8 md:gap-12 lg:gap-16 transition duration-200 ease-in-out {editModeEnabled
+				? 'mt-0'
+				: 'mt-16 '}"
 			use:dndzone={{
 				items: channels,
 				flipDurationMs,
