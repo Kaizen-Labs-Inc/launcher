@@ -5,7 +5,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { flip } from 'svelte/animate';
-
 	import { dndzone } from 'svelte-dnd-action';
 	import AddFormPopover from '../components/AddFormPopover.svelte';
 	import AppSearchDropdown from '../components/AppSearchDropdown.svelte';
@@ -33,14 +32,10 @@
 	);
 	const handleDndConsider = (e) => {
 		isConsidering = true;
-		hoveredOverTrashIcon = false;
 		channels = e.detail.items;
-		// TODO remove mouseover hover effect of all channels
-		// TODO wireup trash drop
 	};
 	const handleDndFinalize = (e) => {
 		isConsidering = false;
-		hoveredOverTrashIcon = false;
 		channels = e.detail.items;
 	};
 
@@ -182,7 +177,8 @@
 				items: channels,
 				flipDurationMs,
 				dropTargetClasses: ['target'],
-				dropTargetStyle: { outline: 'none' }
+				dropTargetStyle: { outline: 'none' },
+				dragDisabled: !editModeEnabled
 			}}
 			on:consider={handleDndConsider}
 			on:finalize={handleDndFinalize}
