@@ -9,7 +9,7 @@
 	import AddFormPopover from '../components/AddFormPopover.svelte';
 	import AppSearchDropdown from '../components/AppSearchDropdown.svelte';
 	import Channel, { mockChannels } from '../models/Channel';
-	import { SearchIcon, GridIcon } from 'svelte-feather-icons';
+	import { SearchIcon, GridIcon, Trash2Icon, Edit2Icon } from 'svelte-feather-icons';
 
 	let query = '';
 	let searchIsFocused: boolean = false;
@@ -73,11 +73,10 @@
 	};
 
 	const handleEditModeToggle = () => {
-		editModeEnabled = true;
+		editModeEnabled = !editModeEnabled;
 	};
 
 	onMount(() => {
-		document.addEventListener('drag', function (event) {}, false);
 		document.addEventListener(
 			'keydown',
 			(event) => {
@@ -127,8 +126,9 @@
 			false
 		);
 		// Handle clicking out of edit mode
+		// TODO This target detection isn't perfect, and if the user clicks on the SVG, it will set editMode to false
 		document.addEventListener('click', function (e) {
-			if (editModeEnabled) {
+			if (editModeEnabled && e.target.parentElement.id !== 'editToggle') {
 				var node = e.target;
 				var inside = false;
 				while (node) {
@@ -139,9 +139,7 @@
 					node = node.parentElement;
 				}
 				if (!inside) {
-					// This is getting intercepted and always resolving to false
-					// We should check to see if the element clicked was the toggle in this if block
-					// editModeEnabled = false;
+					editModeEnabled = false;
 				}
 			}
 		});
@@ -184,7 +182,7 @@
 					>
 					<div class="flex flex-row items-center">
 						<div
-							on:click={handleEditModeToggle}
+							on:click|preventDefault={handleEditModeToggle}
 							id="editToggle"
 							class="mr-8 cursor-pointer opacity-75 hover:opacity-100 transition duration-200 ease-in-out hover:scale-110"
 						>
@@ -287,9 +285,35 @@
 					</div>
 					<div class="text-2xl">{channel.title}</div>
 					<div class="text-md opacity-30">{channel.url}</div>
+					{#if editModeEnabled}
+						<div class=" flex flex-row items-center mt-4">
+							<div
+								class="cursor-pointer mx-2 rounded bg-white bg-opacity-5 p-2 hover:bg-opacity-10"
+							>
+								<Edit2Icon strokeWidth="1" size="16" />
+							</div>
+							<div
+								on:click={() => {
+									// TODO allow undo
+									channels = channels.filter((c) => c.id !== channel.id);
+								}}
+								class="cursor-pointer mx-2 rounded bg-white bg-opacity-5 p-2 hover:bg-opacity-10 text-red-500"
+							>
+								<Trash2Icon strokeWidth="1" size="16" />
+							</div>
+						</div>
+					{/if}
 				</div>
 			{/each}
 		</section>
+		{#if editModeEnabled}
+			<div
+				on:click={handleEditModeToggle}
+				class="mx-auto cursor-pointer mt-12 rounded-xl bg-white bg-opacity-10 p-4 font-medium text-lg flex justify-center items-center hover:bg-opacity-20"
+			>
+				Done
+			</div>
+		{/if}
 	{:else}
 		<AppSearchDropdown
 			bind:selectedChannelIndex
