@@ -40,6 +40,7 @@
 	};
 
 	const handleProceed = (channel: Channel) => {
+		selectedChannelIndex = null;
 		window.open('https://' + channel.url, '_blank').focus();
 	};
 	const handleBlur = () => {
@@ -124,6 +125,25 @@
 			},
 			false
 		);
+		// Handle clicking out of edit mode
+		document.addEventListener('click', function (e) {
+			if (editModeEnabled) {
+				var node = e.target;
+				var inside = false;
+				while (node) {
+					if (node.classList.contains('channel')) {
+						inside = true;
+						break;
+					}
+					node = node.parentElement;
+				}
+				if (!inside) {
+					// This is getting intercepted and always resolving to false
+					// We should check to see if the element clicked was the toggle in this if block
+					// editModeEnabled = false;
+				}
+			}
+		});
 	});
 </script>
 
@@ -164,6 +184,7 @@
 					<div class="flex flex-row items-center">
 						<div
 							on:click={handleEditModeToggle}
+							id="editToggle"
 							class="mr-8 cursor-pointer opacity-75 hover:opacity-100 transition duration-200 ease-in-out hover:scale-110"
 						>
 							<GridIcon size="48" strokeWidth="1" />
@@ -185,7 +206,7 @@
 		<section
 			class="grid lg:grid-cols-6 md:grid-cols-4 grid-cols-2 gap-8 md:gap-12 lg:gap-16 transition duration-200 ease-in-out {editModeEnabled
 				? 'mt-0'
-				: 'mt-16 '}"
+				: 'mt-16'}"
 			use:dndzone={{
 				items: channels,
 				flipDurationMs,
