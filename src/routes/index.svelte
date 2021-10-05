@@ -5,13 +5,12 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { flip } from 'svelte/animate';
-	import { scale } from 'svelte/transition';
 
 	import { dndzone } from 'svelte-dnd-action';
 	import AddFormPopover from '../components/AddFormPopover.svelte';
 	import AppSearchDropdown from '../components/AppSearchDropdown.svelte';
 	import Channel, { mockChannels } from '../models/Channel';
-	import { SearchIcon, TrashIcon, Trash2Icon, Edit2Icon } from 'svelte-feather-icons';
+	import { SearchIcon, GridIcon } from 'svelte-feather-icons';
 
 	let query = '';
 	let searchIsFocused: boolean = false;
@@ -20,7 +19,14 @@
 	let channels = mockChannels;
 	const flipDurationMs = 200;
 	let isConsidering = false;
-	let hoveredOverTrashIcon = false;
+	let editModeEnabled = false;
+
+	// For edit mode jiggles
+	const jiggleAnimDelayMin = -0.75;
+	const jiggleAnimDelayMax = -0.05;
+	const jiggleAnimDurationMin = 0.22;
+	const jiggleAnimDurationMax = 0.3;
+
 	$: filteredChannels = channels.filter(
 		// TODO also filter by description, tags, and URL
 		(channel) => channel.title.toLowerCase().indexOf(query.toLowerCase()) !== -1
@@ -55,16 +61,23 @@
 	const handleInput = () => {
 		selectedChannelIndex = 0;
 	};
+
 	const handleChannelAdded = (channel) => {
 		channels.unshift(channel);
 		channels = channels;
 	};
+
 	const toggleAddForm = () => {
 		// This prevents the popover from appearing in a strange place
 		setTimeout(function () {
 			addFormIsFocused = !addFormIsFocused;
 		}, 200);
 	};
+
+	const handleEditModeToggle = () => {
+		editModeEnabled = true;
+	};
+
 	onMount(() => {
 		document.addEventListener(
 			'keydown',
@@ -115,81 +128,52 @@
 	<title>Springboard</title>
 </svelte:head>
 <div class="container mx-auto pb-12">
-	{#if isConsidering}
-		<div
-			class="flex flex-row absolute left-1/2 bottom-10 transform -translate-x-1/2 -translate-y-1/2"
-		>
-			<div
-				on:focus
-				on:blur
-				transition:scale={{ duration: 200, opacity: 0, start: 0.9 }}
-				on:mouseover={() => {
-					hoveredOverTrashIcon = true;
-				}}
-				on:mouseout={() => {
-					hoveredOverTrashIcon = false;
-				}}
-				class="mx-4 z-40 icon-trash bg-white bg-opacity-10   flex items-center justify-center"
-			>
-				<Edit2Icon size="40" strokeWidth="1" />
-			</div>
-			<div
-				on:focus
-				on:blur
-				transition:scale={{ duration: 200, opacity: 0, start: 0.9 }}
-				on:mouseover={() => {
-					hoveredOverTrashIcon = true;
-				}}
-				on:mouseout={() => {
-					hoveredOverTrashIcon = false;
-				}}
-				class="mx-4 z-40 icon-trash bg-white bg-opacity-10  flex items-center justify-center"
-			>
-				{#if hoveredOverTrashIcon}
-					<Trash2Icon size="48" strokeWidth="1" />
-				{:else}
-					<TrashIcon size="48" strokeWidth="1" />
-				{/if}
-			</div>
-		</div>
-	{/if}
-
 	<section class="mt-16 flex justify-between items-center w-full">
-		<div
-			class="flex flex-row p-4 rounded-t-lg w-full {searchIsFocused
-				? 'bg-white bg-opacity-10'
-				: ''}"
-		>
-			<div class="flex-shrink-0">
-				<SearchIcon size="48" strokeWidth="1" />
-			</div>
-			<div class="flex flex-row items-center justify-between w-full">
-				<input
-					bind:value={query}
-					on:focus={handleFocus}
-					on:blur={handleBlur}
-					on:input={handleInput}
-					autocomplete="false"
-					id="searchInput"
-					placeholder="Search"
-					class="ml-4 text-5xl w-2/3 border-0 outline-none bg-transparent text-white font-light"
-				/>
-				{#if !searchIsFocused}
-					<span
-						class="absolute ml-48 border-2 border-white border-opacity-50 w-10 h-10 opacity-50 flex items-center justify-center rounded-md"
-						>⌘K</span
-					>
-
-					<AddFormPopover
-						channels={mockChannels}
-						bind:popOverIsFocused={addFormIsFocused}
-						on:channelAdded={(e) => {
-							handleChannelAdded(e.detail.channel);
-						}}
+		{#if !editModeEnabled}
+			<div
+				class="flex flex-row p-4 rounded-t-lg w-full {searchIsFocused
+					? 'bg-white bg-opacity-10'
+					: ''}"
+			>
+				<div class="flex-shrink-0">
+					<SearchIcon size="48" strokeWidth="1" />
+				</div>
+				<div class="flex flex-row items-center justify-between w-full">
+					<input
+						bind:value={query}
+						on:focus={handleFocus}
+						on:blur={handleBlur}
+						on:input={handleInput}
+						autocomplete="false"
+						id="searchInput"
+						placeholder="Search"
+						class="ml-4 text-5xl w-2/3 border-0 outline-none bg-transparent text-white font-light"
 					/>
-				{/if}
+					{#if !searchIsFocused}
+						<span
+							class="absolute ml-48 border-2 border-white border-opacity-50 w-10 h-10 opacity-50 flex items-center justify-center rounded-md"
+							>⌘K</span
+						>
+						<div class="flex flex-row items-center">
+							<div
+								on:click={handleEditModeToggle}
+								class="mr-8 cursor-pointer opacity-75 hover:opacity-100 transition duration-200 ease-in-out hover:scale-110"
+							>
+								<GridIcon size="48" strokeWidth="1" />
+							</div>
+
+							<AddFormPopover
+								channels={mockChannels}
+								bind:popOverIsFocused={addFormIsFocused}
+								on:channelAdded={(e) => {
+									handleChannelAdded(e.detail.channel);
+								}}
+							/>
+						</div>
+					{/if}
+				</div>
 			</div>
-		</div>
+		{/if}
 	</section>
 	{#if !searchIsFocused}
 		<section
@@ -197,7 +181,6 @@
 			use:dndzone={{
 				items: channels,
 				flipDurationMs,
-
 				dropTargetClasses: ['target'],
 				dropTargetStyle: { outline: 'none' }
 			}}
@@ -210,39 +193,62 @@
 					on:focus
 					on:blur
 					on:mouseover={() => {
-						selectedChannelIndex = i;
+						if (!editModeEnabled) {
+							selectedChannelIndex = i;
+						}
 					}}
 					on:mouseout={() => {
-						selectedChannelIndex = null;
+						if (!editModeEnabled) {
+							selectedChannelIndex = null;
+						}
 					}}
 					on:click={() => {
-						handleProceed(channel);
+						if (!editModeEnabled) {
+							handleProceed(channel);
+						}
 					}}
 					class="channel cursor-pointer flex items-center justify-between flex-col text-center transition duration-200 ease-in-out hover:-translate-y-1 hover:scale-110"
 				>
-					<div class="text-6xl mb-4 icon flex items-center justify-center">
+					<div
+						style={editModeEnabled
+							? `animation-duration: ${(
+									Math.random() * (jiggleAnimDurationMax - jiggleAnimDurationMin) +
+									jiggleAnimDurationMin
+							  ).toFixed(4)}s; animation-delay: -${(
+									Math.random() * (jiggleAnimDelayMax - jiggleAnimDelayMin) +
+									jiggleAnimDelayMin
+							  ).toFixed(4)}s;`
+							: ''}
+						class="text-6xl mb-4 icon flex items-center justify-center"
+					>
 						{#if channel.iconImageUrl}
 							<img
 								alt={channel.title}
-								class="transition w-16 h-16 duration-300 ease-in-out {selectedChannelIndex === i
+								class="transition w-16 h-16 duration-300 ease-in-out {selectedChannelIndex === i &&
+								!isConsidering &&
+								!editModeEnabled
 									? ' rotate-3 scale-110'
-									: ''}"
+									: 'rotate-0 scale-100'}"
 								src={channel.iconImageUrl}
 							/>
 						{:else if channel.emoji}
 							<div
-								class=" transition w-16 h-16 duration-300 ease-in-out {selectedChannelIndex === i
+								class=" transition w-16 h-16 duration-300 ease-in-out {selectedChannelIndex === i &&
+								!isConsidering &&
+								!editModeEnabled
 									? ' rotate-3 scale-110'
-									: ''}"
+									: 'rotate-0 scale-100'}"
 							>
 								{channel.emoji}
 							</div>
 						{:else}
 							<div
 								class="text-black font-light transition w-16 h-16 duration-300 ease-in-out {selectedChannelIndex ===
-								i
+									i &&
+								!isConsidering &&
+								!editModeEnabled
 									? ' rotate-3 scale-110'
-									: ''}"
+									: 'rotate-0 scale-100'}"
 							>
 								{channel.title.charAt(0)}
 							</div>
@@ -269,22 +275,52 @@
 </div>
 
 <style>
+	/* This will remove the blue outline on drag */
+	:focus {
+		outline: 0 !important;
+		box-shadow: 0 0 0 0 rgba(0, 0, 0, 0) !important;
+	}
+
 	.icon {
 		width: 120px;
 		height: 120px;
 		background: linear-gradient(25.13deg, #dbdbdb 15.69%, #ffffff 93.91%);
 		border-radius: 40px;
 	}
-
-	.icon-trash {
-		width: 120px;
-		height: 120px;
-
-		border-radius: 40px;
+	.icon:nth-child(2n) {
+		animation-name: keyframes1;
+		animation-iteration-count: infinite;
+		transform-origin: 50% 10%;
 	}
-	/* This will remove the blue outline on drag */
-	:focus {
-		outline: 0 !important;
-		box-shadow: 0 0 0 0 rgba(0, 0, 0, 0) !important;
+
+	.icon:nth-child(2n-1) {
+		animation-name: keyframes2;
+		animation-iteration-count: infinite;
+		animation-direction: alternate;
+		transform-origin: 30% 5%;
+	}
+
+	@keyframes keyframes1 {
+		0% {
+			transform: rotate(-1deg);
+			animation-timing-function: ease-in;
+		}
+
+		50% {
+			transform: rotate(1.5deg);
+			animation-timing-function: ease-out;
+		}
+	}
+
+	@keyframes keyframes2 {
+		0% {
+			transform: rotate(1deg);
+			animation-timing-function: ease-in;
+		}
+
+		50% {
+			transform: rotate(-1.5deg);
+			animation-timing-function: ease-out;
+		}
 	}
 </style>

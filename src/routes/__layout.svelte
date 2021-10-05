@@ -61,13 +61,8 @@
 					{#if user}
 						<li on:click={handleSignOut} class="cursor-pointer mr-6 hover:text-white">Sign out</li>
 					{:else}
-						<li
-							on:click={() => {
-								goto('/sign-in');
-							}}
-							class="cursor-pointer mr-6 hover:text-white"
-						>
-							Sign in
+						<li class="cursor-pointer mr-6 hover:text-white">
+							<a href="/sign-in" class=""> Sign in </a>
 						</li>
 					{/if}
 				</ul>
