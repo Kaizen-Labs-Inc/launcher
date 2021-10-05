@@ -112,6 +112,7 @@
 		popOverIsFocused = true;
 	}}
 	on:close={resetPopover}
+	overlayColor="rgba(0, 0, 0, 0.0)"
 >
 	<button
 		slot="target"
@@ -120,7 +121,7 @@
 			: 'hover:scale-110 hover:opacity-100 opacity-75'}"
 		><PlusCircleIcon size="48" strokeWidth="1" /></button
 	>
-	<!-- TODO add icon/image upload -->
+
 	<div
 		transition:scale={{ duration: 200, opacity: 0, start: 0.9 }}
 		slot="content"
