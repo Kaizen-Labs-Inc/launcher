@@ -237,7 +237,7 @@
 							handleProceed(channel);
 						}
 					}}
-					class="channel z-0 cursor-pointer flex items-center justify-between flex-col text-center transition duration-200 ease-in-out {selectedChannelIndex ===
+					class="channel cursor-pointer flex items-center justify-between flex-col text-center transition duration-200 ease-in-out {selectedChannelIndex ===
 					i
 						? '-translate-y-1 scale-110'
 						: ''}"
