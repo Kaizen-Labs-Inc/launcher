@@ -9,7 +9,7 @@
 	import AddFormPopover from '../components/AddFormPopover.svelte';
 	import AppSearchDropdown from '../components/AppSearchDropdown.svelte';
 	import Channel, { mockChannels } from '../models/Channel';
-	import { SearchIcon, GridIcon, Trash2Icon, Edit2Icon } from 'svelte-feather-icons';
+	import { SearchIcon, GridIcon, Trash2Icon, Edit2Icon, XIcon } from 'svelte-feather-icons';
 
 	let query = '';
 	let searchIsFocused: boolean = false;
@@ -222,7 +222,7 @@
 					on:focus
 					on:blur
 					on:mouseover={() => {
-						if (!editModeEnabled) {
+						if (!editModeEnabled && !addFormIsFocused) {
 							selectedChannelIndex = i;
 						}
 					}}
@@ -236,7 +236,10 @@
 							handleProceed(channel);
 						}
 					}}
-					class="channel cursor-pointer flex items-center justify-between flex-col text-center transition duration-200 ease-in-out hover:-translate-y-1 hover:scale-110"
+					class="channel z-0 cursor-pointer flex items-center justify-between flex-col text-center transition duration-200 ease-in-out {selectedChannelIndex ===
+					i
+						? '-translate-y-1 scale-110'
+						: ''}"
 				>
 					<div
 						style={editModeEnabled
@@ -297,9 +300,9 @@
 									// TODO allow undo
 									channels = channels.filter((c) => c.id !== channel.id);
 								}}
-								class="cursor-pointer mx-2 rounded bg-white bg-opacity-5 p-2 hover:bg-opacity-10 text-red-500"
+								class="cursor-pointer mx-2 rounded p-2  text-white bg-red-500 hover:bg-red-600"
 							>
-								<Trash2Icon strokeWidth="1" size="16" />
+								<XIcon strokeWidth="2" size="16" />
 							</div>
 						</div>
 					{/if}
@@ -307,11 +310,14 @@
 			{/each}
 		</section>
 		{#if editModeEnabled}
-			<div
-				on:click={handleEditModeToggle}
-				class="mx-auto cursor-pointer mt-12 rounded-xl bg-white bg-opacity-10 p-4 font-medium text-lg flex justify-center items-center hover:bg-opacity-20"
-			>
-				Done
+			<div class="flex flex-col items-center justify-center">
+				<div
+					on:click={handleEditModeToggle}
+					class="mx-auto cursor-pointer mt-12 rounded-xl bg-white bg-opacity-10 p-4 font-medium text-lg flex justify-center items-center hover:bg-opacity-20"
+				>
+					Done
+				</div>
+				<div class="mt-3 text-center opacity-60">Removing an app affects your homescreen only.</div>
 			</div>
 		{/if}
 	{:else}
