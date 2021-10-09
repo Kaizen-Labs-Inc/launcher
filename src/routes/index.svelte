@@ -214,7 +214,7 @@
 	</section>
 	{#if !searchIsFocused}
 		<section
-			style="z-index: -3"
+			style="z-index: 0"
 			class="grid lg:grid-cols-6 md:grid-cols-4 grid-cols-2 gap-8 md:gap-12 lg:gap-16 transition duration-200 ease-in-out {editModeEnabled
 				? 'mt-0'
 				: 'mt-16'}"
@@ -248,7 +248,7 @@
 							handleProceed(channel);
 						}
 					}}
-					style={editModeEnabled ? '' : 'z-index: -2;'}
+					style={editModeEnabled ? '' : 'z-index: 0;'}
 					class="channel cursor-pointer flex items-center justify-between flex-col text-center transition duration-200 ease-in-out {selectedChannelIndex ===
 					i
 						? '-translate-y-1 scale-110'
