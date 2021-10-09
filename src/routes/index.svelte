@@ -72,7 +72,7 @@
 		// This prevents the popover from appearing in a strange place
 		setTimeout(function () {
 			addFormIsFocused = !addFormIsFocused;
-		}, 200);
+		}, 100);
 	};
 
 	const handleEditModeToggle = () => {
@@ -135,8 +135,10 @@
 			false
 		);
 		// Handle clicking out of edit mode
-		// TODO This target detection isn't perfect, and if the user clicks on the SVG, it will set editMode to false
-		document.addEventListener('click', function (e) {
+		// TODO This target detection isn't perfect,
+		// and if the user clicks on the SVG, it will set editMode to false
+
+		document.addEventListener('mousedown', function (e) {
 			if (editModeEnabled && e.target.parentElement.id !== 'editToggle') {
 				var node = e.target;
 				var inside = false;
