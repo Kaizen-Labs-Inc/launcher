@@ -2,12 +2,9 @@
 	import '../app.postcss';
 	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
-	import { initializeApp } from 'firebase/app';
-	// import { getAnalytics } from 'firebase/analytics';
-	import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
-	import { goto } from '$app/navigation';
-	let auth;
-	let user;
+	import Auth from '$lib/Auth.svelte';
+	import firebase from 'firebase/compat/app';
+
 	let loading = true;
 	const firebaseConfig = {
 		apiKey: 'AIzaSyAV4OMbmBAmlQXc0HKZYqlN95rmeSH-cAY',
@@ -19,57 +16,39 @@
 		measurementId: 'G-7FF7NJNV2R'
 	};
 
-	const handleSignOut = () => {
-		signOut(auth)
-			.then(() => {
-				goto('/sign-in');
-			})
-			.catch((error) => {
-				console.error(error);
-			});
-	};
-
+	firebase.initializeApp(firebaseConfig);
 	onMount(() => {
-		const app = initializeApp(firebaseConfig);
-		// const analytics = getAnalytics(app);
-
-		auth = getAuth();
-		user = auth.currentUser;
-		onAuthStateChanged(auth, (user) => {
-			if (user) {
-				// User is signed in, see docs for a list of available properties
-				// https://firebase.google.com/docs/reference/js/firebase.User
-				const uid = user.uid;
-			} else {
-				goto('/sign-in');
-			}
-		});
-		// TODO figure out how to get a callback from firebase auth
 		loading = false;
 	});
 </script>
 
 <main>
-	{#if loading}
-		<!-- <div class="absolute flex items-center justify-center">Loading</div> -->
-	{:else}
-		<div in:fade>
-			<nav class="mt-4">
-				<ul class="flex flex-row justify-end text-gray-400">
-					<li class="cursor-pointer mr-6 hover:text-white">Invite someone</li>
-					<li class="cursor-pointer mr-6 hover:text-white">Kaizen Labs</li>
-					{#if user}
-						<li on:click={handleSignOut} class="cursor-pointer mr-6 hover:text-white">Sign out</li>
-					{:else}
-						<li class="cursor-pointer mr-6 hover:text-white">
-							<a href="/sign-in" class=""> Sign in </a>
-						</li>
-					{/if}
-				</ul>
-			</nav>
-			<slot />
-		</div>
-	{/if}
+	<Auth useRedirect={true} let:user let:loggedIn let:loginWithGoogle let:logout>
+		{#if loggedIn}
+			{#if loading}
+				<div class="absolute flex items-center justify-center">Loading...</div>
+			{:else}
+				<div in:fade>
+					<nav class="mt-4">
+						<ul class="flex flex-row justify-end text-gray-400">
+							<li class="cursor-pointer mr-6 hover:text-white">Invite someone</li>
+							<li class="cursor-pointer mr-6 hover:text-white">Kaizen Labs</li>
+							{#if user}
+								<li on:click={logout} class="cursor-pointer mr-6 hover:text-white">Sign out</li>
+							{:else}
+								<li class="cursor-pointer mr-6 hover:text-white">
+									<a href="/sign-in" class=""> Sign in </a>
+								</li>
+							{/if}
+						</ul>
+					</nav>
+					<slot />
+				</div>
+			{/if}
+		{:else}
+			<button type="button" on:click|preventDefault={loginWithGoogle}> Sign In with Google </button>
+		{/if}
+	</Auth>
 </main>
 
 <!-- <footer style="opacity-50 hover:opacity-100">
