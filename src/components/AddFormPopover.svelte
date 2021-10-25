@@ -47,7 +47,7 @@
 		return str === null || str.match(/^ *$/) !== null;
 	};
 	onMount(() => {
-		tippy('#target', {
+		tippy('#addTarget', {
 			content: 'Add an app',
 			arrow: false,
 			theme: 'translucent'
@@ -127,7 +127,7 @@
 >
 	<button
 		slot="target"
-		id="target"
+		id="addTarget"
 		class="cursor-pointer transition duration-200 ease-in-out {popOverIsFocused
 			? 'rotate-45'
 			: 'hover:scale-110 hover:opacity-100 opacity-75'}"

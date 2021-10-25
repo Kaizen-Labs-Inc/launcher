@@ -46,6 +46,7 @@
 		selectedChannelIndex = null;
 		window.open('https://' + channel.url, '_blank').focus();
 	};
+
 	const handleBlur = () => {
 		let searchInput = document.getElementById('searchInput');
 		searchIsFocused = false;
@@ -53,6 +54,7 @@
 		selectedChannelIndex = null;
 		query = '';
 	};
+
 	const handleFocus = () => {
 		if (!editModeEnabled) {
 			searchIsFocused = true;
@@ -76,6 +78,7 @@
 	};
 
 	const handleEditModeToggle = () => {
+		// TODO disable tippy
 		editModeEnabled = !editModeEnabled;
 	};
 
@@ -85,7 +88,6 @@
 			arrow: false,
 			theme: 'translucent'
 		});
-
 		document.addEventListener(
 			'keydown',
 			(event) => {
@@ -193,7 +195,7 @@
 					>
 					<div class="flex flex-row items-center">
 						<div
-							on:click|preventDefault={handleEditModeToggle}
+							on:click={handleEditModeToggle}
 							id="editToggle"
 							class="mr-8 cursor-pointer opacity-75 hover:opacity-100 transition duration-200 ease-in-out hover:scale-110"
 						>
