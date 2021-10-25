@@ -14,20 +14,20 @@
 	import 'tippy.js/themes/translucent.css';
 	import { SearchIcon, GridIcon, Edit2Icon, XIcon } from 'svelte-feather-icons';
 
-	let query = '';
+	let query: string = '';
 	let searchIsFocused: boolean = false;
 	let addFormIsFocused: boolean = false;
-	let selectedChannelIndex;
-	let channels = mockChannels;
-	const flipDurationMs = 200;
-	let isConsidering = false;
-	let editModeEnabled = false;
+	let selectedChannelIndex: number;
+	let channels: Channel[] = mockChannels;
+	const flipDurationMs: number = 200;
+	let isConsidering: boolean = false;
+	let editModeEnabled: boolean = false;
 
 	// For edit mode jiggles
-	const jiggleAnimDelayMin = -0.75;
-	const jiggleAnimDelayMax = -0.05;
-	const jiggleAnimDurationMin = 0.22;
-	const jiggleAnimDurationMax = 0.3;
+	const jiggleAnimDelayMin: number = -0.75;
+	const jiggleAnimDelayMax: number = -0.05;
+	const jiggleAnimDurationMin: number = 0.22;
+	const jiggleAnimDurationMax: number = 0.3;
 
 	$: filteredChannels = channels.filter(
 		// TODO also filter by description, tags, and URL

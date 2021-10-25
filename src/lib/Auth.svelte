@@ -1,4 +1,6 @@
 <script>
+	// TODO upgrade these imports based on Firebase 9
+	// https://firebase.googleblog.com/2021/08/the-new-firebase-js-sdk-now-ga.html
 	import firebase from 'firebase/compat/app';
 	import 'firebase/compat/auth';
 	import 'firebase/compat/firestore';

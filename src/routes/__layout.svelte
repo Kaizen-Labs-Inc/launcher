@@ -23,32 +23,32 @@
 </script>
 
 <main>
-	<Auth useRedirect={true} let:user let:loggedIn let:loginWithGoogle let:logout>
-		{#if loggedIn}
-			{#if loading}
-				<div class="absolute flex items-center justify-center">Loading...</div>
-			{:else}
-				<div in:fade>
-					<nav class="mt-4">
-						<ul class="flex flex-row justify-end text-gray-400">
-							<li class="cursor-pointer mr-6 hover:text-white">Invite someone</li>
-							<li class="cursor-pointer mr-6 hover:text-white">Kaizen Labs</li>
-							{#if user}
-								<li on:click={logout} class="cursor-pointer mr-6 hover:text-white">Sign out</li>
-							{:else}
-								<li class="cursor-pointer mr-6 hover:text-white">
-									<a href="/sign-in" class=""> Sign in </a>
-								</li>
-							{/if}
-						</ul>
-					</nav>
-					<slot />
-				</div>
-			{/if}
-		{:else}
-			<button type="button" on:click|preventDefault={loginWithGoogle}> Sign In with Google </button>
-		{/if}
-	</Auth>
+	<!-- <Auth useRedirect={true} let:user let:loggedIn let:loginWithGoogle let:logout> -->
+	<!-- {#if loggedIn} -->
+	{#if loading}
+		<div class="absolute flex items-center justify-center">Loading...</div>
+	{:else}
+		<div in:fade>
+			<nav class="mt-4">
+				<ul class="flex flex-row justify-end text-gray-400">
+					<li class="cursor-pointer mr-6 hover:text-white">Invite someone</li>
+					<li class="cursor-pointer mr-6 hover:text-white">Kaizen Labs</li>
+					<!-- {#if user} -->
+					<!-- <li on:click={logout} class="cursor-pointer mr-6 hover:text-white">Sign out</li> -->
+					<!-- {:else}
+						<li class="cursor-pointer mr-6 hover:text-white">
+							<a href="/sign-in" class=""> Sign in </a>
+						</li>
+					{/if} -->
+				</ul>
+			</nav>
+			<slot />
+		</div>
+	{/if}
+	<!-- {:else} -->
+	<!-- <button type="button" on:click|preventDefault={loginWithGoogle}> Sign In with Google </button> -->
+	<!-- {/if} -->
+	<!-- </Auth> -->
 </main>
 
 <!-- <footer style="opacity-50 hover:opacity-100">
