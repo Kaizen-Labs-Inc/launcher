@@ -2,7 +2,7 @@
 	import '../app.postcss';
 	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
-	import Auth from '$lib/Auth.svelte';
+	// import Auth from '$lib/Auth.svelte';
 	import firebase from 'firebase/compat/app';
 
 	let loading = true;
