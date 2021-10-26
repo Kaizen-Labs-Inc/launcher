@@ -139,7 +139,7 @@
 		slot="content"
 		id="addModal"
 		style="width: 340px;"
-		class="bg-white backdrop-blur-2xl bg-opacity-5 p-4 shadow-xl rounded-xl mr-2"
+		class="bg-black backdrop-blur-2xl bg-opacity-5 p-4 shadow-xl rounded-xl mr-2"
 	>
 		<form>
 			{#if !stepOneComplete}
@@ -321,5 +321,10 @@
 	}
 	.tagsContainer :global(.svelte-tags-input-layout:hover) {
 		border: none;
+	}
+	@-moz-document url-prefix() {
+		#addModal {
+			background-color: red !important;
+		}
 	}
 </style>
