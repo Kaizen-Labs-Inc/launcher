@@ -5,6 +5,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { flip } from 'svelte/animate';
+	import { scale } from 'svelte/transition';
 	import { dndzone } from 'svelte-dnd-action';
 	import AddFormPopover from '../components/AddFormPopover.svelte';
 	import AppSearchDropdown from '../components/AppSearchDropdown.svelte';
@@ -222,8 +223,13 @@
 			use:dndzone={{
 				items: channels,
 				flipDurationMs,
+				morphDisabled: true,
 				dropTargetClasses: ['target'],
 				dropTargetStyle: { outline: 'none' },
+				transformDraggedElement: (el) => {
+					console.log(el); // TODO This is not working
+					// We want to remove the delete and edit buttons when dragging
+				},
 				dragDisabled: !editModeEnabled
 			}}
 			on:consider={handleDndConsider}
@@ -250,7 +256,7 @@
 						}
 					}}
 					style={addFormIsFocused ? 'z-index: -100' : 'z-index: 0;'}
-					class="channel cursor-pointer flex items-center justify-between flex-col text-center transition duration-200 ease-in-out {selectedChannelIndex ===
+					class="channel cursor-pointer flex items-center justify-center flex-col text-center transition duration-200 ease-in-out {selectedChannelIndex ===
 					i
 						? '-translate-y-1 scale-110'
 						: ''}"
@@ -301,10 +307,12 @@
 							</div>
 						{/if}
 					</div>
-					<div class="text-2xl">{channel.title}</div>
-					<div class="text-md opacity-30">{channel.url}</div>
-					{#if editModeEnabled}
-						<div class=" flex flex-row items-center mt-4">
+					<div>
+						<div class="text-2xl">{channel.title}</div>
+						<div class="text-md opacity-30">{channel.url}</div>
+					</div>
+					{#if editModeEnabled && !isConsidering}
+						<div class="flex flex-row items-center mt-4">
 							<div
 								class="cursor-pointer mx-2 rounded bg-white bg-opacity-5 p-2 hover:bg-opacity-10"
 							>
