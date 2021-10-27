@@ -322,9 +322,11 @@
 	.tagsContainer :global(.svelte-tags-input-layout:hover) {
 		border: none;
 	}
-	@-moz-document url-prefix() {
+
+	/* Firefox doesn't support background blur filter yet */
+	@supports (-moz-appearance: none) {
 		#addModal {
-			background-color: red !important;
+			background-color: rgba(0, 0, 0, 0.95);
 		}
 	}
 </style>
