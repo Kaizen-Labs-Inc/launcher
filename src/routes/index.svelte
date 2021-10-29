@@ -311,8 +311,12 @@
 						<div class="text-2xl">{channel.title}</div>
 						<div class="text-md opacity-30">{channel.url}</div>
 					</div>
-					{#if editModeEnabled && !isConsidering}
-						<div class="flex flex-row items-center mt-4">
+					{#if editModeEnabled}
+						<div
+							class="flex flex-row items-center mt-4 transition duration-250 ease-in-out {isConsidering
+								? 'opacity-0 scale-50'
+								: 'opacity-100 scale-100'}"
+						>
 							<div
 								class="cursor-pointer mx-2 rounded bg-white bg-opacity-5 p-2 hover:bg-opacity-10"
 							>

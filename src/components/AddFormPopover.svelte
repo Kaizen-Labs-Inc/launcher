@@ -36,6 +36,7 @@
 	};
 	export let popOverIsFocused: boolean = false;
 	let stepOneComplete: boolean = false;
+
 	const resetPopover = () => {
 		popOverIsFocused = false;
 		selectedChannelIndex = null;
@@ -55,7 +56,10 @@
 
 		picker = new EmojiButton({
 			zIndex: 10000,
-			rootElement: document.getElementById('addModal')
+			rootElement: document.getElementById('addModal'),
+			styleProperties: {
+				'--background-color': '#000'
+			}
 		});
 		picker.on('emoji', (selection) => {
 			emoji = selection.emoji;
@@ -120,6 +124,7 @@
 	open={popOverIsFocused}
 	on:open={() => {
 		popOverIsFocused = true;
+		// TODO tippy.disable
 	}}
 	on:close={resetPopover}
 	overlayColor="rgba(0, 0, 0, 0.0)"
