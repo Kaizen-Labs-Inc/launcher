@@ -5,15 +5,15 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { flip } from 'svelte/animate';
-	import { scale } from 'svelte/transition';
 	import { dndzone } from 'svelte-dnd-action';
-	import AddFormPopover from '../components/AddFormPopover.svelte';
-	import AppSearchDropdown from '../components/AppSearchDropdown.svelte';
+	import AddChannelPopover from '../components/AddChannelPopover.svelte';
+	import ChannelSearchDropdown from '../components/ChannelSearchDropdown.svelte';
 	import Channel, { mockChannels } from '../models/Channel';
 	import tippy from 'tippy.js';
 	import 'tippy.js/dist/tippy.css';
 	import 'tippy.js/themes/translucent.css';
 	import { SearchIcon, GridIcon, Edit2Icon, XIcon } from 'svelte-feather-icons';
+	import { goto } from '$app/navigation';
 
 	let query: string = '';
 	let searchIsFocused: boolean = false;
@@ -203,7 +203,7 @@
 							<GridIcon size="48" strokeWidth="1" />
 						</div>
 
-						<AddFormPopover
+						<AddChannelPopover
 							channels={mockChannels}
 							bind:popOverIsFocused={addFormIsFocused}
 							on:channelAdded={(e) => {
@@ -318,6 +318,9 @@
 								: 'opacity-100 scale-100'}"
 						>
 							<div
+								on:click={() => {
+									goto(`/app/edit?id=${channel.id}`);
+								}}
 								class="cursor-pointer mx-2 rounded bg-white bg-opacity-5 p-2 hover:bg-opacity-10"
 							>
 								<Edit2Icon strokeWidth="1" size="16" />
@@ -350,7 +353,7 @@
 			</div>
 		{/if}
 	{:else}
-		<AppSearchDropdown
+		<ChannelSearchDropdown
 			bind:selectedChannelIndex
 			bind:filteredChannels
 			on:appSelected={(event) => {
