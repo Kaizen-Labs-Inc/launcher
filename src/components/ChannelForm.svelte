@@ -9,10 +9,15 @@
 	import Tags from 'svelte-tags-input';
 	import type Channel from 'src/models/Channel';
 	const dispatch = createEventDispatcher();
-	export let channel: Channel;
+	export let channel: Channel = {
+		title: '',
+		description: '',
+		url: '',
+		icon: '',
+		tags: []
+	};
 	let emoji;
 	let picker;
-
 	export const handleSubmit = (channel: Channel) => {
 		channel.emoji = emoji;
 		dispatch('submit', {
@@ -39,6 +44,7 @@
 		<label for="title" class="font-medium ">Name it</label>
 		<input
 			autofocus
+			bind:value={channel.title}
 			name="title"
 			type="text"
 			placeholder="Type a name"
@@ -60,8 +66,9 @@
 	</div>
 </div>
 <div class="my-4 flex flex-col">
-	<label for="url" class="font-medium ">Paste the URL</label>
+	<label for="url" class="font-medium ">URL</label>
 	<input
+		bind:value={channel.url}
 		name="url"
 		type="url"
 		placeholder="Paste the link here"
@@ -71,6 +78,7 @@
 <div class="my-4 flex flex-col">
 	<label for="description" class="font-medium ">Describe it</label>
 	<textarea
+		bind:value={channel.description}
 		name="description"
 		type="text"
 		placeholder="Add an optional description"
@@ -84,6 +92,7 @@
 			on:tags={(e) => {
 				handleTags(e);
 			}}
+			bind:value={channel.tags}
 			onlyUnique
 			placeholder="Add tags"
 		/>
@@ -97,9 +106,9 @@
 	on:click={() => {
 		handleSubmit(channel);
 	}}
-	class="flex mt-2 cursor-pointer justify-center items-center rounded bg-black text-white font-medium py-2 text-lg"
+	class="flex mt-2 cursor-pointer justify-center items-center rounded bg-white bg-opacity-90 text-black font-medium py-2 text-lg"
 >
-	Add it
+	Save
 </div>
 
 <style>

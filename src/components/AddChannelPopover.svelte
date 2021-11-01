@@ -10,7 +10,6 @@
 	import type Channel from 'src/models/Channel';
 	import { v4 as uuidv4 } from 'uuid';
 	import ChannelForm from './ChannelForm.svelte';
-	import { detach } from 'svelte/internal';
 
 	export let channels = [];
 	let selectedChannelIndex: number = 0;
@@ -25,13 +24,6 @@
 		// HACK dedupe - should do this by ID or just pull directly from airtable cache
 		.filter((c, i, a) => a.findIndex((t) => t.title === c.title) === i);
 
-	let newChannel: Channel = {
-		title: '',
-		description: '',
-		url: '',
-		icon: '',
-		tags: []
-	};
 	export let popOverIsFocused: boolean = false;
 	let stepOneComplete: boolean = false;
 
@@ -143,7 +135,6 @@
 						class="bg-white bg-opacity-10 rounded p-2 outline-none"
 						on:input={() => {
 							if (isEmptyOrSpaces(query)) {
-								console.log('hey');
 								selectedChannelIndex = 0;
 							}
 						}}

@@ -48,6 +48,10 @@
 		window.open('https://' + channel.url, '_blank').focus();
 	};
 
+	const handleEdit = (channel: Channel) => {
+		goto(`/app/edit?id=${channel.id}`);
+	};
+
 	const handleBlur = () => {
 		let searchInput = document.getElementById('searchInput');
 		searchIsFocused = false;
@@ -62,6 +66,7 @@
 			selectedChannelIndex = 0;
 		}
 	};
+
 	const handleInput = () => {
 		selectedChannelIndex = 0;
 	};
@@ -319,7 +324,7 @@
 						>
 							<div
 								on:click={() => {
-									goto(`/app/edit?id=${channel.id}`);
+									handleEdit(channel);
 								}}
 								class="cursor-pointer mx-2 rounded bg-white bg-opacity-5 p-2 hover:bg-opacity-10"
 							>
@@ -360,7 +365,7 @@
 				handleProceed(event.detail.channel);
 			}}
 			on:editClicked={(event) => {
-				console.log('edit clicked', event.detail.channel);
+				handleEdit(event.detail.channel);
 			}}
 			on:addClicked={toggleAddForm}
 		/>

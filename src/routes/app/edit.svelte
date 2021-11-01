@@ -1,17 +1,18 @@
-<script context="module" lang="ts">
-	import ChannelForm from '../../components/ChannelForm.svelte';
-	export const prerender = true;
-</script>
-
 <script lang="ts">
+	import ChannelForm from '../../components/ChannelForm.svelte';
 	import { goto } from '$app/navigation';
+	import Channel, { mockChannels } from '../../models/Channel';
+	import { page } from '$app/stores';
+	// Use channel ID to get details...
+	let channel: Channel = mockChannels.find((c) => c.id === $page.query.get('id'));
+	console.log(channel);
 </script>
 
 <h1>Edit app</h1>
 
 <ChannelForm
+	{channel}
 	on:submit={(event) => {
-		console.log(event.detail);
 		goto('/');
 	}}
 />
