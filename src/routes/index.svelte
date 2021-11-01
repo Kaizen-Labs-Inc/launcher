@@ -5,15 +5,15 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { flip } from 'svelte/animate';
-	import { scale } from 'svelte/transition';
 	import { dndzone } from 'svelte-dnd-action';
-	import AddFormPopover from '../components/AddFormPopover.svelte';
-	import AppSearchDropdown from '../components/AppSearchDropdown.svelte';
+	import AddChannelPopover from '../components/AddChannelPopover.svelte';
+	import ChannelSearchDropdown from '../components/ChannelSearchDropdown.svelte';
 	import Channel, { mockChannels } from '../models/Channel';
 	import tippy from 'tippy.js';
 	import 'tippy.js/dist/tippy.css';
 	import 'tippy.js/themes/translucent.css';
 	import { SearchIcon, GridIcon, Edit2Icon, XIcon } from 'svelte-feather-icons';
+	import { goto } from '$app/navigation';
 
 	let query: string = '';
 	let searchIsFocused: boolean = false;
@@ -48,6 +48,10 @@
 		window.open('https://' + channel.url, '_blank').focus();
 	};
 
+	const handleEdit = (channel: Channel) => {
+		goto(`/app/edit?id=${channel.id}`);
+	};
+
 	const handleBlur = () => {
 		let searchInput = document.getElementById('searchInput');
 		searchIsFocused = false;
@@ -62,6 +66,7 @@
 			selectedChannelIndex = 0;
 		}
 	};
+
 	const handleInput = () => {
 		selectedChannelIndex = 0;
 	};
@@ -203,7 +208,7 @@
 							<GridIcon size="48" strokeWidth="1" />
 						</div>
 
-						<AddFormPopover
+						<AddChannelPopover
 							channels={mockChannels}
 							bind:popOverIsFocused={addFormIsFocused}
 							on:channelAdded={(e) => {
@@ -311,9 +316,16 @@
 						<div class="text-2xl">{channel.title}</div>
 						<div class="text-md opacity-30">{channel.url}</div>
 					</div>
-					{#if editModeEnabled && !isConsidering}
-						<div class="flex flex-row items-center mt-4">
+					{#if editModeEnabled}
+						<div
+							class="flex flex-row items-center mt-4 transition duration-250 ease-in-out {isConsidering
+								? 'opacity-0 scale-50'
+								: 'opacity-100 scale-100'}"
+						>
 							<div
+								on:click={() => {
+									handleEdit(channel);
+								}}
 								class="cursor-pointer mx-2 rounded bg-white bg-opacity-5 p-2 hover:bg-opacity-10"
 							>
 								<Edit2Icon strokeWidth="1" size="16" />
@@ -346,14 +358,14 @@
 			</div>
 		{/if}
 	{:else}
-		<AppSearchDropdown
+		<ChannelSearchDropdown
 			bind:selectedChannelIndex
 			bind:filteredChannels
 			on:appSelected={(event) => {
 				handleProceed(event.detail.channel);
 			}}
 			on:editClicked={(event) => {
-				console.log('edit clicked', event.detail.channel);
+				handleEdit(event.detail.channel);
 			}}
 			on:addClicked={toggleAddForm}
 		/>
