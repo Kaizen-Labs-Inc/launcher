@@ -12,6 +12,7 @@
 	import ChannelForm from './ChannelForm.svelte';
 
 	export let channels = [];
+
 	let selectedChannelIndex: number = 0;
 	const dispatch = createEventDispatcher();
 	let query = '';
@@ -167,8 +168,13 @@
 										{channel.title.charAt(0)}
 									{/if}
 								</div>
-								<div>
-									{channel.title}
+								<div class="flex justify-between align-center w-full">
+									<div>
+										{channel.title}
+									</div>
+									<!-- {#if channel.id is in homescreen array id...} -->
+									<!-- on clicking it, show a toast that its already added-->
+									<div class="opacity-70">✓ Added</div>
 								</div>
 							</li>
 						{/each}

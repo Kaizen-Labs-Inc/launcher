@@ -14,6 +14,8 @@
 	import 'tippy.js/themes/translucent.css';
 	import { SearchIcon, GridIcon, Edit2Icon, XIcon } from 'svelte-feather-icons';
 	import { goto } from '$app/navigation';
+	import { addToast } from '../stores/toaststore';
+	import Toast from '../components/Toast.svelte';
 
 	let query: string = '';
 	let searchIsFocused: boolean = false;
@@ -74,6 +76,7 @@
 	const handleChannelAdded = (channel) => {
 		channels.unshift(channel);
 		channels = channels;
+		addToast({ dismissible: false, message: 'Added', type: 'success', timeout: 3000 });
 	};
 
 	const toggleAddForm = () => {
