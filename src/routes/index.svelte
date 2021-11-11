@@ -15,7 +15,6 @@
 	import { SearchIcon, GridIcon, Edit2Icon, XIcon } from 'svelte-feather-icons';
 	import { goto } from '$app/navigation';
 	import { addToast } from '../stores/toaststore';
-	import Toast from '../components/Toast.svelte';
 
 	let query: string = '';
 	let searchIsFocused: boolean = false;
@@ -212,7 +211,7 @@
 						</div>
 
 						<AddChannelPopover
-							channels={mockChannels}
+							{channels}
 							bind:popOverIsFocused={addFormIsFocused}
 							on:channelAdded={(e) => {
 								handleChannelAdded(e.detail.channel);
