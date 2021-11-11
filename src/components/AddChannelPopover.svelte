@@ -10,6 +10,7 @@
 	import type Channel from 'src/models/Channel';
 	import { v4 as uuidv4 } from 'uuid';
 	import ChannelForm from './ChannelForm.svelte';
+	import { mockChannels } from '../models/Channel';
 
 	export let channels = [];
 
@@ -17,7 +18,7 @@
 	const dispatch = createEventDispatcher();
 	let query = '';
 
-	$: filteredChannels = channels
+	$: filteredChannels = mockChannels
 		.filter(
 			// TODO also filter by description, tags, and URL
 			(channel) => channel.title.toLowerCase().indexOf(query.toLowerCase()) !== -1
@@ -172,9 +173,13 @@
 									<div>
 										{channel.title}
 									</div>
-									<!-- {#if channel.id is in homescreen array id...} -->
-									<!-- on clicking it, show a toast that its already added-->
-									<div class="opacity-70">✓ Added</div>
+									<!-- We need a new store for the users individual channels -->
+									<!-- For now we're just using 'channels', 
+									a prop passed from the parent that is keeping state -->
+
+									{#if channels.map((c) => c.id).includes(channel.id)}
+										<div class="opacity-70">✓ Added</div>
+									{/if}
 								</div>
 							</li>
 						{/each}
