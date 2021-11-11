@@ -4,6 +4,8 @@
 	import { fade } from 'svelte/transition';
 	// import Auth from '$lib/Auth.svelte';
 	import firebase from 'firebase/compat/app';
+	import Toasts from '../components/Toasts.svelte';
+	import { addToast } from '../stores/toaststore';
 
 	let loading = true;
 	const firebaseConfig = {
@@ -23,6 +25,7 @@
 </script>
 
 <main>
+	<Toasts />
 	<!-- <Auth useRedirect={true} let:user let:loggedIn let:loginWithGoogle let:logout> -->
 	<!-- {#if loggedIn} -->
 	{#if loading}
