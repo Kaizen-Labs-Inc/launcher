@@ -151,12 +151,19 @@
 									selectedChannelIndex = i;
 								}}
 								on:click={() => {
-									handleAdd(channel);
+									if (channels.map((c) => c.id).includes(channel.id)) {
+										return; // don't do anything - the channel is already added to the homescreen
+									} else {
+										handleAdd(channel);
+									}
 								}}
-								class="my-1 rounded-lg cursor-pointer p-2 flex items-center {selectedChannelIndex ===
-								i
-									? 'bg-opacity-10 bg-white selected'
-									: ''}"
+								class="my-1 rounded-lg p-2 flex items-center {channels
+									.map((c) => c.id)
+									.includes(channel.id)
+									? 'opacity-60'
+									: selectedChannelIndex === i
+									? 'bg-opacity-10 bg-white selected cursor-pointer'
+									: 'cursor-pointer'}"
 							>
 								<div
 									class="w-10 h-10 bg-white text-lg text-black rounded-md flex items-center justify-center mr-4"
@@ -173,10 +180,9 @@
 									<div>
 										{channel.title}
 									</div>
-									<!-- We need a new store for the users individual channels -->
+									<!-- TODO We need a new store for the users individual channels -->
 									<!-- For now we're just using 'channels', 
 									a prop passed from the parent that is keeping state -->
-
 									{#if channels.map((c) => c.id).includes(channel.id)}
 										<div class="opacity-70">✓ Added</div>
 									{/if}
