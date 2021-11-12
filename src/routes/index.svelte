@@ -133,7 +133,7 @@
 				}
 				if (
 					event.metaKey &&
-					event.key === 'k' &&
+					event.key === 'g' &&
 					searchInput !== document.activeElement &&
 					!searchIsFocused &&
 					!editModeEnabled
@@ -199,7 +199,7 @@
 				{#if !searchIsFocused}
 					<span
 						class="absolute ml-48 border-2 border-white border-opacity-50 w-10 h-10 opacity-50 flex items-center justify-center rounded-md"
-						>⌘K</span
+						>⌘G</span
 					>
 					<div class="flex flex-row items-center">
 						<div
