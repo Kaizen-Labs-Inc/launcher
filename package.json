@@ -12,6 +12,7 @@
 	},
 	"devDependencies": {
 		"@sveltejs/kit": "next",
+		"@sveltejs/adapter-vercel": "next",
 		"@types/cookie": "^0.4.1",
 		"@typescript-eslint/eslint-plugin": "^4.31.1",
 		"@typescript-eslint/parser": "^4.31.1",
