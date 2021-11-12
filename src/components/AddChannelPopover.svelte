@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount, createEventDispatcher } from 'svelte';
 	import { scale } from 'svelte/transition';
-	import tippy from 'tippy.js';
+	import tippy, { Instance } from 'tippy.js';
 	import 'tippy.js/dist/tippy.css';
 	import 'tippy.js/themes/translucent.css';
 
@@ -11,9 +11,10 @@
 	import { v4 as uuidv4 } from 'uuid';
 	import ChannelForm from './ChannelForm.svelte';
 	import { mockChannels } from '../models/Channel';
-
 	export let channels = [];
+	export let editModeEnabled: boolean;
 
+	let tippyInstance: Instance;
 	let selectedChannelIndex: number = 0;
 	const dispatch = createEventDispatcher();
 	let query = '';
@@ -40,7 +41,7 @@
 		return str === null || str.match(/^ *$/) !== null;
 	};
 	onMount(() => {
-		tippy('#addTarget', {
+		tippyInstance = tippy(document.getElementById('addTarget'), {
 			content: 'Add an app',
 			arrow: false,
 			theme: 'translucent'
@@ -102,7 +103,6 @@
 	open={popOverIsFocused}
 	on:open={() => {
 		popOverIsFocused = true;
-		// TODO tippy.disable
 	}}
 	on:close={resetPopover}
 	overlayColor="rgba(0, 0, 0, 0.0)"
@@ -110,10 +110,12 @@
 >
 	<button
 		slot="target"
-		id="addTarget"
-		class="cursor-pointer transition duration-200 ease-in-out {popOverIsFocused
+		id={editModeEnabled ? '' : 'addTarget'}
+		class="transition duration-200 ease-in-out {popOverIsFocused
 			? 'rotate-45'
-			: 'hover:scale-110 hover:opacity-100 opacity-75'}"
+			: ''} {editModeEnabled
+			? 'cursor-default'
+			: 'cursor-pointer hover:opacity-100 hover:scale-110'}"
 		><PlusCircleIcon size="48" strokeWidth="1" /></button
 	>
 
