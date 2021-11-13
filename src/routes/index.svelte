@@ -86,12 +86,8 @@
 	};
 
 	const handleEditModeToggle = () => {
-		editModeEnabled = !editModeEnabled;
-		if (editModeEnabled) {
-			tippyInstance.disable();
-		} else {
-			tippyInstance.enable();
-		}
+		editModeEnabled = true;
+		tippyInstance.disable();
 	};
 
 	onMount(() => {
@@ -165,6 +161,7 @@
 				}
 				if (!inside) {
 					editModeEnabled = false;
+					tippyInstance.enable();
 				}
 			}
 		});
@@ -211,7 +208,7 @@
 							id="editToggle"
 							class="mr-8 {editModeEnabled
 								? ''
-								: 'cursor-pointer hover:opacity-100 hover:scale-110'} opacity-75  transition duration-200 ease-in-out"
+								: 'cursor-pointer hover:opacity-100 hover:scale-110'} opacity-75 transition duration-200 ease-in-out"
 						>
 							<GridIcon size="48" strokeWidth="1" />
 						</div>

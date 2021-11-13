@@ -13,11 +13,21 @@
 	import { mockChannels } from '../models/Channel';
 	export let channels = [];
 	export let editModeEnabled: boolean;
-
 	let tippyInstance: Instance;
+
 	let selectedChannelIndex: number = 0;
 	const dispatch = createEventDispatcher();
 	let query = '';
+
+	$: {
+		if (tippyInstance) {
+			if (editModeEnabled) {
+				tippyInstance.disable();
+			} else {
+				tippyInstance.enable();
+			}
+		}
+	}
 
 	$: filteredChannels = mockChannels
 		.filter(
@@ -110,7 +120,7 @@
 >
 	<button
 		slot="target"
-		id={editModeEnabled ? '' : 'addTarget'}
+		id="addTarget"
 		class="transition duration-200 ease-in-out {popOverIsFocused
 			? 'rotate-45'
 			: ''} {editModeEnabled
