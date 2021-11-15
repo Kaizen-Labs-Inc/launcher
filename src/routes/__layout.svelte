@@ -2,26 +2,27 @@
 	import '../app.postcss';
 	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
-	// import Auth from '$lib/Auth.svelte';
-	import firebase from 'firebase/compat/app';
 	import Toasts from '../components/Toasts.svelte';
-	import { addToast } from '../stores/toaststore';
+	import { session } from "$app/stores";
+	import { signOut } from 'sk-auth/client';
+
+	let user;
+
+	session.subscribe(value => {
+		user = value?.user?.connections?.google;
+	});
 
 	let loading = true;
-	const firebaseConfig = {
-		apiKey: 'AIzaSyAV4OMbmBAmlQXc0HKZYqlN95rmeSH-cAY',
-		authDomain: 'springboard-launcher.firebaseapp.com',
-		projectId: 'springboard-launcher',
-		storageBucket: 'springboard-launcher.appspot.com',
-		messagingSenderId: '190518399300',
-		appId: '1:190518399300:web:769e8cc7c1b82381f08711',
-		measurementId: 'G-7FF7NJNV2R'
-	};
 
-	firebase.initializeApp(firebaseConfig);
 	onMount(() => {
 		loading = false;
 	});
+
+	const logout = () => {
+		signOut()
+		session.set(undefined);
+	}
+
 </script>
 
 <main>
@@ -36,13 +37,14 @@
 				<ul class="flex flex-row justify-end text-gray-400">
 					<li class="cursor-pointer mr-6 hover:text-white">Invite someone</li>
 					<li class="cursor-pointer mr-6 hover:text-white">Kaizen Labs</li>
-					<!-- {#if user} -->
-					<!-- <li on:click={logout} class="cursor-pointer mr-6 hover:text-white">Sign out</li> -->
-					<!-- {:else}
+					{#if user}
+						<li class="cursor-pointer mr-6 hover:text-white">Welcome {user.name}</li>
+						<li on:click={logout} class="cursor-pointer mr-6 hover:text-white">Sign out</li>
+					{:else}
 						<li class="cursor-pointer mr-6 hover:text-white">
-							<a href="/sign-in" class=""> Sign in </a>
+							<a href="/sign-in" class="">Sign in </a>
 						</li>
-					{/if} -->
+					{/if}
 				</ul>
 			</nav>
 			<slot />
