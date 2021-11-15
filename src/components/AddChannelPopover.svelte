@@ -21,7 +21,7 @@
 
 	$: {
 		if (tippyInstance) {
-			if (editModeEnabled) {
+			if (editModeEnabled || popOverIsFocused) {
 				tippyInstance.disable();
 			} else {
 				tippyInstance.enable();
