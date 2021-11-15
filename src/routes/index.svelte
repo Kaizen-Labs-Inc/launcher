@@ -9,13 +9,13 @@
 	import AddChannelPopover from '../components/AddChannelPopover.svelte';
 	import ChannelSearchDropdown from '../components/ChannelSearchDropdown.svelte';
 	import Channel, { mockChannels } from '../models/Channel';
-	import tippy from 'tippy.js';
+	import tippy, { Instance } from 'tippy.js';
 	import 'tippy.js/dist/tippy.css';
 	import 'tippy.js/themes/translucent.css';
 	import { SearchIcon, GridIcon, Edit2Icon, XIcon } from 'svelte-feather-icons';
 	import { goto } from '$app/navigation';
 	import { addToast } from '../stores/toaststore';
-
+	let tippyInstance: Instance;
 	let query: string = '';
 	let searchIsFocused: boolean = false;
 	let addFormIsFocused: boolean = false;
@@ -86,12 +86,12 @@
 	};
 
 	const handleEditModeToggle = () => {
-		// TODO disable tippy
-		editModeEnabled = !editModeEnabled;
+		editModeEnabled = true;
+		tippyInstance.disable();
 	};
 
 	onMount(() => {
-		tippy('#editToggle', {
+		tippyInstance = tippy(document.getElementById('editToggle'), {
 			content: 'Edit your Springboard',
 			arrow: false,
 			theme: 'translucent'
@@ -161,6 +161,7 @@
 				}
 				if (!inside) {
 					editModeEnabled = false;
+					tippyInstance.enable();
 				}
 			}
 		});
@@ -205,7 +206,9 @@
 						<div
 							on:click={handleEditModeToggle}
 							id="editToggle"
-							class="mr-8 cursor-pointer opacity-75 hover:opacity-100 transition duration-200 ease-in-out hover:scale-110"
+							class="mr-8 {editModeEnabled
+								? ''
+								: 'cursor-pointer hover:opacity-100 hover:scale-110'} opacity-75 transition duration-200 ease-in-out"
 						>
 							<GridIcon size="48" strokeWidth="1" />
 						</div>
@@ -213,6 +216,7 @@
 						<AddChannelPopover
 							{channels}
 							bind:popOverIsFocused={addFormIsFocused}
+							bind:editModeEnabled
 							on:channelAdded={(e) => {
 								handleChannelAdded(e.detail.channel);
 							}}
