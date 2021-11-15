@@ -1,7 +1,7 @@
 export default interface Channel {
 	id?: string;
 	title: string;
-	url: string;
+	url?: string;
 	description?: string;
 	icon?: string;
 	emoji?: string;
