@@ -43,4 +43,5 @@ export const appAuth = new SvelteKitAuth({
 		}
 	},
 	jwtSecret: process.env["JWT_SECRET_KEY"],
+	host: process.env["BASE_URL"],
 });
