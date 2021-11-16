@@ -1,5 +1,16 @@
 import { SvelteKitAuth } from "sk-auth";
 import { GoogleOAuth2Provider } from "sk-auth/providers";
+import { config } from 'dotenv';
+
+let environmentSetup = false
+
+if (!environmentSetup) {
+	console.log("Setting up environment...")
+	// this sets up dotenv explicitly and is necessary to get variables
+	// not prefixed with VITE_ and expose them server-side
+	config()
+	environmentSetup = true
+}
 
 export const appAuth = new SvelteKitAuth({
 	providers: [

@@ -2,7 +2,6 @@ import cookie from 'cookie';
 import { v4 as uuid } from '@lukeed/uuid';
 import type { Handle } from '@sveltejs/kit';
 import { appAuth } from '$lib/appAuth';
-import { config } from 'dotenv';
 
 export const handle: Handle = async ({ request, resolve }) => {
 	const cookies = cookie.parse(request.headers.cookie || '');
@@ -26,18 +25,6 @@ export const handle: Handle = async ({ request, resolve }) => {
 
 	return response;
 };
-
-
-
-let environmentSetup = false
-
-if (!environmentSetup) {
-	console.log("Setting up environment...")
-	// this sets up dotenv explicitly and is necessary to get variables
-	// not prefixed with VITE_ and expose them server-side
-	config()
-	environmentSetup = true
-}
 
 // overriding the default session
 export const { getSession } = appAuth;
