@@ -4,6 +4,6 @@ import type { EndpointOutput } from '@sveltejs/kit/types/endpoint';
 export async function get(request: ServerRequest): Promise<void | EndpointOutput> {
 	console.log(JSON.stringify(request))
 	return {
-		body: { hello: process.env["GREETING"] || "world" },
+		body: { hello: process.env["BASE_URL"] || "world" },
 	};
 }
