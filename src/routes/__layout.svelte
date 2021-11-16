@@ -9,6 +9,7 @@
 	let user;
 
 	session.subscribe(value => {
+		console.log(value)
 		user = value?.user?.connections?.google;
 	});
 
