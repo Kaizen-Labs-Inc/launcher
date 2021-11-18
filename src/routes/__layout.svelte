@@ -3,13 +3,13 @@
 	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
 	import Toasts from '../components/Toasts.svelte';
-	import { session } from "$app/stores";
+	import { session } from '$app/stores';
 	import { signOut } from 'sk-auth/client';
 
 	let user;
 
-	session.subscribe(value => {
-		console.log(value)
+	session.subscribe((value) => {
+		console.log(value);
 		user = value?.user?.connections?.google;
 	});
 
@@ -20,10 +20,9 @@
 	});
 
 	const logout = () => {
-		signOut()
+		signOut();
 		session.set(undefined);
-	}
-
+	};
 </script>
 
 <main>
