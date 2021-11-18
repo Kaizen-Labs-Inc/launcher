@@ -3,25 +3,36 @@
 	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
 	import Toasts from '../components/Toasts.svelte';
-	import { session } from "$app/stores";
+	import { userStore } from "../stores/userStore";
 	import { signOut } from 'sk-auth/client';
+	import GoogleUser from '../model/api/GoogleUser';
 
-	let user;
-
-	session.subscribe(value => {
-		console.log(value)
-		user = value?.user?.connections?.google;
-	});
+	let user = undefined;
 
 	let loading = true;
 
-	onMount(() => {
+	onMount(async () => {
+		await userStore.subscribe(value => {
+			if (!value && loading) {
+				fetch("/api/auth/session").then(res => {
+					if (res.status === 200) {
+						res.json().then((s: any) => {
+							if (s.session?.user?.connections?.google) {
+								userStore.set(s.session.user.connections.google as GoogleUser)
+							}
+						})
+					}
+				})
+			}
+			user = value
+		});
+
 		loading = false;
 	});
 
 	const logout = () => {
 		signOut()
-		session.set(undefined);
+		userStore.set(undefined);
 	}
 
 </script>
@@ -43,7 +54,7 @@
 						<li on:click={logout} class="cursor-pointer mr-6 hover:text-white">Sign out</li>
 					{:else}
 						<li class="cursor-pointer mr-6 hover:text-white">
-							<a href="/sign-in" class="">Sign in </a>
+							<a href="/sign-in" class="">Sign in</a>
 						</li>
 					{/if}
 				</ul>

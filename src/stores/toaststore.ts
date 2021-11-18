@@ -1,6 +1,6 @@
 import { writable } from 'svelte/store';
 import { v4 as uuidv4 } from 'uuid';
-import type Toast from '../models/Toast';
+import type Toast from '../model/Toast';
 export const toasts = writable([]);
 
 export const addToast = (toast: Toast) => {

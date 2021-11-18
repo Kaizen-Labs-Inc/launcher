@@ -7,7 +7,7 @@
 	import { EmojiButton } from '@joeattardi/emoji-button';
 	import { SmileIcon } from 'svelte-feather-icons';
 	import Tags from 'svelte-tags-input';
-	import type Channel from 'src/models/Channel';
+	import type Channel from 'src/model/Channel';
 	const dispatch = createEventDispatcher();
 	export let channel: Channel = {
 		title: '',
