@@ -10,4 +10,8 @@
 	});
 </script>
 
-hello {user.name}
+<div class="flex flex-col justify-center items-center mt-16">
+	<img src={user.picture} class="rounded-full" />
+	<div class="mt-4 text-xl">{user.name}</div>
+	<div class="opacity-50 mt-1">{user.email}</div>
+</div>

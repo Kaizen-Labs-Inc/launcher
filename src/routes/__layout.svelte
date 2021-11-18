@@ -27,8 +27,7 @@
 
 <main>
 	<Toasts />
-	<!-- <Auth useRedirect={true} let:user let:loggedIn let:loginWithGoogle let:logout> -->
-	<!-- {#if loggedIn} -->
+
 	{#if loading}
 		<div class="absolute flex items-center justify-center">Loading...</div>
 	{:else}
@@ -38,7 +37,7 @@
 					<li class="cursor-pointer mr-6 hover:text-white">Invite someone</li>
 					<li class="cursor-pointer mr-6 hover:text-white">Kaizen Labs</li>
 					{#if user}
-						<li class="cursor-pointer mr-6 hover:text-white">Welcome {user.name}</li>
+						<li class="cursor-pointer mr-6 hover:text-white"><a href="/user">You</a></li>
 						<li on:click={logout} class="cursor-pointer mr-6 hover:text-white">Sign out</li>
 					{:else}
 						<li class="cursor-pointer mr-6 hover:text-white">
@@ -50,10 +49,6 @@
 			<slot />
 		</div>
 	{/if}
-	<!-- {:else} -->
-	<!-- <button type="button" on:click|preventDefault={loginWithGoogle}> Sign In with Google </button> -->
-	<!-- {/if} -->
-	<!-- </Auth> -->
 </main>
 
 <!-- <footer style="opacity-50 hover:opacity-100">
@@ -72,7 +67,9 @@
 		margin: 0 auto;
 		box-sizing: border-box;
 	}
-
+	nav a {
+		text-decoration: none;
+	}
 	footer {
 		display: flex;
 
