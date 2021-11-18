@@ -1,21 +1,8 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
+	import { getGoogleUser } from '$lib/getGoogleUser';
+	import { logout } from '$lib/logout';
 
-	import { session } from '$app/stores';
-	import { signOut } from 'sk-auth/client';
-
-	let user;
-
-	session.subscribe((value) => {
-		console.log(value);
-		user = value?.user?.connections?.google;
-	});
-
-	const logout = () => {
-		signOut();
-		session.set(undefined);
-		goto('/');
-	};
+	const user = getGoogleUser();
 </script>
 
 <div class="flex flex-col justify-center items-center mt-16">

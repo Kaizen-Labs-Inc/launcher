@@ -3,26 +3,16 @@
 	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
 	import Toasts from '../components/Toasts.svelte';
-	import { session } from '$app/stores';
-	import { signOut } from 'sk-auth/client';
+	import { logout } from '$lib/logout';
+	import { getGoogleUser } from '$lib/getGoogleUser';
 
-	let user;
-
-	session.subscribe((value) => {
-		console.log(value);
-		user = value?.user?.connections?.google;
-	});
+	const user = getGoogleUser();
 
 	let loading = true;
 
 	onMount(() => {
 		loading = false;
 	});
-
-	const logout = () => {
-		signOut();
-		session.set(undefined);
-	};
 </script>
 
 <main>
