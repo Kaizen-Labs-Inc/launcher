@@ -4,13 +4,31 @@
 	import { fade } from 'svelte/transition';
 	import Toasts from '../components/Toasts.svelte';
 	import { logout } from '$lib/logout';
-	import { getGoogleUser } from '$lib/getGoogleUser';
+	import { userStore } from '../stores/userStore';
+	import GoogleUser from '../model/api/GoogleUser';
 
-	const user = getGoogleUser();
+	let user;
+	userStore.subscribe((value) => {
+		user = value;
+	});
 
 	let loading = true;
+	onMount(async () => {
+		await userStore.subscribe(value => {
+			if (!value && loading) {
+				fetch("/api/auth/session").then(res => {
+					if (res.status === 200) {
+						res.json().then((s: any) => {
+							if (s.session?.user?.connections?.google) {
+								userStore.set(s.session.user.connections.google as GoogleUser)
+							}
+						})
+					}
+				})
+			}
+			user = value
+		});
 
-	onMount(() => {
 		loading = false;
 	});
 </script>

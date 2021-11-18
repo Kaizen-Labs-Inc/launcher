@@ -1,8 +1,11 @@
 <script lang="ts">
-	import { getGoogleUser } from '$lib/getGoogleUser';
 	import { logout } from '$lib/logout';
+	import { userStore } from '../../stores/userStore';
 
-	const user = getGoogleUser();
+	let user;
+	userStore.subscribe((value) => {
+		user = value;
+	});
 </script>
 
 <div class="flex flex-col justify-center items-center mt-16">

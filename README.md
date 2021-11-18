@@ -1,10 +1,62 @@
 # Springboard
 
-## Powered by Sveltekit
+Powered by Sveltekit
+
+## Requirements
+
+ - node.js
+ - cockroachdb
+
+## Setup
+
+**Install node.js** using Homebrew (if not already installed):
+```zsh
+brew update
+brew install node
+```
+**Install node packages.** From the project root:
 
 `npm install`
 
-then
+**Install cockroach** using Homebrew:
+```zsh
+brew update
+brew install cockroachdb/tap/cockroach
+```
+
+Generate **SSL certificates** for cockroach
+
+From the project root
+```
+mkdir local
+cockroach cert create-ca --certs-dir=certs --ca-key=local/ca.key
+cockroach cert create-node localhost $(hostname) --certs-dir=certs --ca-key=local/ca.key
+cockroach cert create-client root --certs-dir=certs --ca-key=local/ca.key
+```
+
+**Start cockroach** in its own terminal window:
+
+```zsh
+cockroach start-single-node --certs-dir=certs --listen-addr=localhost:26257 --http-addr=localhost:8081
+```
+
+This starts cockroach postgresql wire interface on `postgresql://root@localhost:26257` and a web server on `https://localhost:8081` that will show the cockroach cluster status.
+
+**Verify the connection** from a shell SQL client:
+
+```zsh
+cockroach sql --certs-dir=certs --host=localhost:26257
+```
+
+`\q` to quit :)
+
+Initialize the **database schema**. From the project root:
+
+```zsh
+cockroach sql --certs-dir=certs --host=localhost:26257 < db/initialize.sql
+```
+
+## Running the app
 
 `npm run dev -- --open`
 
