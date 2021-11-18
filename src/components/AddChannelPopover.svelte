@@ -7,10 +7,10 @@
 
 	import { PlusCircleIcon, PlusIcon } from 'svelte-feather-icons';
 	import Popover from 'svelte-popover';
-	import type Channel from 'src/models/Channel';
+	import type Channel from 'src/model/Channel';
 	import { v4 as uuidv4 } from 'uuid';
 	import ChannelForm from './ChannelForm.svelte';
-	import { mockChannels } from '../models/Channel';
+	import { mockChannels } from '../model/Channel';
 	export let channels = [];
 	export let editModeEnabled: boolean;
 	let tippyInstance: Instance;
@@ -193,7 +193,7 @@
 										{channel.title}
 									</div>
 									<!-- TODO We need a new store for the users individual channels -->
-									<!-- For now we're just using 'channels', 
+									<!-- For now we're just using 'channels',
 									a prop passed from the parent that is keeping state -->
 									{#if channels.map((c) => c.id).includes(channel.id)}
 										<div class="opacity-70">✓ Added</div>
