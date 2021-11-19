@@ -6,6 +6,7 @@
 	import { logout } from '$lib/logout';
 	import { userStore } from '../stores/userStore';
 	import GoogleUser from '../model/api/GoogleUser';
+	import SignInWithGoogleButton from '../components/SignInWithGoogleButton.svelte';
 
 	let user;
 	userStore.subscribe((value) => {
@@ -14,19 +15,19 @@
 
 	let loading = true;
 	onMount(async () => {
-		await userStore.subscribe(value => {
+		await userStore.subscribe((value) => {
 			if (!value && loading) {
-				fetch("/api/auth/session").then(res => {
+				fetch('/api/auth/session').then((res) => {
 					if (res.status === 200) {
 						res.json().then((s: any) => {
 							if (s.session?.user?.connections?.google) {
-								userStore.set(s.session.user.connections.google as GoogleUser)
+								userStore.set(s.session.user.connections.google as GoogleUser);
 							}
-						})
+						});
 					}
-				})
+				});
 			}
-			user = value
+			user = value;
 		});
 
 		loading = false;
@@ -38,6 +39,10 @@
 
 	{#if loading}
 		<div class="absolute flex items-center justify-center">Loading...</div>
+	{:else if !user}
+		<div class="mx-auto flex">
+			<SignInWithGoogleButton />
+		</div>
 	{:else}
 		<div in:fade>
 			<nav class="mt-4">
