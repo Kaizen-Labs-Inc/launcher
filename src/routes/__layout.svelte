@@ -6,14 +6,14 @@
 	import { logout } from '$lib/logout';
 	import { userStore } from '../stores/userStore';
 	import GoogleUser from '../model/api/GoogleUser';
-	import SignInWithGoogleButton from '../components/SignInWithGoogleButton.svelte';
+	import LoadingIndicator from '../components/LoadingIndicator.svelte';
+	import LandingPage from '../components/LandingPage.svelte'; // TODO should this be a route instead
 
 	let user;
 	userStore.subscribe((value) => {
 		user = value;
 	});
-
-	let loading = true;
+	let loading: boolean = true;
 	onMount(async () => {
 		await userStore.subscribe((value) => {
 			if (!value && loading) {
@@ -38,11 +38,9 @@
 	<Toasts />
 
 	{#if loading}
-		<div class="absolute flex items-center justify-center">Loading...</div>
+		<div class="flex items-center h-screen mx-auto justify-center"><LoadingIndicator /></div>
 	{:else if !user}
-		<div class="mx-auto flex">
-			<SignInWithGoogleButton />
-		</div>
+		<LandingPage />
 	{:else}
 		<div in:fade>
 			<nav class="mt-4">
@@ -83,9 +81,9 @@
 	nav a {
 		text-decoration: none;
 	}
+
 	footer {
 		display: flex;
-
 		flex-direction: row;
 		justify-content: center;
 		align-items: center;
