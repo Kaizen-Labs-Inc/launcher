@@ -1,5 +1,6 @@
 <script>
 	import { mockChannels } from '../model/Channel';
+	import { scale } from 'svelte/transition';
 </script>
 
 <div class="container">
@@ -11,21 +12,16 @@
 		<h1 class="text-6xl font-medium">A home screen for your growing team.</h1>
 	</div>
 	<section class="mt-24 grid md:grid-cols-4 grid-cols-2 gap-8 transition duration-200 ease-in-out ">
-		{#each mockChannels as channel, i (channel.id)}
+		{#each mockChannels.slice(0, 8) as channel, i (channel.id)}
 			<div
-				class="channel cursor-pointer flex items-center justify-center flex-col text-center transition duration-200 ease-in-out"
+				class="channel flex items-center justify-center flex-col text-center transition duration-200 ease-in-out"
 			>
 				<div class="text-6xl mb-4 icon flex items-center justify-center">
 					<img
 						alt={channel.title}
-						style="z-index: 0;"
 						class="transition w-16 h-16 duration-300 ease-in-out"
 						src={channel.iconImageUrl}
 					/>
-				</div>
-				<div>
-					<div class="text-2xl">{channel.title}</div>
-					<div class="text-md opacity-30">{channel.url}</div>
 				</div>
 			</div>
 		{/each}
@@ -54,7 +50,7 @@
 	.icon {
 		width: 120px;
 		height: 120px;
-		background: linear-gradient(25.13deg, #dbdbdb 15.69%, #ffffff 93.91%);
+		border: 1px solid white;
 		border-radius: 40px;
 	}
 	.icon:nth-child(2n) {
