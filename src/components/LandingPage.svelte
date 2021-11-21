@@ -1,22 +1,12 @@
 <script>
 	import { mockChannels } from '../model/Channel';
 	let ctaIsHovered = false;
-
-	const handleCtaHover = () => {
-		ctaIsHovered = true;
-	};
 </script>
 
 <div class="container">
-	<nav class="flex w-full justify-end">
-		<a href="/sign-in" class="opacity-50 hover:opacity-100 no-underline">Sign in</a>
-	</nav>
 	<div class="text-center mt-24 flex flex-col">
 		<h1 class="text-6xl font-medium leading-relaxed">A home screen for your growing team.</h1>
-		<h2 class="text-3xl mt-6">
-			<span class="opacity-50">Create shortcuts to your team's daily apps with</span>
-			<span class="opacity-100">Springboard</span><span class="opacity-50">.</span>
-		</h2>
+		<h2 class="text-3xl mt-4 opacity-80">Shared shortcuts to your team's daily apps</h2>
 		<div
 			on:focus
 			on:blur
@@ -26,7 +16,7 @@
 			on:mouseout={() => {
 				ctaIsHovered = false;
 			}}
-			class="cta mx-auto rounded-md cursor-pointer text-2xl font-medium py-3 px-6 flex items-center justify-center mt-10 text-black"
+			class="cta mx-auto rounded-md cursor-pointer text-2xl font-medium py-3 px-6 flex items-center justify-center mt-12 text-black"
 		>
 			Play with a demo
 		</div>

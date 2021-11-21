@@ -40,6 +40,14 @@
 	{#if loading}
 		<div class="flex items-center h-screen mx-auto justify-center"><LoadingIndicator /></div>
 	{:else if !user}
+		<nav class="mt-4">
+			<ul class="flex flex-row justify-center items-center text-gray-400">
+				<li class="cursor-pointer mr-6 hover:text-white">Home</li>
+				<li class="cursor-pointer mr-6 hover:text-white">Pricing</li>
+				<li class="cursor-pointer mr-6 hover:text-white">About</li>
+				<li class="cursor-pointer mr-6 hover:text-white text-yellow-200">Sign in</li>
+			</ul>
+		</nav>
 		<LandingPage />
 	{:else}
 		<div in:fade>
