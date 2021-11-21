@@ -3,17 +3,20 @@
 	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
 	import Toasts from '../components/Toasts.svelte';
-	import { logout } from '$lib/logout';
 	import { userStore } from '../stores/userStore';
-	import GoogleUser from '../model/api/GoogleUser';
+	import type GoogleUser from '../model/api/GoogleUser';
 	import LoadingIndicator from '../components/LoadingIndicator.svelte';
 	import LandingPage from '../components/LandingPage.svelte'; // TODO should this be a route instead
+	import PublicNav from '../components/nav/PublicNav.svelte';
+	import AuthenticatedNav from '../components/nav/AuthenticatedNav.svelte';
 
 	let user;
 	userStore.subscribe((value) => {
 		user = value;
 	});
+
 	let loading: boolean = true;
+
 	onMount(async () => {
 		await userStore.subscribe((value) => {
 			if (!value && loading) {
@@ -38,33 +41,16 @@
 	<Toasts />
 
 	{#if loading}
+		<!-- TODO this loading state isn't rendering the CSS so it's janky -->
 		<div class="flex items-center h-screen mx-auto justify-center"><LoadingIndicator /></div>
 	{:else if !user}
-		<nav class="mt-4">
-			<ul class="flex flex-row justify-center items-center text-gray-400">
-				<li class="cursor-pointer mr-6 hover:text-white">Home</li>
-				<li class="cursor-pointer mr-6 hover:text-white">Pricing</li>
-				<li class="cursor-pointer mr-6 hover:text-white">About</li>
-				<li class="cursor-pointer mr-6 hover:text-white text-yellow-200">Sign in</li>
-			</ul>
-		</nav>
-		<LandingPage />
+		<div in:fade>
+			<PublicNav />
+			<LandingPage />
+		</div>
 	{:else}
 		<div in:fade>
-			<nav class="mt-4">
-				<ul class="flex flex-row justify-end text-gray-400">
-					<li class="cursor-pointer mr-6 hover:text-white">Invite someone</li>
-					<li class="cursor-pointer mr-6 hover:text-white">Kaizen Labs</li>
-					{#if user}
-						<li class="cursor-pointer mr-6 hover:text-white"><a href="/user">You</a></li>
-						<li on:click={logout} class="cursor-pointer mr-6 hover:text-white">Sign out</li>
-					{:else}
-						<li class="cursor-pointer mr-6 hover:text-white">
-							<a href="/sign-in" class="">Sign in </a>
-						</li>
-					{/if}
-				</ul>
-			</nav>
+			<AuthenticatedNav />
 			<slot />
 		</div>
 	{/if}
@@ -85,9 +71,6 @@
 		max-width: 1024px;
 		margin: 0 auto;
 		box-sizing: border-box;
-	}
-	nav a {
-		text-decoration: none;
 	}
 
 	footer {

@@ -6,7 +6,7 @@
 <div class="container">
 	<div class="text-center mt-24 flex flex-col">
 		<h1 class="text-6xl font-medium leading-relaxed">A home screen for your growing team.</h1>
-		<h2 class="text-3xl mt-4 opacity-80">Shared shortcuts to your team's daily apps</h2>
+		<h2 class="text-3xl mt-4 opacity-80">Shared shortcuts to your team's daily apps.</h2>
 		<div
 			on:focus
 			on:blur
@@ -18,12 +18,12 @@
 			}}
 			class="cta mx-auto rounded-md cursor-pointer text-2xl font-medium py-3 px-6 flex items-center justify-center mt-12 text-black"
 		>
-			Play with a demo
+			Play with the demo
 		</div>
 		<div class="mt-3 {ctaIsHovered ? 'opacity-100' : 'opacity-60'}">No sign-up required 🙂</div>
 	</div>
-	<section class="mt-24 grid md:grid-cols-4 grid-cols-2 gap-8 transition duration-200 ease-in-out ">
-		{#each mockChannels.slice(0, 8) as channel, i (channel.id)}
+	<section class="mt-24 grid md:grid-cols-4 grid-cols-2 gap-8 transition duration-200 ease-in-out">
+		{#each mockChannels.filter((c) => c.id !== '1' && c.id !== '2' && c.id !== '4' && c.id !== '6') as channel, i (channel.id)}
 			<div
 				class="channel flex items-center justify-center flex-col text-center transition duration-200 ease-in-out"
 			>
@@ -31,7 +31,7 @@
 					<img
 						alt={channel.title}
 						class="transition w-16 h-16 duration-300 ease-in-out"
-						src={channel.iconImageUrl}
+						src={channel.draftIconImageUrl}
 					/>
 				</div>
 			</div>
