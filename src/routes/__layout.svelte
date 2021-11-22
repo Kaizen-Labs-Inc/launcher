@@ -29,22 +29,24 @@
 				});
 			}
 			user = value;
+			if (user) {
+				goto('/home');
+			}
 		});
 		loading = false;
 
-		// TODO this is not redirecting
-		if ($user) {
+		if (user) {
 			goto('/home');
 		}
 	});
 </script>
 
-<main class="landing h-screen">
+<main style="height: 100vh;" class="preload-bg-gradient">
 	<div class="container">
 		<Toasts />
 		{#if loading}
-			<!-- TODO this loading state isn't rendering the CSS so it's janky -->
-			<div class="flex items-center h-screen mx-auto justify-center"><LoadingIndicator /></div>
+			<!-- hardcode some styles so that there is no flash before tailwind classes are loaded -->
+			<div style="height: 100vh; margin-right: auto; margin-left: auto; display: flex; align-items: center; justify-content: center"><LoadingIndicator /></div>
 		{:else}
 			<div in:fade>
 				<slot />
@@ -69,14 +71,6 @@
 		max-width: 1024px;
 		margin: 0 auto;
 		box-sizing: border-box;
-	}
-	.landing {
-		background-color: #0b1431;
-		background-image: #0b1431;
-		background-image: radial-gradient(at 0% 50%, hsla(233, 45%, 30%, 1) 0, transparent 100%),
-			radial-gradient(at 0% 100%, hsla(127, 93%, 67%, 1) 0, transparent 50%),
-			radial-gradient(at 80% 100%, hsla(242, 100%, 70%, 1) 0, transparent 50%),
-			radial-gradient(at 0% 0%, hsla(229, 100%, 51%, 1) 0, transparent 50%);
 	}
 	footer {
 		display: flex;
