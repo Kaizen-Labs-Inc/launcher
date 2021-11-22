@@ -48,12 +48,13 @@ This starts cockroach postgresql wire interface on `postgresql://root@localhost:
 cockroach sql --certs-dir=certs --host=localhost:26257
 ```
 
-`\q` to quit :)
+*Create a database and user* and assign privileges. While connected to cockroach using the above command:
 
-Initialize the **database schema**. From the project root:
-
-```zsh
-cockroach sql --certs-dir=certs --host=localhost:26257 < db/initialize.sql
+```sql
+CREATE USER app WITH PASSWORD 'ujOs6jXjGXar';
+CREATE DATABASE springboard;
+GRANT ALL PRIVILEGES ON DATABASE springboard TO app;
+\q
 ```
 
 ## Running the app

@@ -1,5 +1,7 @@
 datasource db {
-  provider = "postgresql"
+  //  provider = "postgresql"
+  //  url      = env("postgresql://root:ujOs6jXjGXar@localhost:26257/springboard")
+  provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
@@ -7,18 +9,49 @@ generator client {
   provider = "prisma-client-js"
 }
 
-model Post {
-  id        Int     @id @default(autoincrement())
-  title     String
-  content   String?
-  published Boolean @default(false)
-  author    User?   @relation(fields: [authorId], references: [id])
-  authorId  Int?
+model Organization {
+  id      Int       @id @default(autoincrement())
+  name    String
+  User    User[]
+  Channel Channel[]
 }
 
 model User {
-  id    Int     @id @default(autoincrement())
-  email String  @unique
-  name  String?
-  posts Post[]
+  id             Int          @id @default(autoincrement())
+  email          String       @unique
+  organization   Organization? @relation(fields: [organizationId], references: [id])
+  boards         Board[]
+  organizationId Int?
+  Channel        Channel[]
+}
+
+model Board {
+  id            Int            @id @default(autoincrement())
+  user          User?          @relation(fields: [userId], references: [id])
+  isTemplate    Boolean
+  userId        Int?
+  boardChannels BoardChannel[]
+}
+
+model BoardChannel {
+  id        Int     @id @default(autoincrement())
+  position  Int
+  board     Board   @relation(fields: [boardId], references: [id])
+  channel   Channel @relation(fields: [channelId], references: [id])
+  boardId   Int
+  channelId Int
+}
+
+model Channel {
+  id             Int            @id @default(autoincrement())
+  name           String
+  url            String
+  image          String
+  description    String
+  type           Int
+  user           User           @relation(fields: [userId], references: [id])
+  organization   Organization   @relation(fields: [organizationId], references: [id])
+  BoardChannel   BoardChannel[]
+  userId         Int
+  organizationId Int
 }
