@@ -176,6 +176,14 @@
 </svelte:head>
 <PublicNav />
 <div in:fade class="container mx-auto pb-12">
+	<div
+		on:click={() => {
+			goto('/pricing');
+		}}
+		class="absolute z-50 bottom-0 mb-10 left-1/2 transform -translate-x-1/2 bg-yellow-200 flex items-center justify-center text-lg shadow-lg px-4 py-2 text-black rounded-lg cursor-pointer"
+	>
+		🚧 This is a demo. Start your free trial now.
+	</div>
 	<section
 		class="mt-16 flex justify-between items-center w-full transition duration-200 ease-in-out {editModeEnabled
 			? 'opacity-10 scale-95'
