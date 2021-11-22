@@ -6,7 +6,6 @@
 	<ul class="flex flex-row justify-center items-center text-gray-400">
 		<li class="cursor-pointer mr-6 hover:text-white"><a href="/">Home</a></li>
 		<li class="cursor-pointer mr-6 hover:text-white"><a href="#">Pricing</a></li>
-		<li class="cursor-pointer mr-6 hover:text-white"><a href="#">About</a></li>
 		<li class="cursor-pointer mr-6 hover:text-white flex items-center">
 			<a href="#" target="_blank" rel="external">Github</a>
 			<ArrowUpRightIcon strokeWidth={1} size="18" />

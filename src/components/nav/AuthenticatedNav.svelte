@@ -8,9 +8,6 @@
 		<li class="cursor-pointer mr-6 hover:text-white">Kaizen Labs</li>
 		<li class="cursor-pointer mr-6 hover:text-white"><a href="/user">You</a></li>
 		<li on:click={logout} class="cursor-pointer mr-6 hover:text-white">Sign out</li>
-		<li class="cursor-pointer mr-6 hover:text-white">
-			<a href="/sign-in" class="">Sign in </a>
-		</li>
 	</ul>
 </nav>
 

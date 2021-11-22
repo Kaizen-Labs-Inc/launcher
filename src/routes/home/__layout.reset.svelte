@@ -1,13 +1,13 @@
 <script lang="ts">
-	import '../app.postcss';
+	import '../../../src/app.postcss';
 	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
-	import Toasts from '../components/Toasts.svelte';
-	import { userStore } from '../stores/userStore';
-	import type GoogleUser from '../model/api/GoogleUser';
-	import LoadingIndicator from '../components/LoadingIndicator.svelte';
-	import PublicNav from '../components/nav/PublicNav.svelte';
+	import Toasts from '../../components/Toasts.svelte';
+	import { userStore } from '../../stores/userStore';
+	import type GoogleUser from '../../model/api/GoogleUser';
+	import LoadingIndicator from '../../components/LoadingIndicator.svelte';
 	import { goto } from '$app/navigation';
+	import AuthenticatedNav from '../../components/nav/AuthenticatedNav.svelte';
 
 	let user;
 	userStore.subscribe((value) => {
@@ -32,8 +32,8 @@
 			user = value;
 		});
 		loading = false;
-		if (user) {
-			goto('/home');
+		if (!user) {
+			goto('/');
 		}
 	});
 </script>
@@ -46,18 +46,12 @@
 			<div class="flex items-center h-screen mx-auto justify-center"><LoadingIndicator /></div>
 		{:else}
 			<div in:fade>
-				<PublicNav />
+				<AuthenticatedNav />
 				<slot />
 			</div>
 		{/if}
 	</div>
 </main>
-
-<footer style="opacity-50 hover:opacity-100">
-	<p class="mx-3">Springboard 2021</p>
-	<a href="#" class="mx-3">Privacy policy</a>
-	<a href="#" class="mx-3">Terms of use</a>
-</footer>
 
 <style>
 	.container {
@@ -78,14 +72,6 @@
 			radial-gradient(at 80% 100%, hsla(242, 100%, 70%, 1) 0, transparent 50%),
 			radial-gradient(at 0% 0%, hsla(229, 100%, 51%, 1) 0, transparent 50%);
 	}
-	footer {
-		display: flex;
-		flex-direction: row;
-		justify-content: center;
-		align-items: center;
-		padding: 40px;
-	}
-
 	@media (min-width: 480px) {
 		footer {
 			padding: 40px 0;
