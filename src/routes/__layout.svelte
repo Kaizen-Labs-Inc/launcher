@@ -6,7 +6,6 @@
 	import { userStore } from '../stores/userStore';
 	import type GoogleUser from '../model/api/GoogleUser';
 	import LoadingIndicator from '../components/LoadingIndicator.svelte';
-	import PublicNav from '../components/nav/PublicNav.svelte';
 	import { goto } from '$app/navigation';
 
 	let user;
@@ -32,7 +31,9 @@
 			user = value;
 		});
 		loading = false;
-		if (user) {
+
+		// TODO this is not redirecting
+		if ($user) {
 			goto('/home');
 		}
 	});
@@ -46,7 +47,6 @@
 			<div class="flex items-center h-screen mx-auto justify-center"><LoadingIndicator /></div>
 		{:else}
 			<div in:fade>
-				<PublicNav />
 				<slot />
 			</div>
 		{/if}

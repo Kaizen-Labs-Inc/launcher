@@ -15,6 +15,7 @@
 	import { SearchIcon, GridIcon, Edit2Icon, XIcon } from 'svelte-feather-icons';
 	import { goto } from '$app/navigation';
 	import { addToast } from '../../stores/toaststore';
+	import AuthenticatedNav from '../../components/nav/AuthenticatedNav.svelte';
 	let tippyInstance: Instance;
 	let query: string = '';
 	let searchIsFocused: boolean = false;
@@ -171,6 +172,7 @@
 <svelte:head>
 	<title>Springboard</title>
 </svelte:head>
+<AuthenticatedNav />
 <div class="container mx-auto pb-12">
 	<section
 		class="mt-16 flex justify-between items-center w-full transition duration-200 ease-in-out {editModeEnabled
@@ -195,7 +197,7 @@
 					autocomplete="false"
 					id="searchInput"
 					placeholder="Search"
-					class="ml-4 text-5xl w-2/3 border-0 outline-none bg-transparent text-white font-light"
+					class="ml-4 text-5xl w-2/3 border-0 outline-none bg-transparent text-white font-light placeholder-white placeholder-opacity-30"
 				/>
 				{#if !searchIsFocused}
 					<span
@@ -238,7 +240,7 @@
 				dropTargetClasses: ['target'],
 				dropTargetStyle: { outline: 'none' },
 				transformDraggedElement: (el) => {
-					console.log(el); // TODO This is not working
+					// TODO
 					// We want to remove the delete and edit buttons when dragging
 				},
 				dragDisabled: !editModeEnabled

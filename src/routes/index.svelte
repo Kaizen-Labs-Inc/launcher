@@ -2,9 +2,11 @@
 	import { mockChannels } from '../model/Channel';
 	import { scale } from 'svelte/transition';
 	import { goto } from '$app/navigation';
+	import PublicNav from '../components/nav/PublicNav.svelte';
 	let ctaIsHovered = false;
 </script>
 
+<PublicNav />
 <div class="container">
 	<div class="text-center mt-24 flex flex-col">
 		<h1 class="text-6xl font-medium leading-relaxed">A home screen for your growing team.</h1>

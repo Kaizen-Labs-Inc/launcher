@@ -1,16 +1,41 @@
 <script lang="ts">
+	import { page } from '$app/stores';
 	import { ArrowUpRightIcon } from 'svelte-feather-icons';
 </script>
 
 <nav class="mt-4">
-	<ul class="flex flex-row justify-center items-center text-gray-400">
-		<li class="cursor-pointer mr-6 hover:text-white"><a href="/">Home</a></li>
-		<li class="cursor-pointer mr-6 hover:text-white"><a href="#">Pricing</a></li>
-		<li class="cursor-pointer mr-6 hover:text-white flex items-center">
-			<a href="#" target="_blank" rel="external">Github</a>
+	<ul class="flex flex-row justify-center items-center">
+		<li class="mr-6">
+			<!-- TODO figure out why page path styles aren't applying -->
+			<a
+				href="/"
+				class="{$page.path === '/' ? 'text-opacity-10' : 'text-opacity-50'} hover:text-opacity-100"
+				>Home</a
+			>
+		</li>
+		<li class="mr-6">
+			<a
+				href="/demo"
+				class="{$page.path === '/demo'
+					? 'text-opacity-10'
+					: 'text-opacity-50'} hover:text-opacity-100">Demo</a
+			>
+		</li>
+		<li class="mr-6">
+			<a
+				href="/pricing"
+				class="{$page.path === '/pricing'
+					? 'text-opacity-10'
+					: 'text-opacity-50'} hover:text-opacity-100">Pricing</a
+			>
+		</li>
+		<li class="mr-6 hover:text-opacity-100 text-opacity-50 flex items-center">
+			<a href="https://github.com/Kaizen-Labs-Inc/springboard" target="_blank" rel="external"
+				>Github</a
+			>
 			<ArrowUpRightIcon strokeWidth={1} size="18" />
 		</li>
-		<li class="cursor-pointer mr-6 hover:text-white text-yellow-200">
+		<li class="text-yellow-200">
 			<a href="/sign-in">Sign in</a>
 		</li>
 	</ul>
