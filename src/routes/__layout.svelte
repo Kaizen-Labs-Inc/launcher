@@ -41,7 +41,7 @@
 	});
 </script>
 
-<main style="height: 100vh;" class="preload-bg-gradient">
+<main>
 	<div class="container">
 		<Toasts />
 		{#if loading}
