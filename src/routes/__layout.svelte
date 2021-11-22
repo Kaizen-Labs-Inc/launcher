@@ -3,17 +3,18 @@
 	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
 	import Toasts from '../components/Toasts.svelte';
-	import { logout } from '$lib/logout';
 	import { userStore } from '../stores/userStore';
-	import GoogleUser from '../model/api/GoogleUser';
-	import SignInWithGoogleButton from '../components/SignInWithGoogleButton.svelte';
+	import type GoogleUser from '../model/api/GoogleUser';
+	import LoadingIndicator from '../components/LoadingIndicator.svelte';
+	import { goto } from '$app/navigation';
 
 	let user;
 	userStore.subscribe((value) => {
 		user = value;
 	});
 
-	let loading = true;
+	let loading: boolean = true;
+
 	onMount(async () => {
 		await userStore.subscribe((value) => {
 			if (!value && loading) {
@@ -28,49 +29,40 @@
 				});
 			}
 			user = value;
+			if (user) {
+				goto('/home');
+			}
 		});
-
 		loading = false;
+
+		if (user) {
+			goto('/home');
+		}
 	});
 </script>
 
 <main>
-	<Toasts />
-
-	{#if loading}
-		<div class="absolute flex items-center justify-center">Loading...</div>
-	{:else if !user}
-		<div class="mx-auto flex">
-			<SignInWithGoogleButton />
-		</div>
-	{:else}
-		<div in:fade>
-			<nav class="mt-4">
-				<ul class="flex flex-row justify-end text-gray-400">
-					<li class="cursor-pointer mr-6 hover:text-white">Invite someone</li>
-					<li class="cursor-pointer mr-6 hover:text-white">Kaizen Labs</li>
-					{#if user}
-						<li class="cursor-pointer mr-6 hover:text-white"><a href="/user">You</a></li>
-						<li on:click={logout} class="cursor-pointer mr-6 hover:text-white">Sign out</li>
-					{:else}
-						<li class="cursor-pointer mr-6 hover:text-white">
-							<a href="/sign-in" class="">Sign in </a>
-						</li>
-					{/if}
-				</ul>
-			</nav>
-			<slot />
-		</div>
-	{/if}
+	<div class="container">
+		<Toasts />
+		{#if loading}
+			<!-- hardcode some styles so that there is no flash before tailwind classes are loaded -->
+			<div style="height: 100vh; margin-right: auto; margin-left: auto; display: flex; align-items: center; justify-content: center"><LoadingIndicator /></div>
+		{:else}
+			<div in:fade>
+				<slot />
+			</div>
+		{/if}
+	</div>
 </main>
 
-<!-- <footer style="opacity-50 hover:opacity-100">
+<footer style="opacity-50 hover:opacity-100">
 	<p class="mx-3">Springboard 2021</p>
 	<a href="#" class="mx-3">Privacy policy</a>
 	<a href="#" class="mx-3">Terms of use</a>
-</footer> -->
+</footer>
+
 <style>
-	main {
+	.container {
 		flex: 1;
 		display: flex;
 		flex-direction: column;
@@ -80,12 +72,8 @@
 		margin: 0 auto;
 		box-sizing: border-box;
 	}
-	nav a {
-		text-decoration: none;
-	}
 	footer {
 		display: flex;
-
 		flex-direction: row;
 		justify-content: center;
 		align-items: center;

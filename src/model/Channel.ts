@@ -6,6 +6,7 @@ export default interface Channel {
 	icon?: string;
 	emoji?: string;
 	iconImageUrl?: string;
+	draftIconImageUrl?: string;
 	tags?: string[];
 }
 
@@ -31,6 +32,7 @@ export const mockChannels = [
 		id: '3',
 		emoji: '💬',
 		iconImageUrl: '../../../icons/slack.svg',
+		draftIconImageUrl: '../../../icons/draft/icon-slack-draft.svg',
 		title: 'Slack',
 		url: 'slack.com',
 		description: 'Real-time comms'
@@ -48,6 +50,7 @@ export const mockChannels = [
 		id: '5',
 		emoji: '📬',
 		iconImageUrl: '../../../icons/intercom.svg',
+		draftIconImageUrl: '../../../icons/draft/icon-intercom-draft.svg',
 		title: 'Intercom',
 		url: 'intercom.io',
 		description: 'Customer messaging (email & push)',
@@ -66,6 +69,7 @@ export const mockChannels = [
 		id: '7',
 		emoji: '📈',
 		iconImageUrl: '../../../icons/tableau.svg',
+		draftIconImageUrl: '../../../icons/draft/icon-tableau-draft.svg',
 		title: 'Tableau',
 		url: 'tableau.com',
 		description: 'Product analytics',
@@ -75,6 +79,7 @@ export const mockChannels = [
 		id: '8',
 		emoji: '💸',
 		iconImageUrl: '../../../icons/workday.svg',
+		draftIconImageUrl: '../../../icons/draft/icon-workday-draft.svg',
 		title: 'Workday',
 		url: 'workday.com',
 		description: 'HR, pay, and IT',
@@ -84,6 +89,7 @@ export const mockChannels = [
 		id: '9',
 		emoji: '☎',
 		iconImageUrl: '../../../icons/zendesk.svg',
+		draftIconImageUrl: '../../../icons/draft/icon-zendesk-draft.svg',
 		title: 'Zendesk',
 		url: 'zendesk.com',
 		description: 'Customer support',
@@ -93,6 +99,7 @@ export const mockChannels = [
 		id: '10',
 		emoji: '💼',
 		iconImageUrl: '../../../icons/figma.svg',
+		draftIconImageUrl: '../../../icons/draft/icon-figma-draft.svg',
 		title: 'Figma',
 		url: 'figma.com',
 		description: 'Sales tracking',
@@ -103,6 +110,7 @@ export const mockChannels = [
 		id: '11',
 		emoji: '💼',
 		iconImageUrl: '../../../icons/marketo.svg',
+		draftIconImageUrl: '../../../icons/draft/icon-marketo-draft.svg',
 		title: 'Marketo',
 		url: 'marketo.com',
 		description: 'Sales tracking',
@@ -112,6 +120,7 @@ export const mockChannels = [
 		id: '12',
 		emoji: '💼',
 		iconImageUrl: '../../../icons/github.svg',
+		draftIconImageUrl: '../../../icons/draft/icon-github-draft.svg',
 		title: 'Github',
 		url: 'github.com',
 		description: 'Sales tracking',
