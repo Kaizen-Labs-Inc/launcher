@@ -252,8 +252,7 @@
 				transformDraggedElement: (el) => {
 					// TODO
 					// We want to remove the delete and edit buttons when dragging
-				},
-				dragDisabled: !editModeEnabled
+				}
 			}}
 			on:consider={handleDndConsider}
 			on:finalize={handleDndFinalize}
