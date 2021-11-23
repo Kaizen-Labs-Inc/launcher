@@ -7,9 +7,25 @@ CREATE TABLE "Organization" (
 -- CreateTable
 CREATE TABLE "User" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    "email" TEXT NOT NULL,
+    "googleProfileId" INTEGER NOT NULL,
     "organizationId" INTEGER,
+    CONSTRAINT "User_googleProfileId_fkey" FOREIGN KEY ("googleProfileId") REFERENCES "GoogleProfile" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
     CONSTRAINT "User_organizationId_fkey" FOREIGN KEY ("organizationId") REFERENCES "Organization" ("id") ON DELETE SET NULL ON UPDATE CASCADE
+);
+
+-- CreateTable
+CREATE TABLE "GoogleProfile" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "sub" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "given_name" TEXT NOT NULL,
+    "family_name" TEXT NOT NULL,
+    "picture" TEXT NOT NULL,
+    "email" TEXT NOT NULL,
+    "email_verified" BOOLEAN NOT NULL,
+    "locale" TEXT NOT NULL,
+    "hd" TEXT NOT NULL,
+    "provider" TEXT NOT NULL
 );
 
 -- CreateTable
@@ -37,12 +53,26 @@ CREATE TABLE "Channel" (
     "url" TEXT NOT NULL,
     "image" TEXT NOT NULL,
     "description" TEXT NOT NULL,
-    "type" INTEGER NOT NULL,
+    "channelType" INTEGER NOT NULL,
     "userId" INTEGER NOT NULL,
     "organizationId" INTEGER NOT NULL,
     CONSTRAINT "Channel_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
     CONSTRAINT "Channel_organizationId_fkey" FOREIGN KEY ("organizationId") REFERENCES "Organization" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
+-- CreateTable
+CREATE TABLE "Invitation" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "userId" INTEGER NOT NULL,
+    "inviteeEmail" TEXT NOT NULL,
+    "inviteeName" TEXT,
+    "organizationId" INTEGER NOT NULL,
+    CONSTRAINT "Invitation_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
+    CONSTRAINT "Invitation_organizationId_fkey" FOREIGN KEY ("organizationId") REFERENCES "Organization" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+);
+
 -- CreateIndex
-CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
+CREATE UNIQUE INDEX "User_googleProfileId_key" ON "User"("googleProfileId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "GoogleProfile_email_key" ON "GoogleProfile"("email");

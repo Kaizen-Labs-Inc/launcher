@@ -1,8 +1,12 @@
-import { SvelteKitAuth } from "sk-auth";
+import { SvelteKitAuth } from 'sk-auth';
 import { GoogleOAuth2Provider } from "sk-auth/providers";
 import { config } from 'dotenv';
+import type { GoogleProfile } from '@prisma/client'
+import { PrismaClient } from '@prisma/client';
 
 let environmentSetup = false
+
+const prisma = new PrismaClient()
 
 if (!environmentSetup) {
 	console.log("Setting up environment...")
@@ -24,9 +28,27 @@ export const appAuth = new SvelteKitAuth({
 		}),
 	],
 	callbacks: {
-		jwt(token, profile) {
+		async jwt(token, profile) {
 			if (profile?.provider) {
 				const { provider, ...account } = profile;
+				console.log(profile)
+				// check if user exists
+				const foundProfile: GoogleProfile | null = await prisma.googleProfile.findUnique({
+					where: {
+						email: profile.email,
+					},
+				})
+				if (!foundProfile) {
+					console.log("Adding user " + profile.email)
+					const newProfile = await prisma.googleProfile.create({
+						data: profile
+					})
+					const newUser = await prisma.user.create({
+						data: {
+							googleProfileId: newProfile.id
+						}
+					})
+				}
 				token = {
 					...token,
 					user: {
