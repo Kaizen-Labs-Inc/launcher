@@ -5,7 +5,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { flip } from 'svelte/animate';
-	import { fade } from 'svelte/transition';
 
 	import { dndzone } from 'svelte-dnd-action';
 	import AddChannelPopover from '../components/AddChannelPopover.svelte';
@@ -17,8 +16,7 @@
 	import { SearchIcon, Edit2Icon, XIcon } from 'svelte-feather-icons';
 	import { goto } from '$app/navigation';
 	import { addToast } from '../stores/toaststore';
-	import PublicNav from '../components/nav/PublicNav.svelte';
-	import { logout } from '$lib/logout';
+
 	let tippyInstance: Instance;
 	let query: string = '';
 	let searchIsFocused: boolean = false;
@@ -28,6 +26,7 @@
 	const flipDurationMs: number = 200;
 	let isConsidering: boolean = false;
 	let editModeEnabled: boolean = false;
+	let editModeInitializedByDrag: boolean = false;
 
 	// For edit mode jiggles
 	const jiggleAnimDelayMin: number = -0.75;
@@ -40,12 +39,20 @@
 		(channel) => channel.title.toLowerCase().indexOf(query.toLowerCase()) !== -1
 	);
 	const handleDndConsider = (e) => {
+		if (!editModeEnabled) {
+			editModeInitializedByDrag = true;
+		}
 		isConsidering = true;
+		editModeEnabled = true;
 		channels = e.detail.items;
 		selectedChannelIndex = null;
 	};
 	const handleDndFinalize = (e) => {
+		if (editModeInitializedByDrag) {
+			editModeEnabled = false;
+		}
 		isConsidering = false;
+		editModeInitializedByDrag = false;
 		channels = e.detail.items;
 	};
 
@@ -163,6 +170,7 @@
 				}
 				if (!inside) {
 					editModeEnabled = false;
+					editModeInitializedByDrag = false;
 					tippyInstance.enable();
 				}
 			}

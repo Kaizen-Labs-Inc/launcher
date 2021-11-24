@@ -46,7 +46,11 @@
 		<Toasts />
 		{#if loading}
 			<!-- hardcode some styles so that there is no flash before tailwind classes are loaded -->
-			<div style="height: 100vh; margin-right: auto; margin-left: auto; display: flex; align-items: center; justify-content: center"><LoadingIndicator /></div>
+			<div
+				style="height: 100vh; margin-right: auto; margin-left: auto; display: flex; align-items: center; justify-content: center"
+			>
+				<LoadingIndicator />
+			</div>
 		{:else}
 			<div in:fade>
 				<slot />
@@ -55,7 +59,7 @@
 	</div>
 </main>
 
-<footer style="opacity-50 hover:opacity-100">
+<footer class="opacity-50 hover:opacity-100">
 	<p class="mx-3">Springboard 2021</p>
 	<a href="#" class="mx-3">Privacy policy</a>
 	<a href="#" class="mx-3">Terms of use</a>
@@ -77,7 +81,7 @@
 		flex-direction: row;
 		justify-content: center;
 		align-items: center;
-		padding: 40px;
+		margin-top: 180px;
 	}
 
 	@media (min-width: 480px) {
