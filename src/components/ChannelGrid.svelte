@@ -232,9 +232,9 @@
 </section>
 {#if !searchIsFocused}
 	<section
-		class="grid lg:grid-cols-6 md:grid-cols-4 grid-cols-2 gap-8 md:gap-12 lg:gap-16 transition duration-200 ease-in-out {editModeEnabled
-			? 'mt-0'
-			: 'mt-16'}"
+		class="grid lg:grid-cols-6 md:grid-cols-4 grid-cols-2 gap-8 md:gap-12 lg:gap-16 transition duration-200 ease-in-out mt-16 {editModeEnabled
+			? '-translate-y-10'
+			: ''}"
 		use:dndzone={{
 			items: channels,
 			flipDurationMs,
@@ -242,7 +242,6 @@
 			dropTargetClasses: ['target'],
 			dropTargetStyle: { outline: 'none' },
 			transformDraggedElement: (el, data, i) => {
-				console.log(el, data, i);
 				// TODO
 				// We want to remove the delete and edit buttons when dragging
 			}
@@ -306,7 +305,7 @@
 					<div class="text-2xl">{channel.title}</div>
 					<div class="text-md opacity-30">{channel.url}</div>
 				</div>
-				{#if editModeEnabled}
+				{#if editModeEnabled && !editModeInitializedByDrag}
 					<div
 						class="flex flex-row items-center mt-4 transition duration-250 ease-in-out {isConsidering
 							? 'opacity-0 scale-50'
