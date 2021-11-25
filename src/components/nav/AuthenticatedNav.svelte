@@ -1,13 +1,40 @@
 <script lang="ts">
+	import { page } from '$app/stores';
+
 	import { logout } from '$lib/logout';
 </script>
 
 <nav class="mt-4">
-	<ul class="flex flex-row justify-center items-center text-gray-400">
-		<li class="cursor-pointer mr-6 hover:text-white">Invite someone</li>
-		<li class="cursor-pointer mr-6 hover:text-white">Kaizen Labs</li>
-		<li class="cursor-pointer mr-6 hover:text-white"><a href="/user">You</a></li>
-		<li on:click={logout} class="cursor-pointer mr-6 hover:text-white">Sign out</li>
+	<ul class="flex flex-row justify-center items-cente">
+		<li
+			class="cursor-pointer mr-6 hover:opacity-100 {$page.path === '/home'
+				? 'opacity-100'
+				: 'opacity-60'}"
+		>
+			<a href="/home">Home</a>
+		</li>
+		<li
+			class="cursor-pointer mr-6 hover:opacity-100 {$page.path === '/invite'
+				? 'opacity-100'
+				: 'opacity-60'}"
+		>
+			Invite someone
+		</li>
+		<li
+			class="cursor-pointer mr-6 hover:opacity-100 {$page.path === '/team'
+				? 'opacity-100'
+				: 'opacity-60'}"
+		>
+			Kaizen Labs
+		</li>
+		<li
+			class="cursor-pointer mr-6 hover:opacity-100 {$page.path === '/user'
+				? 'opacity-100'
+				: 'opacity-60'}"
+		>
+			<a href="/user">You</a>
+		</li>
+		<li on:click={logout} class="cursor-pointer mr-6 hover:opacity-100 opacity-40">Sign out</li>
 	</ul>
 </nav>
 
