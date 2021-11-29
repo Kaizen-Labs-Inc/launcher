@@ -56,9 +56,14 @@
 		}
 		isConsidering = false;
 		editModeInitializedByDrag = false;
-		board.positions = e.detail.items;
-		console.log("updated board")
-		if (board.boardType !== BoardType.USER.valueOf()) {
+		board.positions = e.detail.items.map((p, i) => Object.assign({}, p, {position: i}));
+		if (board.boardType === BoardType.USER.valueOf()) {
+			fetch('/api/position', {
+				method: 'PATCH',
+				credentials: 'include',
+				body: JSON.stringify(board.positions)
+			})
+		} else {
 			console.log("We need to create a board")
 			fetch('/api/board', {
 				method: 'POST',

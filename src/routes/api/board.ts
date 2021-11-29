@@ -118,7 +118,7 @@ export async function post(request: ServerRequest): Promise<void | EndpointOutpu
 	}
 
 	created.positions = []
-	positions.forEach(async p => {
+	for (const p of positions) {
 		try {
 			const newPosition = await prisma.position.create({
 				data: {
@@ -133,7 +133,7 @@ export async function post(request: ServerRequest): Promise<void | EndpointOutpu
 		} catch (e: unknown) {
 			console.error(e)
 		}
-	})
+	}
 	return { body: created }
 
 }

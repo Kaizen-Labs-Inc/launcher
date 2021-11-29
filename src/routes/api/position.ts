@@ -1,11 +1,81 @@
 import type { ServerRequest } from '@sveltejs/kit/types/hooks';
 import type { EndpointOutput } from '@sveltejs/kit/types/endpoint';
 import getAuth from '$lib/getAuth';
+import { PrismaClient } from '@prisma/client';
+
+const prisma = new PrismaClient();
 
 export async function patch(request: ServerRequest): Promise<void | EndpointOutput> {
+	console.log('received patch');
+	if (!request.body) {
+		return {
+			status: 400
+		};
+	}
+	let positions = [];
+	let boardId;
+	try {
+		const parsed = JSON.parse(request.body.toString());
+		if (Array.isArray(parsed)) {
+			positions = parsed;
+			boardId = positions[0].boardId;
+			positions.forEach(p => {
+				if (p.boardId !== boardId) {
+					return {
+						status: 400
+					};
+				}
+			});
+		} else {
+			positions = [parsed];
+			boardId = parsed.boardId;
+		}
+	} catch (e: unknown) {
+		console.error(e);
+		return {
+			status: 400
+		};
+	}
 
-	const auth = getAuth(request)
-	console.log("received patch")
+	const auth = getAuth(request);
+	const googleId = auth?.user?.connections?.google?.sub;
+	if (!googleId) {
+		return {
+			status: 404
+		};
+	}
 
-	return { body: "hello, " + request.method }
+	// check user access
+	const board = await prisma.board.findFirst({
+		where: {
+			boardType: 2,
+			id: boardId,
+			user: {
+				googleProfile: {
+					sub: googleId
+				}
+			}
+		}
+	});
+
+	if (!board) {
+		return {
+			status: 404
+		};
+	}
+
+	const updated = await Promise.all(positions.map(p => {
+		prisma.position.update({
+			data: {
+				position: p.position,
+				lastModified: new Date().toISOString()
+			},
+			where: {
+				id: p.id
+			}
+		})
+	})).catch(e => {
+			console.error(e);
+		})
+	return { body: updated };
 }
