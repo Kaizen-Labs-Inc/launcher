@@ -31,7 +31,7 @@ CREATE TABLE "GoogleProfile" (
 -- CreateTable
 CREATE TABLE "Board" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    "isTemplate" BOOLEAN NOT NULL,
+    "boardType" INTEGER NOT NULL,
     "userId" INTEGER,
     CONSTRAINT "Board_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User" ("id") ON DELETE SET NULL ON UPDATE CASCADE
 );
@@ -52,12 +52,12 @@ CREATE TABLE "Channel" (
     "name" TEXT NOT NULL,
     "url" TEXT NOT NULL,
     "image" TEXT NOT NULL,
-    "description" TEXT NOT NULL,
+    "description" TEXT,
     "channelType" INTEGER NOT NULL,
-    "userId" INTEGER NOT NULL,
-    "organizationId" INTEGER NOT NULL,
-    CONSTRAINT "Channel_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
-    CONSTRAINT "Channel_organizationId_fkey" FOREIGN KEY ("organizationId") REFERENCES "Organization" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+    "userId" INTEGER,
+    "organizationId" INTEGER,
+    CONSTRAINT "Channel_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User" ("id") ON DELETE SET NULL ON UPDATE CASCADE,
+    CONSTRAINT "Channel_organizationId_fkey" FOREIGN KEY ("organizationId") REFERENCES "Organization" ("id") ON DELETE SET NULL ON UPDATE CASCADE
 );
 
 -- CreateTable

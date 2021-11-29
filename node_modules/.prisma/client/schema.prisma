@@ -46,7 +46,7 @@ model GoogleProfile {
 model Board {
   id            Int            @id @default(autoincrement())
   user          User?          @relation(fields: [userId], references: [id])
-  isTemplate    Boolean
+  boardType     Int
   userId        Int?
   boardChannels BoardChannel[]
 }
@@ -65,13 +65,13 @@ model Channel {
   name           String
   url            String
   image          String
-  description    String
+  description    String?
   channelType    Int
-  user           User           @relation(fields: [userId], references: [id])
-  organization   Organization   @relation(fields: [organizationId], references: [id])
+  user           User?          @relation(fields: [userId], references: [id])
+  organization   Organization?  @relation(fields: [organizationId], references: [id])
   BoardChannel   BoardChannel[]
-  userId         Int
-  organizationId Int
+  userId         Int?
+  organizationId Int?
 }
 
 model Invitation {

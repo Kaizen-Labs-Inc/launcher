@@ -32,7 +32,7 @@
 	$: filteredChannels = mockChannels
 		.filter(
 			// TODO also filter by description, tags, and URL
-			(channel) => channel.title.toLowerCase().indexOf(query.toLowerCase()) !== -1
+			(channel) => channel.name.toLowerCase().indexOf(query.toLowerCase()) !== -1
 		)
 		// HACK dedupe - should do this by ID or just pull directly from airtable cache
 		.filter((c, i, a) => a.findIndex((t) => t.title === c.title) === i);

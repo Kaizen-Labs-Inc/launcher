@@ -36,7 +36,7 @@
 
 	$: filteredChannels = channels.filter(
 		// TODO also filter by description, tags, and URL
-		(channel) => channel.title.toLowerCase().indexOf(query.toLowerCase()) !== -1
+		(channel) => channel.name.toLowerCase().indexOf(query.toLowerCase()) !== -1
 	);
 	const handleDndConsider = (e) => {
 		isConsidering = true;

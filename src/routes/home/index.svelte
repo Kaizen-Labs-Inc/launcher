@@ -21,7 +21,7 @@
 	let searchIsFocused: boolean = false;
 	let addFormIsFocused: boolean = false;
 	let selectedChannelIndex: number;
-	let channels: Channel[] = mockChannels;
+	let channels: Channel[] = [];
 	const flipDurationMs: number = 200;
 	let isConsidering: boolean = false;
 	let editModeEnabled: boolean = false;
@@ -34,7 +34,7 @@
 
 	$: filteredChannels = channels.filter(
 		// TODO also filter by description, tags, and URL
-		(channel) => channel.title.toLowerCase().indexOf(query.toLowerCase()) !== -1
+		(channel) => channel.name.toLowerCase().indexOf(query.toLowerCase()) !== -1
 	);
 	const handleDndConsider = (e) => {
 		isConsidering = true;
@@ -92,6 +92,21 @@
 	};
 
 	onMount(() => {
+		fetch("api/board", {
+			credentials: 'include'
+		})
+			.then(async res => {
+				res.json().then(board => {
+					channels = board.boardChannels.sort((a, b) => {
+						return b.position - a.position
+					}).map(bc => bc.channel)
+					console.log(channels)
+				})
+
+			})
+			.catch(err => {
+				console.error(err.message)
+			})
 		tippyInstance = tippy(document.getElementById('editToggle'), {
 			content: 'Edit your Springboard',
 			arrow: false,
@@ -286,16 +301,16 @@
 							: ''}
 						class="text-6xl mb-4 icon flex items-center justify-center"
 					>
-						{#if channel.iconImageUrl}
+						{#if channel.image}
 							<img
-								alt={channel.title}
+								alt={channel.name}
 								style="z-index: 0;"
 								class="transition w-16 h-16 duration-300 ease-in-out {selectedChannelIndex === i &&
 								!isConsidering &&
 								!editModeEnabled
 									? ' rotate-3 scale-110'
 									: 'rotate-0 scale-100'}"
-								src={channel.iconImageUrl}
+								src={channel.image}
 							/>
 						{:else if channel.emoji}
 							<div
@@ -316,12 +331,12 @@
 									? ' rotate-3 scale-110'
 									: 'rotate-0 scale-100'}"
 							>
-								{channel.title.charAt(0)}
+								{channel.name.charAt(0)}
 							</div>
 						{/if}
 					</div>
 					<div>
-						<div class="text-2xl">{channel.title}</div>
+						<div class="text-2xl">{channel.name}</div>
 						<div class="text-md opacity-30">{channel.url}</div>
 					</div>
 					{#if editModeEnabled}

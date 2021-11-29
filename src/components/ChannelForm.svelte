@@ -41,10 +41,10 @@
 
 <div class="flex flex-row items-end justify-between mb-4 text-white ">
 	<div class="flex flex-col flex-1 mr-10">
-		<label for="title" class="font-medium ">Name it</label>
+		<label for="name" class="font-medium ">Name it</label>
 		<input
 			autofocus
-			bind:value={channel.title}
+			bind:value={channel.name}
 			name="title"
 			type="text"
 			placeholder="Type a name"

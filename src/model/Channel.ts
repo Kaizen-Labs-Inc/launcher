@@ -1,29 +1,25 @@
 export default interface Channel {
 	id?: string;
-	title: string;
+	name: string;
 	url?: string;
 	description?: string;
-	icon?: string;
-	emoji?: string;
-	iconImageUrl?: string;
-	draftIconImageUrl?: string;
-	tags?: string[];
+	image?: string;
 }
 
 export const mockChannels = [
 	{
 		id: '1',
 		emoji: '✉️',
-		iconImageUrl: '../../../icons/gmail.svg',
-		title: 'Gmail',
+		image: '../../../icons/gmail.svg',
+		name: 'Gmail',
 		url: 'mail.google.com',
 		tags: ['email', 'google']
 	},
 	{
 		id: '2',
 		emoji: '🗓',
-		iconImageUrl: '../../../icons/gcal.svg',
-		title: 'Calendar',
+		image: '../../../icons/gcal.svg',
+		name: 'Calendar',
 		url: 'calendar.google.com',
 		tags: ['google', 'gsuite']
 	},
@@ -31,17 +27,17 @@ export const mockChannels = [
 	{
 		id: '3',
 		emoji: '💬',
-		iconImageUrl: '../../../icons/slack.svg',
+		image: '../../../icons/slack.svg',
 		draftIconImageUrl: '../../../icons/draft/icon-slack-draft.svg',
-		title: 'Slack',
+		name: 'Slack',
 		url: 'slack.com',
 		description: 'Real-time comms'
 	},
 	{
 		id: '4',
 		emoji: '📓',
-		iconImageUrl: '../../../icons/notion.svg',
-		title: 'Notion',
+		image: '../../../icons/notion.svg',
+		name: 'Notion',
 		url: 'notion.so',
 		description: 'Docs and notes',
 		tags: ['product', 'docs']
@@ -49,9 +45,9 @@ export const mockChannels = [
 	{
 		id: '5',
 		emoji: '📬',
-		iconImageUrl: '../../../icons/intercom.svg',
+		image: '../../../icons/intercom.svg',
 		draftIconImageUrl: '../../../icons/draft/icon-intercom-draft.svg',
-		title: 'Intercom',
+		name: 'Intercom',
 		url: 'intercom.io',
 		description: 'Customer messaging (email & push)',
 		tags: ['marketing', 'push', 'email']
@@ -59,8 +55,8 @@ export const mockChannels = [
 	{
 		id: '6',
 		emoji: '🖇',
-		iconImageUrl: '../../../icons/trello.svg',
-		title: 'Trello',
+		image: '../../../icons/trello.svg',
+		name: 'Trello',
 		url: 'trello.com',
 		description: 'Feature tracking for POs',
 		tags: ['product']
@@ -68,9 +64,9 @@ export const mockChannels = [
 	{
 		id: '7',
 		emoji: '📈',
-		iconImageUrl: '../../../icons/tableau.svg',
+		image: '../../../icons/tableau.svg',
 		draftIconImageUrl: '../../../icons/draft/icon-tableau-draft.svg',
-		title: 'Tableau',
+		name: 'Tableau',
 		url: 'tableau.com',
 		description: 'Product analytics',
 		tags: ['product', 'data']
@@ -78,9 +74,9 @@ export const mockChannels = [
 	{
 		id: '8',
 		emoji: '💸',
-		iconImageUrl: '../../../icons/workday.svg',
+		image: '../../../icons/workday.svg',
 		draftIconImageUrl: '../../../icons/draft/icon-workday-draft.svg',
-		title: 'Workday',
+		name: 'Workday',
 		url: 'workday.com',
 		description: 'HR, pay, and IT',
 		tags: ['HR', 'IT']
@@ -88,9 +84,9 @@ export const mockChannels = [
 	{
 		id: '9',
 		emoji: '☎',
-		iconImageUrl: '../../../icons/zendesk.svg',
+		image: '../../../icons/zendesk.svg',
 		draftIconImageUrl: '../../../icons/draft/icon-zendesk-draft.svg',
-		title: 'Zendesk',
+		name: 'Zendesk',
 		url: 'zendesk.com',
 		description: 'Customer support',
 		tags: ['CS']
@@ -98,9 +94,9 @@ export const mockChannels = [
 	{
 		id: '10',
 		emoji: '💼',
-		iconImageUrl: '../../../icons/figma.svg',
+		image: '../../../icons/figma.svg',
 		draftIconImageUrl: '../../../icons/draft/icon-figma-draft.svg',
-		title: 'Figma',
+		name: 'Figma',
 		url: 'figma.com',
 		description: 'Sales tracking',
 		tags: ['sales']
@@ -109,9 +105,9 @@ export const mockChannels = [
 	{
 		id: '11',
 		emoji: '💼',
-		iconImageUrl: '../../../icons/marketo.svg',
+		image: '../../../icons/marketo.svg',
 		draftIconImageUrl: '../../../icons/draft/icon-marketo-draft.svg',
-		title: 'Marketo',
+		name: 'Marketo',
 		url: 'marketo.com',
 		description: 'Sales tracking',
 		tags: ['sales']
@@ -119,9 +115,9 @@ export const mockChannels = [
 	{
 		id: '12',
 		emoji: '💼',
-		iconImageUrl: '../../../icons/github.svg',
+		image: '../../../icons/github.svg',
 		draftIconImageUrl: '../../../icons/draft/icon-github-draft.svg',
-		title: 'Github',
+		name: 'Github',
 		url: 'github.com',
 		description: 'Sales tracking',
 		tags: ['sales']
