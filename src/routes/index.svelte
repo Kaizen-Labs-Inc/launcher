@@ -3,7 +3,8 @@
 	import { scale } from 'svelte/transition';
 	import { goto } from '$app/navigation';
 	import PublicNav from '../components/nav/PublicNav.svelte';
-	let ctaIsHovered = false;
+	let demoCtaIsHovered = false;
+	let pricingCtaIsHovered = false;
 </script>
 
 <PublicNav />
@@ -11,23 +12,47 @@
 	<div class="text-center mt-24 flex flex-col">
 		<h1 class="text-6xl font-medium leading-relaxed">A home screen for your growing team.</h1>
 		<h2 class="text-3xl mt-4 opacity-80">Shared shortcuts to your team's daily apps.</h2>
-		<div
-			on:focus
-			on:blur
-			on:mouseover={() => {
-				ctaIsHovered = true;
-			}}
-			on:mouseout={() => {
-				ctaIsHovered = false;
-			}}
-			on:click={() => {
-				goto('/demo');
-			}}
-			class="cta mx-auto rounded-md cursor-pointer text-2xl font-medium py-3 px-6 flex items-center justify-center mt-12 text-black"
-		>
-			Play with the demo
+		<div class="flex justify-center items-top mt-16">
+			<div class="flex flex-col mx-4">
+				<div
+					on:focus
+					on:blur
+					on:mouseover={() => {
+						demoCtaIsHovered = true;
+					}}
+					on:mouseout={() => {
+						demoCtaIsHovered = false;
+					}}
+					on:click={() => {
+						goto('/demo');
+					}}
+					class="cta mx-auto rounded-md cursor-pointer text-2xl font-medium py-3 px-6 flex items-center justify-center text-black"
+				>
+					Play with the demo
+				</div>
+				<div class="mt-3 {demoCtaIsHovered ? 'opacity-100' : 'opacity-60'}">
+					No sign-up required 🙂
+				</div>
+			</div>
+			<div class="mx-4">
+				<div
+					on:focus
+					on:blur
+					on:mouseover={() => {
+						pricingCtaIsHovered = true;
+					}}
+					on:mouseout={() => {
+						pricingCtaIsHovered = false;
+					}}
+					class="bg-white bg-opacity-5 hover:bg-opacity-20 rounded-md cursor-pointer text-2xl font-medium py-3 px-6 flex items-center justify-center"
+				>
+					See pricing
+				</div>
+				<div class="mt-3 {pricingCtaIsHovered ? 'opacity-100' : 'opacity-60'}">
+					Limited-time free trial
+				</div>
+			</div>
 		</div>
-		<div class="mt-3 {ctaIsHovered ? 'opacity-100' : 'opacity-60'}">No sign-up required 🙂</div>
 	</div>
 	<section class="my-24 grid md:grid-cols-4 grid-cols-2 gap-8 transition duration-200 ease-in-out">
 		{#each mockChannels.filter((c) => c.draftIconImageUrl) as channel, i (channel.id)}

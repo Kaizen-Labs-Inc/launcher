@@ -5,7 +5,7 @@
 	import 'tippy.js/dist/tippy.css';
 	import 'tippy.js/themes/translucent.css';
 
-	import { PlusCircleIcon, PlusIcon } from 'svelte-feather-icons';
+	import { PlusIcon } from 'svelte-feather-icons';
 	import Popover from 'svelte-popover';
 	import type Channel from 'src/model/Channel';
 	import { v4 as uuidv4 } from 'uuid';
@@ -126,7 +126,7 @@
 			: ''} {editModeEnabled
 			? 'cursor-default'
 			: 'cursor-pointer hover:opacity-100 hover:scale-110'}"
-		><PlusCircleIcon size="48" strokeWidth="1" /></button
+		><PlusIcon size="48" strokeWidth="1" /></button
 	>
 
 	<div
