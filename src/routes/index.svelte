@@ -64,7 +64,7 @@
 					class="opacity-60 mb-4 icon flex items-center justify-center"
 				>
 					<img
-						alt={channel.title}
+						alt={channel.name}
 						class="transition w-16 h-16 duration-300 ease-in-out"
 						src={channel.draftIconImageUrl}
 					/>

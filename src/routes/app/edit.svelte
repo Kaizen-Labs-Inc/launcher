@@ -10,7 +10,7 @@
 </script>
 
 <AuthenticatedNav />
-<h1 class="mt-16">Edit {channel.title}</h1>
+<h1 class="mt-16">Edit {channel.name}</h1>
 
 <ChannelForm
 	{channel}

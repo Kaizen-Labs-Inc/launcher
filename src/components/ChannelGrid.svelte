@@ -16,13 +16,15 @@
 	import { SearchIcon, Edit2Icon, XIcon } from 'svelte-feather-icons';
 	import { goto } from '$app/navigation';
 	import { addToast } from '../stores/toaststore';
+	import Board from '../model/Board';
+	import { BoardType } from '../model/api/BoardType';
 
 	let tippyInstance: Instance;
 	let query: string = '';
 	let searchIsFocused: boolean = false;
 	let addFormIsFocused: boolean = false;
 	let selectedChannelIndex: number;
-	let channels: Channel[] = mockChannels;
+	let board: Board;
 	const flipDurationMs: number = 200;
 	let isConsidering: boolean = false;
 	let editModeEnabled: boolean = false;
@@ -34,17 +36,18 @@
 	const jiggleAnimDurationMin: number = 0.22;
 	const jiggleAnimDurationMax: number = 0.3;
 
-	$: filteredChannels = channels.filter(
+	$: filteredChannels = (board?.positions || []).filter(
 		// TODO also filter by description, tags, and URL
-		(channel) => channel.title.toLowerCase().indexOf(query.toLowerCase()) !== -1
-	);
+		(position) => position.channel.name.toLowerCase().indexOf(query.toLowerCase()) !== -1
+	).map(position => position.channel);
+
 	const handleDndConsider = (e) => {
 		if (!editModeEnabled) {
 			editModeInitializedByDrag = true;
 		}
 		isConsidering = true;
 		editModeEnabled = true;
-		channels = e.detail.items;
+		board.positions = e.detail.items;
 		selectedChannelIndex = null;
 	};
 	const handleDndFinalize = (e) => {
@@ -53,8 +56,18 @@
 		}
 		isConsidering = false;
 		editModeInitializedByDrag = false;
-		channels = e.detail.items;
+		board.positions = e.detail.items;
+		console.log("updated board")
+		if (board.boardType !== BoardType.USER.valueOf()) {
+			console.log("We need to create a board")
+			fetch('/api/board', {
+				method: 'POST',
+				credentials: 'include',
+				body: JSON.stringify(board)
+			})
+		}
 	};
+
 
 	const handleProceed = (channel: Channel) => {
 		selectedChannelIndex = null;
@@ -85,8 +98,8 @@
 	};
 
 	const handleChannelAdded = (channel) => {
-		channels.unshift(channel);
-		channels = channels;
+		board.positions.unshift(channel);
+		board.positions = board.positions;
 		addToast({ dismissible: false, message: 'Added', type: 'success', timeout: 3000 });
 	};
 
@@ -103,6 +116,21 @@
 	};
 
 	onMount(() => {
+		fetch("api/board", {
+			credentials: 'include'
+		})
+			.then(async res => {
+				res.json().then(b => {
+					b.positions.sort((a, b) => {
+						return a.position - b.position
+					})
+					board = b
+				})
+
+			})
+			.catch(err => {
+				console.error(err.message)
+			})
 		tippyInstance = tippy(document.getElementById('editToggle'), {
 			content: 'Edit your Springboard',
 			arrow: false,
@@ -218,7 +246,7 @@
 					</div>
 
 					<AddChannelPopover
-						{channels}
+						channels={board?.positions || []}
 						bind:popOverIsFocused={addFormIsFocused}
 						bind:editModeEnabled
 						on:channelAdded={(e) => {
@@ -236,7 +264,7 @@
 			? '-translate-y-10'
 			: ''}"
 		use:dndzone={{
-			items: channels,
+			items: board?.positions || [],
 			flipDurationMs,
 			morphDisabled: true,
 			dropTargetClasses: ['target'],
@@ -249,7 +277,7 @@
 		on:consider={handleDndConsider}
 		on:finalize={handleDndFinalize}
 	>
-		{#each channels as channel, i (channel.id)}
+		{#each (board?.positions || []) as position, i (position.id)}
 			<div
 				animate:flip={{ duration: flipDurationMs }}
 				on:focus
@@ -266,7 +294,7 @@
 				}}
 				on:click={() => {
 					if (!editModeEnabled) {
-						handleProceed(channel);
+						handleProceed(position.channel);
 					}
 				}}
 				style={addFormIsFocused ? 'z-index: -100' : 'z-index: 0;'}
@@ -284,26 +312,26 @@
 						: ''}
 					class="text-6xl mb-4 icon flex items-center justify-center"
 				>
-					{#if channel.iconImageUrl}
+					{#if position.channel.image}
 						<img
-							alt={channel.title}
+							alt={position.channel.name}
 							style="z-index: 0;"
 							class="transition w-16 h-16 duration-300 ease-in-out"
-							src={channel.iconImageUrl}
+							src={position.channel.image}
 						/>
-					{:else if channel.emoji}
+					{:else if position.channel.emoji}
 						<div class=" transition w-16 h-16 duration-300 ease-in-out">
-							{channel.emoji}
+							{position.channel.emoji}
 						</div>
 					{:else}
 						<div class="text-black font-light transition w-16 h-16 duration-300 ease-in-out">
-							{channel.title.charAt(0)}
+							{position.channel.name.charAt(0)}
 						</div>
 					{/if}
 				</div>
 				<div>
-					<div class="text-2xl">{channel.title}</div>
-					<div class="text-md opacity-30">{channel.url}</div>
+					<div class="text-2xl">{position.channel.name}</div>
+					<div class="text-md opacity-30">{position.channel.url}</div>
 				</div>
 				{#if editModeEnabled && !editModeInitializedByDrag}
 					<div
@@ -313,7 +341,7 @@
 					>
 						<div
 							on:click={() => {
-								handleEdit(channel);
+								handleEdit(position.channel);
 							}}
 							class="cursor-pointer mx-2 rounded bg-white bg-opacity-5 p-2 hover:bg-opacity-10"
 						>
@@ -322,7 +350,7 @@
 						<div
 							on:click={() => {
 								// TODO allow undo
-								channels = channels.filter((c) => c.id !== channel.id);
+								board.positions = board.positions.filter((p) => p.channel.id !== position.channel.id);
 							}}
 							class="cursor-pointer mx-2 rounded p-2  text-white bg-red-500 hover:bg-red-600"
 						>

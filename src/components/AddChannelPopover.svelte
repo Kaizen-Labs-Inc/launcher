@@ -180,17 +180,17 @@
 								<div
 									class="w-10 h-10 bg-white text-lg text-black rounded-md flex items-center justify-center mr-4"
 								>
-									{#if channel.iconImageUrl}
-										<img src={channel.iconImageUrl} class="w-6 h-6" alt={channel.title} />
+									{#if channel.image}
+										<img src={channel.image} class="w-6 h-6" alt={channel.name} />
 									{:else if channel.emoji}
 										{channel.emoji}
 									{:else}
-										{channel.title.charAt(0)}
+										{channel.name.charAt(0)}
 									{/if}
 								</div>
 								<div class="flex justify-between align-center w-full">
 									<div>
-										{channel.title}
+										{channel.name}
 									</div>
 									<!-- TODO We need a new store for the users individual channels -->
 									<!-- For now we're just using 'channels',
