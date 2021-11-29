@@ -38,7 +38,7 @@
 	$: filteredChannels = (board?.positions || []).filter(
 		// TODO also filter by description, tags, and URL
 		(position) => position.channel.name.toLowerCase().indexOf(query.toLowerCase()) !== -1
-	);
+	).map(position => position.channel);
 	const handleDndConsider = (e) => {
 		isConsidering = true;
 		board?.positions = e.detail.items;
@@ -49,6 +49,11 @@
 		console.log("updated board")
 		if (board.boardType !== BoardType.USER.valueOf()) {
 			console.log("We need to create a board")
+			fetch('/api/board', {
+				method: 'POST',
+				credentials: 'include',
+				body: JSON.stringify(board)
+			})
 		}
 	};
 

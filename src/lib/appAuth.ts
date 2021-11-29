@@ -40,12 +40,15 @@ export const appAuth = new SvelteKitAuth({
 				})
 				if (!foundProfile) {
 					console.log("Adding user " + profile.email)
+					const dateCreated = new Date().toISOString()
 					const newProfile = await prisma.googleProfile.create({
-						data: profile
+						data: Object.assign({}, profile, { dateCreated: dateCreated, lastModified: dateCreated })
 					})
 					const newUser = await prisma.user.create({
 						data: {
-							googleProfileId: newProfile.id
+							googleProfileId: newProfile.id,
+							dateCreated: dateCreated,
+							lastModified: dateCreated
 						}
 					})
 				}
