@@ -27,7 +27,9 @@ export async function get(request: ServerRequest): Promise<void | EndpointOutput
 		select: {
 			boardChannels: {
 				select: {
-					channel: true
+					id: true,
+					channel: true,
+					position: true
 				}
 			}
 		}
@@ -40,7 +42,9 @@ export async function get(request: ServerRequest): Promise<void | EndpointOutput
 			select: {
 				boardChannels: {
 					select: {
-						channel: true
+						id: true,
+						channel: true,
+						position: true
 					}
 				}
 			}

@@ -6,22 +6,23 @@
 	import { onMount } from 'svelte';
 	import { flip } from 'svelte/animate';
 	import { dndzone } from 'svelte-dnd-action';
-	import AddChannelPopover from '../../components/AddChannelPopover.svelte';
-	import ChannelSearchDropdown from '../../components/ChannelSearchDropdown.svelte';
-	import Channel, { mockChannels } from '../../model/Channel';
+	import AddChannelPopover from '../components/AddChannelPopover.svelte';
+	import ChannelSearchDropdown from '../components/ChannelSearchDropdown.svelte';
+	import Channel, { mockChannels } from '../model/Channel';
 	import tippy, { Instance } from 'tippy.js';
 	import 'tippy.js/dist/tippy.css';
 	import 'tippy.js/themes/translucent.css';
 	import { SearchIcon, GridIcon, Edit2Icon, XIcon } from 'svelte-feather-icons';
 	import { goto } from '$app/navigation';
-	import { addToast } from '../../stores/toaststore';
-	import AuthenticatedNav from '../../components/nav/AuthenticatedNav.svelte';
+	import { addToast } from '../stores/toaststore';
+	import AuthenticatedNav from '../components/nav/AuthenticatedNav.svelte';
+	import BoardChannel from '../model/BoardChannel';
 	let tippyInstance: Instance;
 	let query: string = '';
 	let searchIsFocused: boolean = false;
 	let addFormIsFocused: boolean = false;
 	let selectedChannelIndex: number;
-	let channels: Channel[] = [];
+	let boardChannels: BoardChannel[] = [];
 	const flipDurationMs: number = 200;
 	let isConsidering: boolean = false;
 	let editModeEnabled: boolean = false;
@@ -32,17 +33,17 @@
 	const jiggleAnimDurationMin: number = 0.22;
 	const jiggleAnimDurationMax: number = 0.3;
 
-	$: filteredChannels = channels.filter(
+	$: filteredChannels = boardChannels.filter(
 		// TODO also filter by description, tags, and URL
-		(channel) => channel.name.toLowerCase().indexOf(query.toLowerCase()) !== -1
+		(boardChannel) => boardChannel.channel.name.toLowerCase().indexOf(query.toLowerCase()) !== -1
 	);
 	const handleDndConsider = (e) => {
 		isConsidering = true;
-		channels = e.detail.items;
+		boardChannels = e.detail.items;
 	};
 	const handleDndFinalize = (e) => {
 		isConsidering = false;
-		channels = e.detail.items;
+		boardChannels = e.detail.items;
 	};
 
 	const handleProceed = (channel: Channel) => {
@@ -74,8 +75,8 @@
 	};
 
 	const handleChannelAdded = (channel) => {
-		channels.unshift(channel);
-		channels = channels;
+		boardChannels.unshift(channel);
+		boardChannels = boardChannels;
 		addToast({ dismissible: false, message: 'Added', type: 'success', timeout: 3000 });
 	};
 
@@ -97,10 +98,10 @@
 		})
 			.then(async res => {
 				res.json().then(board => {
-					channels = board.boardChannels.sort((a, b) => {
-						return b.position - a.position
-					}).map(bc => bc.channel)
-					console.log(channels)
+					board.boardChannels.sort((a, b) => {
+						return a.position - b.position
+					})
+					boardChannels = board.boardChannels
 				})
 
 			})
@@ -231,7 +232,7 @@
 						</div>
 
 						<AddChannelPopover
-							{channels}
+							{boardChannels}
 							bind:popOverIsFocused={addFormIsFocused}
 							bind:editModeEnabled
 							on:channelAdded={(e) => {
@@ -249,7 +250,7 @@
 				? 'mt-0'
 				: 'mt-16'}"
 			use:dndzone={{
-				items: channels,
+				items: boardChannels,
 				flipDurationMs,
 				morphDisabled: true,
 				dropTargetClasses: ['target'],
@@ -263,7 +264,7 @@
 			on:consider={handleDndConsider}
 			on:finalize={handleDndFinalize}
 		>
-			{#each channels as channel, i (channel.id)}
+			{#each boardChannels as boardChannel, i (boardChannel.id)}
 				<div
 					animate:flip={{ duration: flipDurationMs }}
 					on:focus
@@ -280,7 +281,7 @@
 					}}
 					on:click={() => {
 						if (!editModeEnabled) {
-							handleProceed(channel);
+							handleProceed(boardChannel);
 						}
 					}}
 					style={addFormIsFocused ? 'z-index: -100' : 'z-index: 0;'}
@@ -301,18 +302,18 @@
 							: ''}
 						class="text-6xl mb-4 icon flex items-center justify-center"
 					>
-						{#if channel.image}
+						{#if boardChannel.channel.image}
 							<img
-								alt={channel.name}
+								alt={boardChannel.channel.name}
 								style="z-index: 0;"
 								class="transition w-16 h-16 duration-300 ease-in-out {selectedChannelIndex === i &&
 								!isConsidering &&
 								!editModeEnabled
 									? ' rotate-3 scale-110'
 									: 'rotate-0 scale-100'}"
-								src={channel.image}
+								src={boardChannel.channel.image}
 							/>
-						{:else if channel.emoji}
+						{:else if boardChannel.channel.emoji}
 							<div
 								class=" transition w-16 h-16 duration-300 ease-in-out {selectedChannelIndex === i &&
 								!isConsidering &&
@@ -320,7 +321,7 @@
 									? ' rotate-3 scale-110'
 									: 'rotate-0 scale-100'}"
 							>
-								{channel.emoji}
+								{boardChannel.channel.emoji}
 							</div>
 						{:else}
 							<div
@@ -331,13 +332,13 @@
 									? ' rotate-3 scale-110'
 									: 'rotate-0 scale-100'}"
 							>
-								{channel.name.charAt(0)}
+								{boardChannel.channel.name.charAt(0)}
 							</div>
 						{/if}
 					</div>
 					<div>
-						<div class="text-2xl">{channel.name}</div>
-						<div class="text-md opacity-30">{channel.url}</div>
+						<div class="text-2xl">{boardChannel.channel.name}</div>
+						<div class="text-md opacity-30">{boardChannel.channel.url}</div>
 					</div>
 					{#if editModeEnabled}
 						<div
@@ -347,7 +348,7 @@
 						>
 							<div
 								on:click={() => {
-									handleEdit(channel);
+									handleEdit(boardChannel.channel);
 								}}
 								class="cursor-pointer mx-2 rounded bg-white bg-opacity-5 p-2 hover:bg-opacity-10"
 							>
@@ -356,7 +357,7 @@
 							<div
 								on:click={() => {
 									// TODO allow undo
-									channels = channels.filter((c) => c.id !== channel.id);
+									boardChannels = boardChannels.filter((c) => c.id !== boardChannel.id);
 								}}
 								class="cursor-pointer mx-2 rounded p-2  text-white bg-red-500 hover:bg-red-600"
 							>
