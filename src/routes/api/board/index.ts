@@ -5,6 +5,18 @@ import getAuth from '$lib/getAuth';
 
 const prisma = new PrismaClient()
 
+const SELECTIONS = {
+	id: true,
+	boardType: true,
+	positions: {
+		select: {
+			id: true,
+			channel: true,
+			position: true
+		}
+	}
+}
+
 export async function get(request: ServerRequest): Promise<void | EndpointOutput> {
 
 	const auth = getAuth(request)
@@ -24,33 +36,16 @@ export async function get(request: ServerRequest): Promise<void | EndpointOutput
 				}
 			}
 		},
-		select: {
-			boardChannels: {
-				select: {
-					id: true,
-					channel: true,
-					position: true
-				}
-			}
-		}
+		select: SELECTIONS
 	})
 	if (!board) {
 		board = await prisma.board.findFirst({
 			where: {
 				boardType: 0
 			},
-			select: {
-				boardChannels: {
-					select: {
-						id: true,
-						channel: true,
-						position: true
-					}
-				}
-			}
+			select: SELECTIONS
 		})
 	}
-	console.log(JSON.stringify(board))
 	if (!board) {
 		return {
 			status: 404

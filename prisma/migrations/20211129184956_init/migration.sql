@@ -1,7 +1,9 @@
 -- CreateTable
 CREATE TABLE "Organization" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    "name" TEXT NOT NULL
+    "name" TEXT NOT NULL,
+    "dateCreated" DATETIME NOT NULL,
+    "lastModified" DATETIME NOT NULL
 );
 
 -- CreateTable
@@ -9,6 +11,8 @@ CREATE TABLE "User" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     "googleProfileId" INTEGER NOT NULL,
     "organizationId" INTEGER,
+    "dateCreated" DATETIME NOT NULL,
+    "lastModified" DATETIME NOT NULL,
     CONSTRAINT "User_googleProfileId_fkey" FOREIGN KEY ("googleProfileId") REFERENCES "GoogleProfile" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
     CONSTRAINT "User_organizationId_fkey" FOREIGN KEY ("organizationId") REFERENCES "Organization" ("id") ON DELETE SET NULL ON UPDATE CASCADE
 );
@@ -25,7 +29,9 @@ CREATE TABLE "GoogleProfile" (
     "email_verified" BOOLEAN NOT NULL,
     "locale" TEXT NOT NULL,
     "hd" TEXT NOT NULL,
-    "provider" TEXT NOT NULL
+    "provider" TEXT NOT NULL,
+    "dateCreated" DATETIME NOT NULL,
+    "lastModified" DATETIME NOT NULL
 );
 
 -- CreateTable
@@ -33,17 +39,21 @@ CREATE TABLE "Board" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     "boardType" INTEGER NOT NULL,
     "userId" INTEGER,
+    "dateCreated" DATETIME NOT NULL,
+    "lastModified" DATETIME NOT NULL,
     CONSTRAINT "Board_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User" ("id") ON DELETE SET NULL ON UPDATE CASCADE
 );
 
 -- CreateTable
-CREATE TABLE "BoardChannel" (
+CREATE TABLE "Position" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     "position" INTEGER NOT NULL,
     "boardId" INTEGER NOT NULL,
     "channelId" INTEGER NOT NULL,
-    CONSTRAINT "BoardChannel_boardId_fkey" FOREIGN KEY ("boardId") REFERENCES "Board" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
-    CONSTRAINT "BoardChannel_channelId_fkey" FOREIGN KEY ("channelId") REFERENCES "Channel" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+    "dateCreated" DATETIME NOT NULL,
+    "lastModified" DATETIME NOT NULL,
+    CONSTRAINT "Position_boardId_fkey" FOREIGN KEY ("boardId") REFERENCES "Board" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
+    CONSTRAINT "Position_channelId_fkey" FOREIGN KEY ("channelId") REFERENCES "Channel" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
 -- CreateTable
@@ -52,10 +62,13 @@ CREATE TABLE "Channel" (
     "name" TEXT NOT NULL,
     "url" TEXT NOT NULL,
     "image" TEXT NOT NULL,
-    "description" TEXT,
     "channelType" INTEGER NOT NULL,
+    "description" TEXT,
+    "emoji" TEXT,
     "userId" INTEGER,
     "organizationId" INTEGER,
+    "dateCreated" DATETIME NOT NULL,
+    "lastModified" DATETIME NOT NULL,
     CONSTRAINT "Channel_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User" ("id") ON DELETE SET NULL ON UPDATE CASCADE,
     CONSTRAINT "Channel_organizationId_fkey" FOREIGN KEY ("organizationId") REFERENCES "Organization" ("id") ON DELETE SET NULL ON UPDATE CASCADE
 );
@@ -67,8 +80,20 @@ CREATE TABLE "Invitation" (
     "inviteeEmail" TEXT NOT NULL,
     "inviteeName" TEXT,
     "organizationId" INTEGER NOT NULL,
+    "dateCreated" DATETIME NOT NULL,
+    "lastModified" DATETIME NOT NULL,
     CONSTRAINT "Invitation_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
     CONSTRAINT "Invitation_organizationId_fkey" FOREIGN KEY ("organizationId") REFERENCES "Organization" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+);
+
+-- CreateTable
+CREATE TABLE "Tag" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "name" TEXT NOT NULL,
+    "userId" INTEGER,
+    "dateCreated" DATETIME NOT NULL,
+    "lastModified" DATETIME NOT NULL,
+    CONSTRAINT "Tag_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User" ("id") ON DELETE SET NULL ON UPDATE CASCADE
 );
 
 -- CreateIndex

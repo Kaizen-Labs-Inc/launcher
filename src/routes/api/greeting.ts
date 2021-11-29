@@ -1,8 +1,6 @@
 import type { ServerRequest } from '@sveltejs/kit/types/hooks';
 import type { EndpointOutput } from '@sveltejs/kit/types/endpoint';
 import { PrismaClient } from '@prisma/client'
-import type { User, Channel } from '@prisma/client';
-import getAuth from '$lib/getAuth';
 import { ChannelType } from '../../model/ChannelType';
 import { BoardType } from '../../model/api/BoardType';
 
@@ -102,7 +100,7 @@ export async function get(request: ServerRequest): Promise<void | EndpointOutput
 				boardType: 0
 			},
 			select: {
-				boardChannels: {
+				positions: {
 					select: {
 						channel: true
 					}
@@ -111,23 +109,28 @@ export async function get(request: ServerRequest): Promise<void | EndpointOutput
 
 		})
 		if (!defaultBoard) {
+			const dateCreated = new Date().toISOString()
 			console.log("creating default board")
 			defaultBoard = await prisma.board.create({
 				data: {
-					boardType: BoardType.DEFAULT.valueOf()
+					boardType: BoardType.DEFAULT.valueOf(),
+					dateCreated: dateCreated,
+					lastModified: dateCreated
 				}
 			})
 			const allChannels = await Promise.all(defaultChannels.map(it => {
 				return prisma.channel.create({
-					data: it
+					data: Object.assign(it, {dateCreated: dateCreated, lastModified: dateCreated})
 				})
 			}))
-			const boardChannels = await Promise.all(allChannels.map((it, idx) => {
-				return prisma.boardChannel.create({
+			const positions = await Promise.all(allChannels.map((it, idx) => {
+				return prisma.position.create({
 					data: {
 						channelId: it.id,
 						boardId: defaultBoard.id,
-						position: idx
+						position: idx,
+						dateCreated: dateCreated,
+						lastModified: dateCreated
 					}
 				})
 			}))

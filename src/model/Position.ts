@@ -1,7 +1,7 @@
 import type Channel from './Channel';
 
-export default interface BoardChannel {
-	id?: string;
+export default interface Position {
+	id?: number;
 	position: number;
 	channel: Channel
 }

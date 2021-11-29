@@ -10,11 +10,13 @@ generator client {
 }
 
 model Organization {
-  id         Int          @id @default(autoincrement())
-  name       String
-  User       User[]
-  Channel    Channel[]
-  Invitation Invitation[]
+  id           Int          @id @default(autoincrement())
+  name         String
+  User         User[]
+  Channel      Channel[]
+  Invitation   Invitation[]
+  dateCreated  DateTime
+  lastModified DateTime
 }
 
 model User {
@@ -24,54 +26,66 @@ model User {
   organization    Organization? @relation(fields: [organizationId], references: [id])
   organizationId  Int?
   boards          Board[]
-  Channel         Channel[]
-  Invitation      Invitation[]
+  channels        Channel[]
+  invitations     Invitation[]
+  tags            Tag[]
+  dateCreated     DateTime
+  lastModified    DateTime
 }
 
 model GoogleProfile {
-  id             Int     @id @default(autoincrement())
+  id             Int      @id @default(autoincrement())
   sub            String
   name           String
   given_name     String
   family_name    String
   picture        String
-  email          String  @unique
+  email          String   @unique
   email_verified Boolean
   locale         String
   hd             String
   provider       String
   User           User?
+  dateCreated    DateTime
+  lastModified   DateTime
 }
 
 model Board {
-  id            Int            @id @default(autoincrement())
-  user          User?          @relation(fields: [userId], references: [id])
-  boardType     Int
-  userId        Int?
-  boardChannels BoardChannel[]
+  id           Int        @id @default(autoincrement())
+  user         User?      @relation(fields: [userId], references: [id])
+  boardType    Int
+  userId       Int?
+  positions    Position[]
+  dateCreated  DateTime
+  lastModified DateTime
 }
 
-model BoardChannel {
-  id        Int     @id @default(autoincrement())
-  position  Int
-  board     Board   @relation(fields: [boardId], references: [id])
-  channel   Channel @relation(fields: [channelId], references: [id])
-  boardId   Int
-  channelId Int
+model Position {
+  id           Int      @id @default(autoincrement())
+  position     Int
+  board        Board    @relation(fields: [boardId], references: [id])
+  channel      Channel  @relation(fields: [channelId], references: [id])
+  boardId      Int
+  channelId    Int
+  dateCreated  DateTime
+  lastModified DateTime
 }
 
 model Channel {
-  id             Int            @id @default(autoincrement())
+  id             Int           @id @default(autoincrement())
   name           String
   url            String
   image          String
-  description    String?
   channelType    Int
-  user           User?          @relation(fields: [userId], references: [id])
-  organization   Organization?  @relation(fields: [organizationId], references: [id])
-  BoardChannel   BoardChannel[]
+  description    String?
+  emoji          String?
+  user           User?         @relation(fields: [userId], references: [id])
+  organization   Organization? @relation(fields: [organizationId], references: [id])
   userId         Int?
   organizationId Int?
+  Position       Position[]
+  dateCreated    DateTime
+  lastModified   DateTime
 }
 
 model Invitation {
@@ -82,4 +96,15 @@ model Invitation {
   inviteeEmail   String
   inviteeName    String?
   organizationId Int
+  dateCreated    DateTime
+  lastModified   DateTime
+}
+
+model Tag {
+  id           Int      @id @default(autoincrement())
+  name         String
+  user         User?    @relation(fields: [userId], references: [id])
+  userId       Int?
+  dateCreated  DateTime
+  lastModified DateTime
 }

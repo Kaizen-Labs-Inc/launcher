@@ -1,14 +1,15 @@
 export default interface Channel {
-	id?: string;
+	id?: number;
 	name: string;
-	url?: string;
+	url: string;
+	emoji?: string,
 	description?: string;
 	image?: string;
 }
 
 export const mockChannels = [
 	{
-		id: '1',
+		id: 1,
 		emoji: '✉️',
 		image: '../../../icons/gmail.svg',
 		name: 'Gmail',
@@ -16,7 +17,7 @@ export const mockChannels = [
 		tags: ['email', 'google']
 	},
 	{
-		id: '2',
+		id: 2,
 		emoji: '🗓',
 		image: '../../../icons/gcal.svg',
 		name: 'Calendar',
@@ -25,7 +26,7 @@ export const mockChannels = [
 	},
 
 	{
-		id: '3',
+		id: 3,
 		emoji: '💬',
 		image: '../../../icons/slack.svg',
 		draftIconImageUrl: '../../../icons/draft/icon-slack-draft.svg',
@@ -34,7 +35,7 @@ export const mockChannels = [
 		description: 'Real-time comms'
 	},
 	{
-		id: '4',
+		id: 4,
 		emoji: '📓',
 		image: '../../../icons/notion.svg',
 		name: 'Notion',
@@ -43,7 +44,7 @@ export const mockChannels = [
 		tags: ['product', 'docs']
 	},
 	{
-		id: '5',
+		id: 5,
 		emoji: '📬',
 		image: '../../../icons/intercom.svg',
 		draftIconImageUrl: '../../../icons/draft/icon-intercom-draft.svg',
@@ -53,7 +54,7 @@ export const mockChannels = [
 		tags: ['marketing', 'push', 'email']
 	},
 	{
-		id: '6',
+		id: 6,
 		emoji: '🖇',
 		image: '../../../icons/trello.svg',
 		name: 'Trello',
@@ -62,7 +63,7 @@ export const mockChannels = [
 		tags: ['product']
 	},
 	{
-		id: '7',
+		id: 7,
 		emoji: '📈',
 		image: '../../../icons/tableau.svg',
 		draftIconImageUrl: '../../../icons/draft/icon-tableau-draft.svg',
@@ -72,7 +73,7 @@ export const mockChannels = [
 		tags: ['product', 'data']
 	},
 	{
-		id: '8',
+		id: 8,
 		emoji: '💸',
 		image: '../../../icons/workday.svg',
 		draftIconImageUrl: '../../../icons/draft/icon-workday-draft.svg',
@@ -82,7 +83,7 @@ export const mockChannels = [
 		tags: ['HR', 'IT']
 	},
 	{
-		id: '9',
+		id: 9,
 		emoji: '☎',
 		image: '../../../icons/zendesk.svg',
 		draftIconImageUrl: '../../../icons/draft/icon-zendesk-draft.svg',
@@ -92,7 +93,7 @@ export const mockChannels = [
 		tags: ['CS']
 	},
 	{
-		id: '10',
+		id: 10,
 		emoji: '💼',
 		image: '../../../icons/figma.svg',
 		draftIconImageUrl: '../../../icons/draft/icon-figma-draft.svg',
@@ -103,7 +104,7 @@ export const mockChannels = [
 	},
 
 	{
-		id: '11',
+		id: 11,
 		emoji: '💼',
 		image: '../../../icons/marketo.svg',
 		draftIconImageUrl: '../../../icons/draft/icon-marketo-draft.svg',
@@ -113,7 +114,7 @@ export const mockChannels = [
 		tags: ['sales']
 	},
 	{
-		id: '12',
+		id: 12,
 		emoji: '💼',
 		image: '../../../icons/github.svg',
 		draftIconImageUrl: '../../../icons/draft/icon-github-draft.svg',
