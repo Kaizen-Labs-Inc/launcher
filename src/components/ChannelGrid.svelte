@@ -269,7 +269,7 @@
 						handleProceed(channel);
 					}
 				}}
-				style={addFormIsFocused ? 'z-index: -100' : 'z-index: 0;'}
+				style={addFormIsFocused ? 'z-index: 0' : 'z-index: 0;'}
 				class="channel cursor-pointer flex items-center justify-center flex-col text-center transition duration-200 ease-in-out hover:scale-105"
 			>
 				<div
@@ -289,7 +289,7 @@
 							alt={channel.title}
 							style="z-index: 0;"
 							class="transition w-16 h-16 duration-300 ease-in-out"
-							src={channel.iconImageUrl}
+							src={channel.iconImageUrlDark ? channel.iconImageUrlDark : channel.iconImageUrl}
 						/>
 					{:else if channel.emoji}
 						<div class=" transition w-16 h-16 duration-300 ease-in-out">
