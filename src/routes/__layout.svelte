@@ -60,7 +60,7 @@
 </main>
 
 <footer class="opacity-50 hover:opacity-100">
-	<p class="mx-3">Springboard 2021</p>
+	<p class="mx-3">Kaizen Labs Inc 2021</p>
 	<a href="#" class="mx-3">Privacy policy</a>
 	<a href="#" class="mx-3">Terms of use</a>
 </footer>

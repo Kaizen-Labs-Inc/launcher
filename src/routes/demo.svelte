@@ -10,7 +10,7 @@
 </script>
 
 <svelte:head>
-	<title>Springboard</title>
+	<title>Launcher</title>
 </svelte:head>
 <PublicNav />
 <div in:fade class="container mx-auto pb-12">

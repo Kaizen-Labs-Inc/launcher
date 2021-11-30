@@ -44,6 +44,7 @@
 		"@joeattardi/emoji-button": "^4.6.0",
 		"@lukeed/uuid": "^2.0.0",
 		"dotenv": "^10.0.0",
+		"metascraper": "^5.25.2",
 		"stripe": "^8.177.0",
 		"svelte-tags-input": "^2.8.0",
 		"tippy.js": "^6.3.2",

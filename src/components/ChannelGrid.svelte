@@ -104,7 +104,7 @@
 
 	onMount(() => {
 		tippyInstance = tippy(document.getElementById('editToggle'), {
-			content: 'Edit your Springboard',
+			content: 'Edit launcher',
 			arrow: false,
 			theme: 'translucent'
 		});
