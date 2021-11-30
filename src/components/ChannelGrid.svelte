@@ -115,7 +115,9 @@
 			body: JSON.stringify(channel)
 		}).then(async res => {
 			if (res.status === 201) {
-				board.positions.unshift(channel);
+				const newChannel = await res.json()
+				const newPosition = { position: 0, channel: newChannel }
+				board.positions.unshift(newPosition);
 				await orderAndSyncBoardPositions();
 				addToast({ dismissible: false, message: 'Added', type: 'success', timeout: 3000 });
 			}
