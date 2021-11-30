@@ -8,7 +8,7 @@
 	import { SmileIcon } from 'svelte-feather-icons';
 	import Tags from 'svelte-tags-input';
 	import type Channel from 'src/model/Channel';
-	import { scrape } from '../routes/api/scrape';
+	// import { scrape } from '../routes/api/scrape';
 	const dispatch = createEventDispatcher();
 	export let channel: Channel = {
 		title: '',
