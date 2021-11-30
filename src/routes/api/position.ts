@@ -64,6 +64,20 @@ export async function patch(request: ServerRequest): Promise<void | EndpointOutp
 		};
 	}
 
+	const newPositions = positions.filter(p => !p.id)
+	console.log("Creating new positions: " + JSON.stringify(newPositions))
+	const created = Promise.all(newPositions.map(p => {
+		const dateCreated = new Date().toISOString()
+		prisma.position.create({
+			data: Object.assign(p, {
+				dateCreated: dateCreated,
+				lastModified: dateCreated
+			})
+		})
+	})).catch(e => {
+		console.error(e);
+	})
+
 	const updated = await Promise.all(positions.map(p => {
 		prisma.position.update({
 			data: {
@@ -77,5 +91,5 @@ export async function patch(request: ServerRequest): Promise<void | EndpointOutp
 	})).catch(e => {
 			console.error(e);
 		})
-	return { body: updated };
+	return { body: created.concat(updated) };
 }

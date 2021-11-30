@@ -56,7 +56,14 @@
 		}
 		isConsidering = false;
 		editModeInitializedByDrag = false;
-		board.positions = e.detail.items.map((p, i) => Object.assign({}, p, {position: i}));
+		board.positions = e.detail.items
+		orderAndSyncBoardPositions();
+	};
+
+
+	function orderAndSyncBoardPositions() {
+		// ensure positions are numerically correct
+		board.positions = board.positions.map((p, i) => Object.assign({}, p, { position: i }));
 		if (board.boardType === BoardType.USER.valueOf()) {
 			fetch('/api/position', {
 				method: 'PATCH',
@@ -71,8 +78,7 @@
 				body: JSON.stringify(board)
 			})
 		}
-	};
-
+	}
 
 	const handleProceed = (channel: Channel) => {
 		selectedChannelIndex = null;
@@ -107,10 +113,10 @@
 			method: 'POST',
 			credentials: 'include',
 			body: JSON.stringify(channel)
-		}).then(res => {
+		}).then(async res => {
 			if (res.status === 201) {
 				board.positions.unshift(channel);
-				board.positions = board.positions;
+				await orderAndSyncBoardPositions();
 				addToast({ dismissible: false, message: 'Added', type: 'success', timeout: 3000 });
 			}
 		})
