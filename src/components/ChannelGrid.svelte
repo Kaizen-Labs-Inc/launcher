@@ -103,9 +103,17 @@
 	};
 
 	const handleChannelAdded = (channel) => {
-		board.positions.unshift(channel);
-		board.positions = board.positions;
-		addToast({ dismissible: false, message: 'Added', type: 'success', timeout: 3000 });
+		fetch('/api/channel', {
+			method: 'POST',
+			credentials: 'include',
+			body: JSON.stringify(channel)
+		}).then(res => {
+			if (res.status === 201) {
+				board.positions.unshift(channel);
+				board.positions = board.positions;
+				addToast({ dismissible: false, message: 'Added', type: 'success', timeout: 3000 });
+			}
+		})
 	};
 
 	const toggleAddForm = () => {

@@ -10,10 +10,11 @@
 	import type Channel from 'src/model/Channel';
 	const dispatch = createEventDispatcher();
 	export let channel: Channel = {
-		title: '',
+		name: '',
 		description: '',
 		url: '',
 		icon: '',
+		emoji: '',
 		tags: []
 	};
 	let emoji;
@@ -45,7 +46,7 @@
 		<input
 			autofocus
 			bind:value={channel.name}
-			name="title"
+			name="name"
 			type="text"
 			placeholder="Type a name"
 			class="bg-white bg-opacity-10 rounded p-2"

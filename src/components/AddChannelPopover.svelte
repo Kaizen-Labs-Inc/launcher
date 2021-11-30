@@ -35,7 +35,7 @@
 			(channel) => channel.name.toLowerCase().indexOf(query.toLowerCase()) !== -1
 		)
 		// HACK dedupe - should do this by ID or just pull directly from airtable cache
-		.filter((c, i, a) => a.findIndex((t) => t.title === c.title) === i);
+		.filter((c, i, a) => a.findIndex((t) => t.name === c.name) === i);
 
 	export let popOverIsFocused: boolean = false;
 	let stepOneComplete: boolean = false;
@@ -163,9 +163,7 @@
 									selectedChannelIndex = i;
 								}}
 								on:click={() => {
-									if (channels.map((c) => c.id).includes(channel.id)) {
-										return; // don't do anything - the channel is already added to the homescreen
-									} else {
+									if (!channels.map((c) => c.id).includes(channel.id)) {
 										handleAdd(channel);
 									}
 								}}
@@ -229,7 +227,7 @@
 			{:else}
 				<ChannelForm
 					channel={{
-						title: query.charAt(0).toUpperCase() + query.substr(1).toLowerCase() || undefined
+						name: query.charAt(0).toUpperCase() + query.substr(1).toLowerCase() || undefined
 					}}
 					on:submit={(event) => {
 						console.log(event);

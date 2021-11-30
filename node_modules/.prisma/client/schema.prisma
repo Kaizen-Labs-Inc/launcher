@@ -75,15 +75,16 @@ model Channel {
   id             Int           @id @default(autoincrement())
   name           String
   url            String
-  image          String
   channelType    Int
+  image          String?
   description    String?
   emoji          String?
   user           User?         @relation(fields: [userId], references: [id])
   organization   Organization? @relation(fields: [organizationId], references: [id])
   userId         Int?
   organizationId Int?
-  Position       Position[]
+  positions      Position[]
+  tags           Tag[]
   dateCreated    DateTime
   lastModified   DateTime
 }
@@ -101,10 +102,11 @@ model Invitation {
 }
 
 model Tag {
-  id           Int      @id @default(autoincrement())
+  id           Int       @id @default(autoincrement())
   name         String
-  user         User?    @relation(fields: [userId], references: [id])
+  user         User?     @relation(fields: [userId], references: [id])
   userId       Int?
+  channels     Channel[]
   dateCreated  DateTime
   lastModified DateTime
 }

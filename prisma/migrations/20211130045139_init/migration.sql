@@ -61,8 +61,8 @@ CREATE TABLE "Channel" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     "name" TEXT NOT NULL,
     "url" TEXT NOT NULL,
-    "image" TEXT NOT NULL,
     "channelType" INTEGER NOT NULL,
+    "image" TEXT,
     "description" TEXT,
     "emoji" TEXT,
     "userId" INTEGER,
@@ -96,8 +96,22 @@ CREATE TABLE "Tag" (
     CONSTRAINT "Tag_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User" ("id") ON DELETE SET NULL ON UPDATE CASCADE
 );
 
+-- CreateTable
+CREATE TABLE "_ChannelToTag" (
+    "A" INTEGER NOT NULL,
+    "B" INTEGER NOT NULL,
+    FOREIGN KEY ("A") REFERENCES "Channel" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY ("B") REFERENCES "Tag" ("id") ON DELETE CASCADE ON UPDATE CASCADE
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "User_googleProfileId_key" ON "User"("googleProfileId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "GoogleProfile_email_key" ON "GoogleProfile"("email");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "_ChannelToTag_AB_unique" ON "_ChannelToTag"("A", "B");
+
+-- CreateIndex
+CREATE INDEX "_ChannelToTag_B_index" ON "_ChannelToTag"("B");

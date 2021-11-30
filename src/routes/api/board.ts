@@ -134,7 +134,9 @@ export async function post(request: ServerRequest): Promise<void | EndpointOutpu
 			console.error(e)
 		}
 	}
-	return { body: created }
+	return {
+		status: 201,
+		body: created
+	}
 
 }
-
