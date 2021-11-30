@@ -1,18 +1,28 @@
-<script>
-	import { mockChannels } from '../model/Channel';
-	import { scale } from 'svelte/transition';
+<script lang="ts">
 	import { goto } from '$app/navigation';
 	import PublicNav from '../components/nav/PublicNav.svelte';
+	import {
+		CodeIcon,
+		CommandIcon,
+		GridIcon,
+		LockIcon,
+		UsersIcon,
+		ZapIcon
+	} from 'svelte-feather-icons';
+	import ScrollingChannelIconBackground from '../components/ScrollingChannelIconBackground.svelte';
 	let demoCtaIsHovered = false;
 	let pricingCtaIsHovered = false;
 </script>
 
 <PublicNav />
-<div class="container">
+<ScrollingChannelIconBackground />
+<div class="container mx-auto">
 	<div class="text-center mt-24 flex flex-col">
-		<h1 class="text-6xl font-medium leading-relaxed">A home screen for your growing team.</h1>
-		<h2 class="text-3xl mt-4 opacity-80">Shared shortcuts to your team's daily apps.</h2>
-		<div class="flex justify-center items-top mt-16">
+		<h1 class="font-bold text-5xl md:text-8xl z-20" style="line-height: 115%">
+			A home screen for your growing team.
+		</h1>
+		<h2 class="text-3xl mt-12 opacity-80 z-20">Shared shortcuts to your team's daily apps.</h2>
+		<div class="flex justify-center items-top mt-16 z-20">
 			<div class="flex flex-col mx-4">
 				<div
 					on:focus
@@ -44,7 +54,10 @@
 					on:mouseout={() => {
 						pricingCtaIsHovered = false;
 					}}
-					class="bg-white bg-opacity-5 hover:bg-opacity-20 rounded-md cursor-pointer text-2xl font-medium py-3 px-6 flex items-center justify-center"
+					on:click={() => {
+						goto('/pricing');
+					}}
+					class="bg-white bg-opacity-5 hover:bg-opacity-10 rounded-md cursor-pointer text-2xl font-medium py-3 px-6 flex items-center justify-center"
 				>
 					See pricing
 				</div>
@@ -54,24 +67,82 @@
 			</div>
 		</div>
 	</div>
-	<section class="my-24 grid md:grid-cols-4 grid-cols-2 gap-8 transition duration-200 ease-in-out">
-		{#each mockChannels.filter((c) => c.draftIconImageUrl) as channel, i (channel.id)}
+
+	<h3 class="text-5xl font-medium text-center mt-36 w-2/3 mx-auto">
+		The "new tab" page for your company.
+	</h3>
+	<h4 class="text-2xl mt-10 opacity-60 text-center mx-auto">
+		Springboard wrangles the apps your company uses (like GitHub, Notion, and Asana) and makes them
+		beautiful and accessible. Perfect for new hires and growing teams.
+	</h4>
+	<div class="mt-12 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+		<div
+			class="rounded-2xl bg-black text-white bg-opacity-30 backdrop-blur-md p-8 flex flex-col items-center text-center"
+		>
 			<div
-				class="channel flex items-center justify-center flex-col text-center transition duration-200 ease-in-out"
+				class="rounded-xl text-black bg-gradient-to-b from-red-200 to-blue-100 flex items-center justify-center p-3"
 			>
-				<div
-					in:scale={{ duration: 300, delay: 500, opacity: 0, start: 0.5 }}
-					class="opacity-60 mb-4 icon flex items-center justify-center"
-				>
-					<img
-						alt={channel.title}
-						class="transition w-16 h-16 duration-300 ease-in-out"
-						src={channel.draftIconImageUrl}
-					/>
-				</div>
+				<ZapIcon size="28" strokeWidth="1.25" />
 			</div>
-		{/each}
-	</section>
+			<div class="font-bold text-2xl text-white my-4">Real fast.</div>
+			<span class="opacity-75">Built with performance as a first-class-citizen.</span>
+		</div>
+		<div
+			class="rounded-2xl bg-black text-white bg-opacity-30 backdrop-blur-md p-8 flex flex-col items-center text-center"
+		>
+			<div
+				class="rounded-xl text-black bg-gradient-to-b from-yellow-300 to-green-100 flex items-center justify-center p-3"
+			>
+				<CommandIcon size="28" strokeWidth="1.25" />
+			</div>
+			<div class="font-bold text-2xl text-white my-4">Keyboard friendly.</div>
+			<span class="opacity-75">Find and launch any app in milliseconds with ⌘G.</span>
+		</div>
+		<div
+			class="rounded-2xl bg-black text-white bg-opacity-30 backdrop-blur-md p-8 flex flex-col items-center text-center"
+		>
+			<div
+				class="rounded-xl text-black bg-gradient-to-b from-red-200 to-pink-300 flex items-center justify-center p-3"
+			>
+				<UsersIcon size="28" strokeWidth="1.25" />
+			</div>
+			<div class="font-bold text-2xl text-white my-4">Pay as you grow.</div>
+			<span class="opacity-75">Simple, fair, per-user pricing. Cancel anytime.</span>
+		</div>
+		<div
+			class="rounded-2xl bg-black text-white bg-opacity-30 backdrop-blur-md p-8 flex flex-col items-center text-center"
+		>
+			<div
+				class="rounded-xl text-black bg-gradient-to-b from-blue-300 to-indigo-100 flex items-center justify-center p-3"
+			>
+				<CodeIcon size="28" strokeWidth="1.25" />
+			</div>
+			<div class="font-bold text-2xl text-white my-4">Open source.</div>
+			<span class="opacity-75">Peek under the hood, or host it yourself.</span>
+		</div>
+		<div
+			class="rounded-2xl bg-black text-white bg-opacity-30 backdrop-blur-md p-8 flex flex-col items-center text-center"
+		>
+			<div
+				class="rounded-xl text-black bg-gradient-to-b from-purple-300 to-pink-100 flex items-center justify-center p-3"
+			>
+				<LockIcon size="28" strokeWidth="1.25" />
+			</div>
+			<div class="font-bold text-2xl text-white my-4">Private.</div>
+			<span class="opacity-75">We don't track, store, or sell your data.</span>
+		</div>
+		<div
+			class="rounded-2xl bg-black text-white bg-opacity-30 backdrop-blur-md p-8 flex flex-col items-center text-center"
+		>
+			<div
+				class="rounded-xl text-black bg-gradient-to-b from-pink-300 to-green-200 flex items-center justify-center p-3"
+			>
+				<GridIcon size="28" strokeWidth="1.25" />
+			</div>
+			<div class="font-bold text-2xl text-white my-4">Yours.</div>
+			<span class="opacity-75">Use and browse our apps, or add your own.</span>
+		</div>
+	</div>
 </div>
 
 <style>
@@ -92,7 +163,6 @@
 		-webkit-background-clip: text;
 		-webkit-text-fill-color: transparent;
 	}
-
 	.cta {
 		background-color: #85ffbd;
 		background-image: linear-gradient(45deg, #85ffbd 0%, #fffb7d 100%);
