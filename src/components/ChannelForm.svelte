@@ -31,7 +31,7 @@
 
 	const handleUrlScraping = async () => {
 		isScraping = true;
-		await scrape(channel.url);
+		// TODO await scrape(channel.url);
 		isScraping = false;
 		urlResolved = true;
 	};
