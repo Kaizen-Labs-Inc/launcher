@@ -153,7 +153,7 @@
 				console.error(err.message)
 			})
 		tippyInstance = tippy(document.getElementById('editToggle'), {
-			content: 'Edit your Springboard',
+			content: 'Edit launcher',
 			arrow: false,
 			theme: 'translucent'
 		});
@@ -318,7 +318,7 @@
 						handleProceed(position.channel);
 					}
 				}}
-				style={addFormIsFocused ? 'z-index: -100' : 'z-index: 0;'}
+				style={addFormIsFocused ? 'z-index: 0' : 'z-index: 0;'}
 				class="channel cursor-pointer flex items-center justify-center flex-col text-center transition duration-200 ease-in-out hover:scale-105"
 			>
 				<div

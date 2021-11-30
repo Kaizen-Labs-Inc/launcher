@@ -116,7 +116,7 @@
 	}}
 	on:close={resetPopover}
 	overlayColor="rgba(0, 0, 0, 0.0)"
-	zIndex="10000"
+	zIndex="100"
 >
 	<button
 		slot="target"
@@ -217,7 +217,7 @@
 							: ''} rounded-lg cursor-pointer p-2 flex items-center "
 					>
 						<div
-							class="w-10 h-10 bg-white rounded-md flex items-center justify-center mr-4 opacity-75 hover:opacity-100 transition duration-200 ease-in-out"
+							class="w-10 h-10 bg-white text-black rounded-md flex items-center justify-center mr-4"
 						>
 							<PlusIcon strokeWidth="2" size="20" />
 						</div>

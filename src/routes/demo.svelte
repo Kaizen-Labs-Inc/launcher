@@ -10,7 +10,7 @@
 </script>
 
 <svelte:head>
-	<title>Springboard</title>
+	<title>Launcher</title>
 </svelte:head>
 <PublicNav />
 <div in:fade class="container mx-auto pb-12">
@@ -18,7 +18,7 @@
 		on:click={() => {
 			goto('/pricing');
 		}}
-		class="absolute z-50 bottom-0 mb-10 left-1/2 transform -translate-x-1/2 bg-yellow-200 flex items-center justify-center text-lg shadow-lg px-4 py-2 text-black rounded-lg cursor-pointer"
+		class="fixed z-50 bottom-0 mb-10 left-1/2 transform -translate-x-1/2 bg-yellow-200 flex items-center justify-center text-lg shadow-lg px-4 py-2 text-black rounded-lg cursor-pointer"
 	>
 		🚧 This is a demo. Start your free trial now.
 	</div>

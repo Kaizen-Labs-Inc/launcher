@@ -5,7 +5,7 @@
 </script>
 
 <svelte:head>
-	<title>Springboard</title>
+	<title>Launcher</title>
 </svelte:head>
 <AuthenticatedNav />
 <div class="container mx-auto pb-12">

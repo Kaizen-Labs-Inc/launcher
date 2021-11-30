@@ -30,9 +30,7 @@
 			>
 		</li>
 		<li class="mr-6 hover:text-opacity-100 text-opacity-50 flex items-center">
-			<a href="https://github.com/Kaizen-Labs-Inc/springboard" target="_blank" rel="external"
-				>Github</a
-			>
+			<a href="https://github.com/natevaughan/springboard" target="_blank" rel="external">Github</a>
 			<ArrowUpRightIcon strokeWidth={1} size="18" />
 		</li>
 		<li class="text-yellow-200">
