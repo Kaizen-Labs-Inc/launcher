@@ -72,7 +72,7 @@
 		The "new tab" page for your company.
 	</h3>
 	<h4 class="text-2xl mt-10 opacity-60 text-center mx-auto">
-		Springboard wrangles the apps your company uses (like GitHub, Notion, and Asana) and makes them
+		Launcher wrangles the apps your company uses (like GitHub, Notion, and Asana) and makes them
 		beautiful and accessible. Perfect for new hires and growing teams.
 	</h4>
 	<div class="mt-12 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
