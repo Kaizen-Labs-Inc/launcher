@@ -186,7 +186,11 @@
 	<div
 		class="flex flex-row p-4 rounded-t-lg w-full {searchIsFocused ? 'bg-white bg-opacity-10' : ''}"
 	>
-		<div class="flex-shrink-0">
+		<div
+			class="flex-shrink-0 transition duration-200 ease-in-out {addFormIsFocused
+				? 'opacity-5 scale-95'
+				: ''}"
+		>
 			<SearchIcon size="48" strokeWidth="1" />
 		</div>
 		<div class="flex flex-row items-center justify-between w-full">
@@ -195,17 +199,21 @@
 				on:focus={handleFocus}
 				on:blur={handleBlur}
 				on:input={handleInput}
-				disabled={editModeEnabled}
+				disabled={editModeEnabled || addFormIsFocused}
 				autocomplete="false"
 				id="searchInput"
 				placeholder="Search"
-				class="ml-4 text-5xl w-2/3 border-0 outline-none bg-transparent text-white font-light placeholder-white placeholder-opacity-30"
+				class="ml-4 text-5xl w-2/3 border-0 outline-none bg-transparent text-white font-light placeholder-white placeholder-opacity-30 transition duration-200 ease-in-out {addFormIsFocused
+					? 'opacity-5 scale-95'
+					: ''}"
 			/>
 			{#if !searchIsFocused}
 				<span
-					class="absolute ml-48 border-2 border-white border-opacity-50 w-10 h-10 opacity-50 flex items-center justify-center rounded-md"
-					>⌘G</span
+					class="absolute ml-48 border-2 border-white border-opacity-50 w-10 h-10 opacity-50 flex items-center justify-center rounded-md transition duration-200 ease-in-out {addFormIsFocused
+						? 'opacity-5 scale-95'
+						: ''}">⌘G</span
 				>
+
 				<div class="flex flex-row items-center">
 					<div
 						on:click={handleEditModeToggle}
@@ -238,6 +246,7 @@
 		use:dndzone={{
 			items: channels,
 			flipDurationMs,
+			dragDisabled: addFormIsFocused,
 			morphDisabled: true,
 			dropTargetClasses: ['target'],
 			dropTargetStyle: { outline: 'none' },
@@ -265,12 +274,13 @@
 					}
 				}}
 				on:click={() => {
-					if (!editModeEnabled) {
+					if (!editModeEnabled && !addFormIsFocused) {
 						handleProceed(channel);
 					}
 				}}
-				style={addFormIsFocused ? 'z-index: 0' : 'z-index: 0;'}
-				class="channel cursor-pointer flex items-center justify-center flex-col text-center transition duration-200 ease-in-out hover:scale-105"
+				class="channel flex items-center justify-center flex-col text-center transition duration-200 ease-in-out {addFormIsFocused
+					? 'opacity-5 scale-95'
+					: 'opacity-100 hover:scale-105 cursor-pointer'}"
 			>
 				<div
 					style={editModeEnabled
@@ -353,10 +363,13 @@
 		on:appSelected={(event) => {
 			handleProceed(event.detail.channel);
 		}}
+		on:addClicked={(event) => {
+			handleChannelAdded(event.detail.channel);
+		}}
 		on:editClicked={(event) => {
 			handleEdit(event.detail.channel);
 		}}
-		on:addClicked={toggleAddForm}
+		on:newChannelClicked={toggleAddForm}
 	/>
 {/if}
 

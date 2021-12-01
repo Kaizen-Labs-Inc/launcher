@@ -32,7 +32,6 @@
 		"svelte-check": "^2.2.6",
 		"svelte-dnd-action": "^0.9.11",
 		"svelte-feather-icons": "^3.5.0",
-		"svelte-popover": "^2.0.8",
 		"svelte-preprocess": "^4.9.4",
 		"tailwindcss": "^2.2.15",
 		"tslib": "^2.3.1",
@@ -45,7 +44,6 @@
 		"@lukeed/uuid": "^2.0.0",
 		"dotenv": "^10.0.0",
 		"metascraper": "^5.25.2",
-		"stripe": "^8.177.0",
 		"svelte-tags-input": "^2.8.0",
 		"tippy.js": "^6.3.2",
 		"uuid": "^8.3.2"
