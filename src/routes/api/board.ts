@@ -3,6 +3,7 @@ import type { EndpointOutput } from '@sveltejs/kit/types/endpoint';
 import { PrismaClient } from '@prisma/client'
 import getAuth from '$lib/getAuth';
 import { BoardType } from '../../model/api/BoardType';
+import validateUser  from '$lib/validateUser';
 
 const prisma = new PrismaClient()
 
@@ -20,21 +21,13 @@ const SELECTIONS = {
 
 export async function get(request: ServerRequest): Promise<void | EndpointOutput> {
 
-	const auth = getAuth(request)
-	const googleId = auth?.user?.connections?.google?.sub
-	if (!googleId) {
-		return {
-			status: 404
-		}
-	}
+	const user = await validateUser(request, prisma)
 
 	let board = await prisma.board.findFirst({
 		where: {
 			boardType: 2,
 			user: {
-				googleProfile: {
-					sub: googleId
-				}
+				id: user.id
 			}
 		},
 		select: SELECTIONS
@@ -58,21 +51,7 @@ export async function get(request: ServerRequest): Promise<void | EndpointOutput
 
 export async function post(request: ServerRequest): Promise<void | EndpointOutput> {
 
-	const auth = getAuth(request)
-	const googleId = auth?.user?.connections?.google?.sub
-	if (!googleId) {
-		return {
-			status: 401
-		}
-	}
-
-	const user = await prisma.user.findFirst({
-		where: {
-			googleProfile: {
-				sub: googleId
-			}
-		}
-	})
+	const user = await validateUser(request, prisma)
 
 	if (!user) {
 		return {

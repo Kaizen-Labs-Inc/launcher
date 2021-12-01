@@ -1,4 +1,4 @@
-import type Channel from './Channel';
+import type MockChannel from './MockChannel';
 import type Position from './Position';
 
 export default interface Board {

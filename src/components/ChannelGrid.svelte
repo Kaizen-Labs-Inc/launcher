@@ -9,7 +9,7 @@
 	import { dndzone } from 'svelte-dnd-action';
 	import AddChannelPopover from '../components/AddChannelPopover.svelte';
 	import ChannelSearchDropdown from '../components/ChannelSearchDropdown.svelte';
-	import Channel, { mockChannels } from '../model/Channel';
+	import Channel from '../model/Channel';
 	import tippy, { Instance } from 'tippy.js';
 	import 'tippy.js/dist/tippy.css';
 	import 'tippy.js/themes/translucent.css';
@@ -38,7 +38,9 @@
 
 	$: filteredChannels = (board?.positions || []).filter(
 		// TODO also filter by description, tags, and URL
-		(position) => position.channel.name.toLowerCase().indexOf(query.toLowerCase()) !== -1
+		(position) => {
+			return position.channel.name.toLowerCase().indexOf(query.toLowerCase()) !== -1
+		}
 	).map(position => position.channel);
 
 	const handleDndConsider = (e) => {
@@ -80,12 +82,12 @@
 		}
 	}
 
-	const handleProceed = (channel: Channel) => {
+	const handleProceed = (channel: MockChannel) => {
 		selectedChannelIndex = null;
 		window.open('https://' + channel.url, '_blank').focus();
 	};
 
-	const handleEdit = (channel: Channel) => {
+	const handleEdit = (channel: MockChannel) => {
 		goto(`/app/edit?id=${channel.id}`);
 	};
 

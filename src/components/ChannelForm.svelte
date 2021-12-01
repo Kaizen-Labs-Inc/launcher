@@ -7,10 +7,10 @@
 	import { EmojiButton } from '@joeattardi/emoji-button';
 	import { SmileIcon } from 'svelte-feather-icons';
 	import Tags from 'svelte-tags-input';
-	import type Channel from 'src/model/Channel';
+	import type MockChannel from 'src/model/MockChannel';
 	// import { scrape } from '../routes/api/scrape';
 	const dispatch = createEventDispatcher();
-	export let channel: Channel = {
+	export let channel: MockChannel = {
 		name: '',
 		description: '',
 		url: '',
@@ -23,7 +23,7 @@
 	let isScraping: boolean = false;
 	let urlResolved: boolean = false;
 
-	export const handleSubmit = (channel: Channel) => {
+	export const handleSubmit = (channel: MockChannel) => {
 		channel.emoji = emoji;
 		dispatch('submit', {
 			channel: channel

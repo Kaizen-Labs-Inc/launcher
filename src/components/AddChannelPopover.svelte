@@ -5,10 +5,10 @@
 	import 'tippy.js/dist/tippy.css';
 	import 'tippy.js/themes/translucent.css';
 	import { PlusIcon } from 'svelte-feather-icons';
-	import type Channel from 'src/model/Channel';
+	import type MockChannel from 'src/model/MockChannel';
 	import { v4 as uuidv4 } from 'uuid';
 	import ChannelForm from './ChannelForm.svelte';
-	import { mockChannels } from '../model/Channel';
+	import { mockChannels } from '../model/MockChannel';
 	export let channels = [];
 	export let editModeEnabled: boolean;
 	let tippyInstance: Instance;
@@ -30,7 +30,7 @@
 	$: filteredChannels = mockChannels
 		.filter(
 			// TODO also filter by description, tags, and URL
-			(channel) => channel.name.toLowerCase().indexOf(query.toLowerCase()) !== -1
+			(channel) => channel.title.toLowerCase().indexOf(query.toLowerCase()) !== -1
 		)
 		// HACK dedupe - should do this by ID or just pull directly from airtable cache
 		.filter((c, i, a) => a.findIndex((t) => t.name === c.name) === i);
@@ -94,7 +94,7 @@
 		);
 	});
 
-	const handleAdd = (channel: Channel) => {
+	const handleAdd = (channel: MockChannel) => {
 		// Generate a new UUID
 		channel.id = uuidv4();
 		// Pass this channel back to the parent as an event

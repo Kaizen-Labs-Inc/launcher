@@ -1,11 +1,11 @@
 <script lang="ts">
 	import ChannelForm from '../../components/ChannelForm.svelte';
 	import { goto } from '$app/navigation';
-	import Channel, { mockChannels } from '../../model/Channel';
+	import MockChannel, { mockChannels } from '../../model/MockChannel';
 	import { page } from '$app/stores';
 	import AuthenticatedNav from '../../components/nav/AuthenticatedNav.svelte';
 	// Use channel ID to get details...
-	let channel: Channel = mockChannels.find((c) => c.id === $page.query.get('id'));
+	let channel: MockChannel = mockChannels.find((c) => c.id === $page.query.get('id'));
 	console.log(channel);
 </script>
 
