@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
-	import { Edit2Icon } from 'svelte-feather-icons';
+	import { Edit2Icon, PlusIcon } from 'svelte-feather-icons';
 	export let selectedChannelIndex;
 	export let filteredChannels;
 	const dispatch = createEventDispatcher();
@@ -17,8 +17,14 @@
 		});
 	};
 
-	const onAdd = () => {
-		dispatch('addClicked');
+	const onAdd = (channel) => {
+		dispatch('addClicked', {
+			channel: channel
+		});
+	};
+
+	const onNewChannel = () => {
+		dispatch('newChannelClicked');
 	};
 </script>
 
@@ -32,7 +38,7 @@
 		<div class="mt-16 mb-16 flex flex-col justify-center items-center">
 			<p class="text-2xl ">🤷‍♂️ Nothing found.</p>
 			<div
-				on:mousedown={onAdd}
+				on:mousedown={onNewChannel}
 				class="bg-white bg-opacity-20 cursor-pointer text-lg font-medium mt-8 p-3 rounded"
 			>
 				Add something
@@ -98,6 +104,15 @@
 					<div />
 				{/if}
 				<div class="w-full flex justify-end">
+					<div
+						on:mousedown|preventDefault={(channel) => {
+							onAdd(channel);
+						}}
+						class="w-12 h-12 mr-3 hover:bg-white hover:bg-opacity-10 rounded-md flex justify-center items-center"
+					>
+						<!-- TODO if already added to homescreen, show a checkmark with no-op -->
+						<PlusIcon size="20" strokeWidth="1" />
+					</div>
 					<div
 						on:mousedown|preventDefault={(channel) => {
 							onEdit(channel);
