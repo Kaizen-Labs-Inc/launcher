@@ -3,6 +3,7 @@ export default interface Channel {
 	title: string;
 	url?: string;
 	description?: string;
+	defaultBoardPosition?: number;
 	icon?: string;
 	emoji?: string;
 	iconImageUrl?: string;
@@ -17,6 +18,7 @@ export const mockChannels = [
 		emoji: '✉️',
 		iconImageUrl: '../../../icons/gmail.svg',
 		title: 'Gmail',
+		defaultBoardPosition: 0,
 		url: 'mail.google.com',
 		tags: ['email', 'google']
 	},
@@ -25,6 +27,7 @@ export const mockChannels = [
 		emoji: '🗓',
 		iconImageUrl: '../../../icons/gcal.svg',
 		title: 'Calendar',
+		defaultBoardPosition: 1,
 		url: 'calendar.google.com',
 		tags: ['google', 'gsuite']
 	},
@@ -34,6 +37,7 @@ export const mockChannels = [
 		emoji: '💬',
 		iconImageUrl: '../../../icons/slack.svg',
 		draftIconImageUrl: '../../../icons/draft/icon-slack-draft.svg',
+		defaultBoardPosition: 2,
 		title: 'Slack',
 		url: 'slack.com',
 		description: 'Real-time comms'
@@ -41,7 +45,6 @@ export const mockChannels = [
 	{
 		id: '4',
 		emoji: '📓',
-		iconImageUrl: '../../../icons/notion.svg',
 		iconImageUrl: '../../../icons/notion-dark.svg',
 		title: 'Notion',
 		url: 'notion.so',
@@ -103,6 +106,7 @@ export const mockChannels = [
 		emoji: '💼',
 		iconImageUrl: '../../../icons/figma.svg',
 		draftIconImageUrl: '../../../icons/draft/icon-figma-draft.svg',
+		defaultBoardPosition: 3,
 		title: 'Figma',
 		url: 'figma.com',
 		description: 'Sales tracking',
@@ -125,6 +129,7 @@ export const mockChannels = [
 		iconImageUrl: '../../../icons/github.svg',
 		iconImageUrlDark: '../../../icons/github-dark.svg',
 		draftIconImageUrl: '../../../icons/draft/icon-github-draft.svg',
+		defaultBoardPosition: 4,
 		title: 'Github',
 		url: 'github.com',
 		description: 'Sales tracking',
@@ -203,14 +208,7 @@ export const mockChannels = [
 		description: 'CRM',
 		tags: ['customer success', 'sales']
 	},
-	{
-		id: '22',
-		iconImageUrl: '../../../icons/launchdarkly.svg',
-		title: 'Launch Darkly',
-		url: 'launchdarkly.com',
-		description: 'Feature flags',
-		tags: ['dev']
-	},
+
 	{
 		id: '23',
 		iconImageUrl: '../../../icons/mixpanel.svg',
