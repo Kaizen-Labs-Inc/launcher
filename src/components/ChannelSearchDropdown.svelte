@@ -65,7 +65,11 @@
 				<div class="flex flex-row">
 					<div class="icon flex-shrink-0 w-14 h-14 flex items-center justify-center mr-4">
 						{#if channel.iconImageUrl}
-							<img class="w-8 h-8" src={channel.iconImageUrl} alt={channel.title} />
+							<img
+								class="w-8 h-8"
+								src={channel.iconImageUrlDark ? channel.iconImageUrlDark : channel.iconImageUrl}
+								alt={channel.title}
+							/>
 						{:else if channel.emoji}
 							<div class="text-2xl">
 								{channel.emoji}
