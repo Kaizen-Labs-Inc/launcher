@@ -3,6 +3,7 @@ export default interface Channel {
 	name: string;
 	url: string;
 	description?: string;
+	defaultBoardPosition?: number;
 	icon?: string;
 	emoji?: string;
 	iconImageUrl?: string;
@@ -12,43 +13,45 @@ export default interface Channel {
 
 export const mockChannels = [
 	{
-		id: 1,
+		id: '1',
 		emoji: '✉️',
 		image: '../../../icons/gmail.svg',
 		name: 'Gmail',
+		defaultBoardPosition: 0,
 		url: 'mail.google.com',
 		tags: ['email', 'google']
 	},
 	{
-		id: 2,
+		id: '2',
 		emoji: '🗓',
 		image: '../../../icons/gcal.svg',
 		name: 'Calendar',
+		defaultBoardPosition: 1,
 		url: 'calendar.google.com',
 		tags: ['google', 'gsuite']
 	},
 
 	{
-		id: 3,
+		id: '3',
 		emoji: '💬',
 		image: '../../../icons/slack.svg',
 		draftIconImageUrl: '../../../icons/draft/icon-slack-draft.svg',
-		name: 'Slack',
+		defaultBoardPosition: 2,
+		title: 'Slack',
 		url: 'slack.com',
 		description: 'Real-time comms'
 	},
 	{
-		id: 4,
+		id: '4',
 		emoji: '📓',
-		image: '../../../icons/notion.svg',
-		draftIconImageUrl: '../../../icons/notion-dark.svg',
-		name: 'Notion',
+		iconImageUrl: '../../../icons/notion-dark.svg',
+		title: 'Notion',
 		url: 'notion.so',
 		description: 'Docs and notes',
 		tags: ['product', 'docs']
 	},
 	{
-		id: 5,
+		id: '5',
 		emoji: '📬',
 		image: '../../../icons/intercom.svg',
 		draftIconImageUrl: '../../../icons/draft/icon-intercom-draft.svg',
@@ -58,7 +61,7 @@ export const mockChannels = [
 		tags: ['marketing', 'push', 'email']
 	},
 	{
-		id: 6,
+		id: '6',
 		emoji: '🖇',
 		image: '../../../icons/trello.svg',
 		name: 'Trello',
@@ -67,7 +70,7 @@ export const mockChannels = [
 		tags: ['product']
 	},
 	{
-		id: 7,
+		id: '7',
 		emoji: '📈',
 		image: '../../../icons/tableau.svg',
 		draftIconImageUrl: '../../../icons/draft/icon-tableau-draft.svg',
@@ -77,7 +80,7 @@ export const mockChannels = [
 		tags: ['product', 'data']
 	},
 	{
-		id: 8,
+		id: '8',
 		emoji: '💸',
 		image: '../../../icons/workday.svg',
 		draftIconImageUrl: '../../../icons/draft/icon-workday-draft.svg',
@@ -87,7 +90,7 @@ export const mockChannels = [
 		tags: ['HR', 'IT']
 	},
 	{
-		id: 9,
+		id: '9',
 		emoji: '☎',
 		image: '../../../icons/zendesk.svg',
 		iconImageUrlDark: '../../../icons/zendesk-dark.svg',
@@ -98,18 +101,19 @@ export const mockChannels = [
 		tags: ['CS']
 	},
 	{
-		id: 10,
+		id: '10',
 		emoji: '💼',
 		image: '../../../icons/figma.svg',
 		draftIconImageUrl: '../../../icons/draft/icon-figma-draft.svg',
-		name: 'Figma',
+		defaultBoardPosition: 3,
+		title: 'Figma',
 		url: 'figma.com',
-		description: 'Sales tracking',
-		tags: ['sales']
+		description: 'Graphic and UX design',
+		tags: ['design']
 	},
 
 	{
-		id: 11,
+		id: '11',
 		emoji: '💼',
 		image: '../../../icons/marketo.svg',
 		draftIconImageUrl: '../../../icons/draft/icon-marketo-draft.svg',
@@ -119,15 +123,16 @@ export const mockChannels = [
 		tags: ['sales']
 	},
 	{
-		id: 12,
+		id: '12',
 		emoji: '💼',
 		image: '../../../icons/github.svg',
 		iconImageUrlDark: '../../../icons/github-dark.svg',
 		draftIconImageUrl: '../../../icons/draft/icon-github-draft.svg',
-		name: 'Github',
+		defaultBoardPosition: 4,
+		title: 'Github',
 		url: 'github.com',
 		description: 'Sales tracking',
-		tags: ['sales']
+		tags: ['git', 'engineering']
 	},
 	{
 		id: '13',
@@ -202,14 +207,7 @@ export const mockChannels = [
 		description: 'CRM',
 		tags: ['customer success', 'sales']
 	},
-	{
-		id: '22',
-		iconImageUrl: '../../../icons/launchdarkly.svg',
-		title: 'Launch Darkly',
-		url: 'launchdarkly.com',
-		description: 'Feature flags',
-		tags: ['dev']
-	},
+
 	{
 		id: '23',
 		iconImageUrl: '../../../icons/mixpanel.svg',
