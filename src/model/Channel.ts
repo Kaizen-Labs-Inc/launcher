@@ -1,12 +1,13 @@
 export default interface Channel {
-	id?: number;
-	name: string;
-	url: string;
+	id?: string;
+	title: string;
+	url?: string;
 	description?: string;
 	defaultBoardPosition?: number;
 	icon?: string;
 	emoji?: string;
 	iconImageUrl?: string;
+	iconImageUrlDark?: string;
 	draftIconImageUrl?: string;
 	tags?: string[];
 }
@@ -15,8 +16,8 @@ export const mockChannels = [
 	{
 		id: '1',
 		emoji: '✉️',
-		image: '../../../icons/gmail.svg',
-		name: 'Gmail',
+		iconImageUrl: '../../../icons/gmail.svg',
+		title: 'Gmail',
 		defaultBoardPosition: 0,
 		url: 'mail.google.com',
 		tags: ['email', 'google']
@@ -24,8 +25,8 @@ export const mockChannels = [
 	{
 		id: '2',
 		emoji: '🗓',
-		image: '../../../icons/gcal.svg',
-		name: 'Calendar',
+		iconImageUrl: '../../../icons/gcal.svg',
+		title: 'Calendar',
 		defaultBoardPosition: 1,
 		url: 'calendar.google.com',
 		tags: ['google', 'gsuite']
@@ -34,7 +35,7 @@ export const mockChannels = [
 	{
 		id: '3',
 		emoji: '💬',
-		image: '../../../icons/slack.svg',
+		iconImageUrl: '../../../icons/slack.svg',
 		draftIconImageUrl: '../../../icons/draft/icon-slack-draft.svg',
 		defaultBoardPosition: 2,
 		title: 'Slack',
@@ -53,9 +54,9 @@ export const mockChannels = [
 	{
 		id: '5',
 		emoji: '📬',
-		image: '../../../icons/intercom.svg',
+		iconImageUrl: '../../../icons/intercom.svg',
 		draftIconImageUrl: '../../../icons/draft/icon-intercom-draft.svg',
-		name: 'Intercom',
+		title: 'Intercom',
 		url: 'intercom.io',
 		description: 'Customer messaging (email & push)',
 		tags: ['marketing', 'push', 'email']
@@ -63,8 +64,8 @@ export const mockChannels = [
 	{
 		id: '6',
 		emoji: '🖇',
-		image: '../../../icons/trello.svg',
-		name: 'Trello',
+		iconImageUrl: '../../../icons/trello.svg',
+		title: 'Trello',
 		url: 'trello.com',
 		description: 'Feature tracking for POs',
 		tags: ['product']
@@ -72,9 +73,9 @@ export const mockChannels = [
 	{
 		id: '7',
 		emoji: '📈',
-		image: '../../../icons/tableau.svg',
+		iconImageUrl: '../../../icons/tableau.svg',
 		draftIconImageUrl: '../../../icons/draft/icon-tableau-draft.svg',
-		name: 'Tableau',
+		title: 'Tableau',
 		url: 'tableau.com',
 		description: 'Product analytics',
 		tags: ['product', 'data']
@@ -82,42 +83,42 @@ export const mockChannels = [
 	{
 		id: '8',
 		emoji: '💸',
-		image: '../../../icons/workday.svg',
+		iconImageUrl: '../../../icons/workday.svg',
 		draftIconImageUrl: '../../../icons/draft/icon-workday-draft.svg',
-		name: 'Workday',
+		title: 'Workday',
 		url: 'workday.com',
 		description: 'HR, pay, and IT',
-		tags: ['HR', 'IT']
+		tags: ['hr', 'it']
 	},
 	{
 		id: '9',
 		emoji: '☎',
-		image: '../../../icons/zendesk.svg',
+		iconImageUrl: '../../../icons/zendesk.svg',
 		iconImageUrlDark: '../../../icons/zendesk-dark.svg',
 		draftIconImageUrl: '../../../icons/draft/icon-zendesk-draft.svg',
-		name: 'Zendesk',
+		title: 'Zendesk',
 		url: 'zendesk.com',
 		description: 'Customer support',
-		tags: ['CS']
+		tags: ['cs']
 	},
 	{
 		id: '10',
 		emoji: '💼',
-		image: '../../../icons/figma.svg',
+		iconImageUrl: '../../../icons/figma.svg',
 		draftIconImageUrl: '../../../icons/draft/icon-figma-draft.svg',
 		defaultBoardPosition: 3,
 		title: 'Figma',
 		url: 'figma.com',
-		description: 'Graphic and UX design',
+		description: 'Graphic and UX dsesign',
 		tags: ['design']
 	},
 
 	{
 		id: '11',
 		emoji: '💼',
-		image: '../../../icons/marketo.svg',
+		iconImageUrl: '../../../icons/marketo.svg',
 		draftIconImageUrl: '../../../icons/draft/icon-marketo-draft.svg',
-		name: 'Marketo',
+		title: 'Marketo',
 		url: 'marketo.com',
 		description: 'Sales tracking',
 		tags: ['sales']
@@ -125,14 +126,14 @@ export const mockChannels = [
 	{
 		id: '12',
 		emoji: '💼',
-		image: '../../../icons/github.svg',
+		iconImageUrl: '../../../icons/github.svg',
 		iconImageUrlDark: '../../../icons/github-dark.svg',
 		draftIconImageUrl: '../../../icons/draft/icon-github-draft.svg',
 		defaultBoardPosition: 4,
 		title: 'Github',
 		url: 'github.com',
-		description: 'Sales tracking',
-		tags: ['git', 'engineering']
+		description: 'Cloud git hosting',
+		tags: ['engineering']
 	},
 	{
 		id: '13',
