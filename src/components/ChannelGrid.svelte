@@ -22,7 +22,7 @@
 	let searchIsFocused: boolean = false;
 	let addFormIsFocused: boolean = false;
 	let selectedChannelIndex: number;
-	let channels: Channel[] = mockChannels;
+	let channels: Channel[] = mockChannels.splice(0, 12); // TODO update this
 	const flipDurationMs: number = 200;
 	let isConsidering: boolean = false;
 	let editModeEnabled: boolean = false;
