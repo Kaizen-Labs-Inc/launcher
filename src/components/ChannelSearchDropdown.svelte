@@ -25,7 +25,7 @@
 <section
 	style="max-height: 500px; scroll-behavior: smooth;"
 	id="appDropdown"
-	class="flex flex-col w-full bg-white bg-opacity-10 rounded-b-lg overflow-y-scroll shadow-2xl"
+	class="flex flex-col w-full bg-white bg-opacity-10 backdrop-blur-2xl rounded-b-lg overflow-y-scroll shadow-2xl"
 >
 	<!-- TODO Have 2 states. A) by last used, when b) alpha  -->
 	{#if filteredChannels.length === 0}

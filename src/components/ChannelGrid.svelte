@@ -238,6 +238,7 @@
 		use:dndzone={{
 			items: channels,
 			flipDurationMs,
+			dragDisabled: addFormIsFocused,
 			morphDisabled: true,
 			dropTargetClasses: ['target'],
 			dropTargetStyle: { outline: 'none' },
@@ -265,12 +266,13 @@
 					}
 				}}
 				on:click={() => {
-					if (!editModeEnabled) {
+					if (!editModeEnabled && !addFormIsFocused) {
 						handleProceed(channel);
 					}
 				}}
-				style={addFormIsFocused ? 'z-index: 0' : 'z-index: 0;'}
-				class="channel cursor-pointer flex items-center justify-center flex-col text-center transition duration-200 ease-in-out hover:scale-105"
+				class="channel flex items-center justify-center flex-col text-center transition duration-200 ease-in-out {addFormIsFocused
+					? 'opacity-5 scale-95'
+					: 'opacity-100 hover:scale-105 cursor-pointer'}"
 			>
 				<div
 					style={editModeEnabled

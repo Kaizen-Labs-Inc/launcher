@@ -127,7 +127,7 @@
 		transition:scale={{ duration: 200, opacity: 0, start: 0.9 }}
 		id="addModal"
 		style="width: 340px;"
-		class="bg-black backdrop-blur-2xl bg-opacity-5 p-4 shadow-xl rounded-xl mr-2 absolute top-2 right-12"
+		class="p-4 bg-white bg-opacity-10 backdrop-blur-2xl shadow-2xl rounded-xl mr-2 absolute top-2 right-16"
 	>
 		<form>
 			{#if !stepOneComplete}
