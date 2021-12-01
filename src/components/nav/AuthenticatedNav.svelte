@@ -11,7 +11,9 @@
 				? 'opacity-100'
 				: 'opacity-60'}"
 		>
-			<a href="/home"><img src="favicon-32x32.png" class="w-4 h-4 mr-1" alt="Logo" />Home</a>
+			<a href="/home" class="flex items-center"
+				><img src="favicon-32x32.png" class="w-4 h-4 mr-1" alt="Logo" />Home</a
+			>
 		</li>
 		<li
 			class="cursor-pointer mr-6 hover:opacity-100 {$page.path === '/invite'
