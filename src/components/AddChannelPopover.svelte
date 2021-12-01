@@ -4,9 +4,7 @@
 	import tippy, { Instance } from 'tippy.js';
 	import 'tippy.js/dist/tippy.css';
 	import 'tippy.js/themes/translucent.css';
-
 	import { PlusIcon } from 'svelte-feather-icons';
-	import Popover from 'svelte-popover';
 	import type Channel from 'src/model/Channel';
 	import { v4 as uuidv4 } from 'uuid';
 	import ChannelForm from './ChannelForm.svelte';
@@ -39,6 +37,10 @@
 
 	export let popOverIsFocused: boolean = false;
 	let stepOneComplete: boolean = false;
+
+	const togglePopover = () => {
+		popOverIsFocused = !popOverIsFocused;
+	};
 
 	const resetPopover = () => {
 		popOverIsFocused = false;
@@ -107,34 +109,25 @@
 	};
 </script>
 
-<Popover
-	arrow={false}
-	placement="left-start"
-	open={popOverIsFocused}
-	on:open={() => {
-		popOverIsFocused = true;
+<button
+	on:click={() => {
+		togglePopover();
+		if (!popOverIsFocused) {
+			resetPopover();
+		}
 	}}
-	on:close={resetPopover}
-	overlayColor="rgba(0, 0, 0, 0.0)"
-	zIndex="100"
+	id="addTarget"
+	class="transition duration-200 ease-in-out {popOverIsFocused ? 'rotate-45' : ''} {editModeEnabled
+		? 'cursor-default'
+		: 'cursor-pointer hover:opacity-100 hover:scale-110'}"
+	><PlusIcon size="48" strokeWidth="1" /></button
 >
-	<button
-		slot="target"
-		id="addTarget"
-		class="transition duration-200 ease-in-out {popOverIsFocused
-			? 'rotate-45'
-			: ''} {editModeEnabled
-			? 'cursor-default'
-			: 'cursor-pointer hover:opacity-100 hover:scale-110'}"
-		><PlusIcon size="48" strokeWidth="1" /></button
-	>
-
+{#if popOverIsFocused}
 	<div
 		transition:scale={{ duration: 200, opacity: 0, start: 0.9 }}
-		slot="content"
 		id="addModal"
 		style="width: 340px;"
-		class="bg-black backdrop-blur-2xl bg-opacity-5 p-4 shadow-xl rounded-xl mr-2"
+		class="bg-black backdrop-blur-2xl bg-opacity-5 p-4 shadow-xl rounded-xl mr-2 absolute top-2 right-12"
 	>
 		<form>
 			{#if !stepOneComplete}
@@ -239,7 +232,7 @@
 			{/if}
 		</form>
 	</div>
-</Popover>
+{/if}
 
 <style>
 	/* Firefox doesn't support background blur filter yet */
