@@ -88,7 +88,7 @@ export const mockChannels = [
 		title: 'Workday',
 		url: 'workday.com',
 		description: 'HR, pay, and IT',
-		tags: ['HR', 'IT']
+		tags: ['hr', 'it']
 	},
 	{
 		id: '9',
@@ -99,7 +99,7 @@ export const mockChannels = [
 		title: 'Zendesk',
 		url: 'zendesk.com',
 		description: 'Customer support',
-		tags: ['CS']
+		tags: ['cs']
 	},
 	{
 		id: '10',
@@ -109,8 +109,8 @@ export const mockChannels = [
 		defaultBoardPosition: 3,
 		title: 'Figma',
 		url: 'figma.com',
-		description: 'Sales tracking',
-		tags: ['sales']
+		description: 'Graphic and UX dsesign',
+		tags: ['design']
 	},
 
 	{
@@ -132,8 +132,8 @@ export const mockChannels = [
 		defaultBoardPosition: 4,
 		title: 'Github',
 		url: 'github.com',
-		description: 'Sales tracking',
-		tags: ['sales']
+		description: 'Cloud git hosting',
+		tags: ['engineering']
 	},
 	{
 		id: '13',
