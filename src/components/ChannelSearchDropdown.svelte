@@ -68,7 +68,7 @@
 							<img
 								class="w-8 h-8"
 								src={channel.image}
-								alt={channel.title}
+								alt={channel.name}
 							/>
 						{:else if channel.emoji}
 							<div class="text-2xl">

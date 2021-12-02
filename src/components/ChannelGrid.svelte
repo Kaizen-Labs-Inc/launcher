@@ -69,7 +69,7 @@
 		board.positions = board.positions.map((p, i) => Object.assign({}, p, { position: i }));
 		if (board.boardType === BoardType.USER.valueOf()) {
 			fetch('/api/position', {
-				method: 'PATCH',
+				method: 'PUT',
 				credentials: 'include',
 				body: JSON.stringify(board.positions)
 			})
@@ -287,7 +287,7 @@
 					</div>
 
 					<AddChannelPopover
-						channels={board?.positions || []}
+						channels={channelsToSearch || []}
 						bind:popOverIsFocused={addFormIsFocused}
 						bind:editModeEnabled
 						on:channelAdded={(e) => {

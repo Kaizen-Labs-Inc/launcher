@@ -8,7 +8,6 @@
 	import type MockChannel from 'src/model/MockChannel';
 	import { v4 as uuidv4 } from 'uuid';
 	import ChannelForm from './ChannelForm.svelte';
-	import { mockChannels } from '../model/MockChannel';
 	export let channels = [];
 	export let editModeEnabled: boolean;
 	let tippyInstance: Instance;
@@ -27,10 +26,10 @@
 		}
 	}
 
-	$: filteredChannels = mockChannels
+	$: filteredChannels = channels
 		.filter(
 			// TODO also filter by description, tags, and URL
-			(channel) => channel.title.toLowerCase().indexOf(query.toLowerCase()) !== -1
+			(channel) => channel.name.toLowerCase().indexOf(query.toLowerCase()) !== -1
 		)
 		// HACK dedupe - should do this by ID or just pull directly from airtable cache
 		.filter((c, i, a) => a.findIndex((t) => t.name === c.name) === i);

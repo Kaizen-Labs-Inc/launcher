@@ -5,8 +5,8 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-export async function patch(request: ServerRequest): Promise<void | EndpointOutput> {
-	console.log('received patch');
+export async function put(request: ServerRequest): Promise<void | EndpointOutput> {
+
 	if (!request.body) {
 		return {
 			status: 400
@@ -105,7 +105,7 @@ export async function patch(request: ServerRequest): Promise<void | EndpointOutp
 	}
 
 	// update existing positions
-	console.log(JSON.stringify(updatedPositions.map(it => `${it.id}/${it.position}`)));
+	console.log(updatedPositions.map(it => `${it.id}/${it.position}`));
 	const updated = await Promise.all(updatedPositions.map(async (p, i) => {
 		  await later(i * 100)
 			return prisma.position.update({
