@@ -5,7 +5,7 @@
 </script>
 
 <nav class="mt-4">
-	<ul class="flex flex-row justify-center items-cente">
+	<ul class="flex flex-row justify-center items-center flex-wrap">
 		<li
 			class="cursor-pointer mr-6 hover:opacity-100 {$page.path === '/home'
 				? 'opacity-100'

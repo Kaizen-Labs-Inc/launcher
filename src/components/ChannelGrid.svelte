@@ -16,12 +16,14 @@
 	import { SearchIcon, Edit2Icon, XIcon } from 'svelte-feather-icons';
 	import { goto } from '$app/navigation';
 	import { addToast } from '../stores/toaststore';
+	import { isMobileDevice } from '../utils/DetectDevice';
 
 	let tippyInstance: Instance;
 	let query: string = '';
 	let searchIsFocused: boolean = false;
 	let addFormIsFocused: boolean = false;
 	let selectedChannelIndex: number;
+	let isMobile: boolean = false;
 	let channels: Channel[] = mockChannels.splice(0, 12); // TODO update this
 	const flipDurationMs: number = 200;
 	let isConsidering: boolean = false;
@@ -41,6 +43,10 @@
 	const handleDndConsider = (e) => {
 		if (!editModeEnabled) {
 			editModeInitializedByDrag = true;
+			if (isMobile) {
+				return; // don't allow drag and drop on mobile
+				// TODO consider 'long press' to enter edit mode like on iOS
+			}
 		}
 		isConsidering = true;
 		editModeEnabled = true;
@@ -108,6 +114,8 @@
 			arrow: false,
 			theme: 'translucent'
 		});
+
+		isMobile = isMobileDevice();
 		document.addEventListener(
 			'keydown',
 			(event) => {
