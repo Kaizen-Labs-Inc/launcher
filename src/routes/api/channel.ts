@@ -3,6 +3,7 @@ import type { EndpointOutput } from '@sveltejs/kit/types/endpoint';
 import { PrismaClient } from '@prisma/client'
 import { ChannelType } from '../../model/ChannelType';
 import validateUser from '$lib/validateUser';
+import stripPrefix from '$lib/stripPrefix';
 
 const prisma = new PrismaClient()
 
@@ -63,11 +64,24 @@ export async function post(request: ServerRequest): Promise<void | EndpointOutpu
 		}
 	}
 
-	channel.url = channel.url?.trim()
+	channel.url = stripPrefix(channel.url?.trim())
 
 	if (!channel.url || channel.url.length === 0) {
 		return {
 			status: 400
+		}
+	}
+
+	const foundChannel = await prisma.channel.findFirst({
+		where: {
+			url: channel.url
+		}
+	})
+
+	if (foundChannel) {
+		return {
+			// conflict
+			status: 409
 		}
 	}
 

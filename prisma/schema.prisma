@@ -74,7 +74,7 @@ model Position {
 model Channel {
   id             Int           @id @default(autoincrement())
   name           String
-  url            String
+  url            String        @unique
   channelType    Int
   image          String?
   description    String?

@@ -141,5 +141,5 @@ export async function put(request: ServerRequest): Promise<void | EndpointOutput
 			console.error(e);
 		});
 	}
-	return { body: (created).concat((updated)) };
+	return { body: (created).concat(updated) };
 }
