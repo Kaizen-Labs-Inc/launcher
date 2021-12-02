@@ -54,7 +54,7 @@
 					selectedChannelIndex = i;
 				}}
 				on:focus
-				class="grid grid-cols-4 gap-12 text-left cursor-pointer p-6 transition duration-200 ease-in-out {filteredChannels.length ===
+				class="flex flex-row sm:grid sm:grid-cols-4 gap-6 sm:gap-12 text-left cursor-pointer p-6 transition duration-200 ease-in-out {filteredChannels.length ===
 				1
 					? 'rounded-b-lg'
 					: ''}  {selectedChannelIndex === i
@@ -62,25 +62,27 @@
 					: 'bg-transparent'}
             "
 			>
-				<div class="flex flex-row">
-					<div class="icon flex-shrink-0 w-14 h-14 flex items-center justify-center mr-4">
+				<div class="flex flex-row items-center">
+					<div
+						class="icon sm:rounded-2xl rounded-lg flex-shrink-0 w-10 h-10 sm:w-14 sm:h-14 flex items-center justify-center mr-2 sm:mr-4"
+					>
 						{#if channel.iconImageUrl}
 							<img
-								class="w-8 h-8"
+								class="sm:w-8 sm:h-8 w-5 h-5"
 								src={channel.iconImageUrlDark ? channel.iconImageUrlDark : channel.iconImageUrl}
 								alt={channel.title}
 							/>
 						{:else if channel.emoji}
-							<div class="text-2xl">
+							<div class="text-lg sm:text-2xl">
 								{channel.emoji}
 							</div>
 						{:else}
-							<div class="text-black text-2xl">
+							<div class="text-black text-lg sm:text-2xl">
 								{channel.title.charAt(0)}
 							</div>
 						{/if}
 					</div>
-					<div class="text-2xl">
+					<div class="sm:text-2xl">
 						{channel.title}
 						<div class="block text-sm {selectedChannelIndex === i ? 'opacity-50' : 'opacity-25'}">
 							{channel.url}
@@ -88,17 +90,21 @@
 					</div>
 				</div>
 				{#if channel.description}
-					<div class={selectedChannelIndex === i ? 'opacity-60' : 'opacity-30'}>
+					<div
+						class="hidden text-sm lg:text-lg sm:block {selectedChannelIndex === i
+							? 'opacity-60'
+							: 'opacity-30'}"
+					>
 						{channel.description}
 					</div>
 				{:else}
 					<div />
 				{/if}
 				{#if channel.tags}
-					<div class="flex flex-wrap flex-row">
+					<div class="hidden sm:flex flex-wrap flex-row">
 						{#each channel.tags as tag}
 							<div
-								class="flex justify-center items-center h-8 mr-2 mb-2 text-sm font-medium rounded bg-white bg-opacity-5 px-2 py-1"
+								class="flex justify-center items-center h-8 mr-2 mb-2 text-xs sm:text-sm font-medium rounded bg-white bg-opacity-5 px-2 py-2"
 							>
 								#{tag}
 							</div>
@@ -107,7 +113,7 @@
 				{:else}
 					<div />
 				{/if}
-				<div class="w-full flex justify-end">
+				<div class=" w-full flex justify-end">
 					<div
 						on:mousedown|preventDefault={(channel) => {
 							onAdd(channel);
@@ -134,6 +140,5 @@
 <style>
 	.icon {
 		background: linear-gradient(25.13deg, #dbdbdb 15.69%, #fcfcfc 93.91%);
-		border-radius: 20px;
 	}
 </style>
