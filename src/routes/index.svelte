@@ -22,8 +22,8 @@
 			A home screen for your growing team.
 		</h1>
 		<h2 class="text-3xl mt-12 opacity-80 z-20">Shared shortcuts to your team's daily apps.</h2>
-		<div class="flex justify-center items-top mt-16 z-20">
-			<div class="flex flex-col mx-4">
+		<div class="flex sm:flex-row flex-col justify-center items-top mt-16 z-20">
+			<div class="flex flex-col sm:mx-4 my-4 sm:my-0">
 				<div
 					on:focus
 					on:blur

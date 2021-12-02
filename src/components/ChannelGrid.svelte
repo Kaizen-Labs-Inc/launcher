@@ -43,10 +43,6 @@
 	const handleDndConsider = (e) => {
 		if (!editModeEnabled) {
 			editModeInitializedByDrag = true;
-			if (isMobile) {
-				return; // don't allow drag and drop on mobile
-				// TODO consider 'long press' to enter edit mode like on iOS
-			}
 		}
 		isConsidering = true;
 		editModeEnabled = true;
@@ -210,7 +206,7 @@
 				on:focus={handleFocus}
 				on:blur={handleBlur}
 				on:input={handleInput}
-				disabled={editModeEnabled || addFormIsFocused}
+				disabled={addFormIsFocused}
 				autocomplete="false"
 				id="searchInput"
 				placeholder="Search"
@@ -257,7 +253,7 @@
 		use:dndzone={{
 			items: channels,
 			flipDurationMs,
-			dragDisabled: addFormIsFocused,
+			dragDisabled: addFormIsFocused || (isMobile && !editModeEnabled),
 			morphDisabled: true,
 			dropTargetClasses: ['target'],
 			dropTargetStyle: { outline: 'none' },
