@@ -67,7 +67,6 @@ export async function patch(request: ServerRequest): Promise<void | EndpointOutp
 		};
 	}
 
-	console.log(JSON.stringify(positions.map(it => `${it.id}/${it.position}`)));
 	const newPositions = positions.filter(p => {
 		!board.positions.find(it => it.channelId === p.channel.id);
 	});
@@ -99,18 +98,26 @@ export async function patch(request: ServerRequest): Promise<void | EndpointOutp
 		console.error(e);
 	});
 
-	// update existing positions
-	const updated = await Promise.all(updatedPositions.map(p => {
-		console.log('updating position: ' + JSON.stringify(p));
-		return prisma.position.update({
-			data: {
-				position: p.position,
-				lastModified: new Date().toISOString()
-			},
-			where: {
-				id: p.id
-			}
+	function later(delay) {
+		return new Promise(function(resolve) {
+			setTimeout(resolve, delay);
 		});
+	}
+
+	// update existing positions
+	console.log(JSON.stringify(updatedPositions.map(it => `${it.id}/${it.position}`)));
+	const updated = await Promise.all(updatedPositions.map(async (p, i) => {
+		  await later(i * 100)
+			return prisma.position.update({
+				data: {
+					position: p.position,
+					lastModified: new Date().toISOString()
+				},
+				where: {
+					id: p.id
+				}
+			})
+		})
 	})).catch(e => {
 		console.error(e);
 	});

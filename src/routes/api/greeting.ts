@@ -45,7 +45,7 @@ export async function get(request: ServerRequest): Promise<void | EndpointOutput
 			const d: any = {
 				name: it.title,
 				url: it.url,
-				image: it.iconImageUrl,
+				image: it.iconImageUrlDark ? it.iconImageUrlDark : it.iconImageUrl,
 				channelType: ChannelType.DEFAULT.valueOf(),
 				emoji: it.emoji,
 				description: it.description,
