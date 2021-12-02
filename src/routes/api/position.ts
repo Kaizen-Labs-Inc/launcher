@@ -118,7 +118,7 @@ export async function patch(request: ServerRequest): Promise<void | EndpointOutp
 				}
 			})
 		})
-	})).catch(e => {
+	).catch(e => {
 		console.error(e);
 	});
 

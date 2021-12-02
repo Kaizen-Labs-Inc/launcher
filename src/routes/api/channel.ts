@@ -15,7 +15,7 @@ export async function get(request: ServerRequest): Promise<void | EndpointOutput
 		}
 	}
 
-	return { body: prisma.channel.findMany({
+	return { body: await prisma.channel.findMany({
 			where: {
 				OR: [{
 					channelType: 0
@@ -27,7 +27,6 @@ export async function get(request: ServerRequest): Promise<void | EndpointOutput
 			}
 		})
 	}
-
 }
 export async function post(request: ServerRequest): Promise<void | EndpointOutput> {
 

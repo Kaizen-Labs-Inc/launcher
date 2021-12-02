@@ -24,7 +24,7 @@ export async function get(request: ServerRequest): Promise<void | EndpointOutput
 	const user = await validateUser(request, prisma)
 
 	let board;
-	console.log(user)
+
 	if (user) {
 		board = await prisma.board.findFirst({
 			where: {

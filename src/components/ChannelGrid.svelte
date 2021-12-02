@@ -25,6 +25,7 @@
 	let addFormIsFocused: boolean = false;
 	let selectedChannelIndex: number;
 	let board: Board;
+	let channelsToSearch: Channel[];
 	const flipDurationMs: number = 200;
 	let isConsidering: boolean = false;
 	let editModeEnabled: boolean = false;
@@ -36,12 +37,12 @@
 	const jiggleAnimDurationMin: number = 0.22;
 	const jiggleAnimDurationMax: number = 0.3;
 
-	$: filteredChannels = (board?.positions || []).filter(
+	$: filteredChannels = (channelsToSearch || []).filter(
 		// TODO also filter by description, tags, and URL
-		(position) => {
-			return position.channel.name.toLowerCase().indexOf(query.toLowerCase()) !== -1
+		(channel) => {
+			return channel.name.toLowerCase().indexOf(query.toLowerCase()) !== -1
 		}
-	).map(position => position.channel);
+	)
 
 	const handleDndConsider = (e) => {
 		if (!editModeEnabled) {
@@ -82,12 +83,12 @@
 		}
 	}
 
-	const handleProceed = (channel: MockChannel) => {
+	const handleProceed = (channel: Channel) => {
 		selectedChannelIndex = null;
 		window.open('https://' + channel.url, '_blank').focus();
 	};
 
-	const handleEdit = (channel: MockChannel) => {
+	const handleEdit = (channel: Channel) => {
 		goto(`/app/edit?id=${channel.id}`);
 	};
 
@@ -153,6 +154,15 @@
 			})
 			.catch(err => {
 				console.error(err.message)
+			})
+		fetch('/api/channel', {
+			credentials: 'include'
+		})
+			.then(async res => {
+				res.json().then(channels => {
+					channelsToSearch = channels
+				})
+
 			})
 		tippyInstance = tippy(document.getElementById('editToggle'), {
 			content: 'Edit launcher',
