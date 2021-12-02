@@ -109,7 +109,7 @@ export const mockChannels = [
 		defaultBoardPosition: 3,
 		title: 'Figma',
 		url: 'figma.com',
-		description: 'Graphic and UX dsesign',
+		description: 'Product design',
 		tags: ['design']
 	},
 

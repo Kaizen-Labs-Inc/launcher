@@ -4,7 +4,7 @@
 </script>
 
 <nav class="mt-4">
-	<ul class="flex flex-row justify-center items-center">
+	<ul class="flex flex-row justify-center items-center flex-wrap">
 		<li class="mr-6">
 			<!-- TODO figure out why page path styles aren't applying -->
 			<a
