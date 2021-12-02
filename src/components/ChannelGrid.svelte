@@ -16,12 +16,14 @@
 	import { SearchIcon, Edit2Icon, XIcon } from 'svelte-feather-icons';
 	import { goto } from '$app/navigation';
 	import { addToast } from '../stores/toaststore';
+	import { isMobileDevice } from '../utils/DetectDevice';
 
 	let tippyInstance: Instance;
 	let query: string = '';
 	let searchIsFocused: boolean = false;
 	let addFormIsFocused: boolean = false;
 	let selectedChannelIndex: number;
+	let isMobile: boolean = false;
 	let channels: Channel[] = mockChannels.splice(0, 12); // TODO update this
 	const flipDurationMs: number = 200;
 	let isConsidering: boolean = false;
@@ -108,6 +110,9 @@
 			arrow: false,
 			theme: 'translucent'
 		});
+
+		isMobile = isMobileDevice();
+
 		document.addEventListener(
 			'keydown',
 			(event) => {
@@ -184,14 +189,16 @@
 		: 'opacity-100 scale-100'}"
 >
 	<div
-		class="flex flex-row p-4 rounded-t-lg w-full {searchIsFocused ? 'bg-white bg-opacity-10' : ''}"
+		class="flex items-center p-4 rounded-t-lg w-full {searchIsFocused
+			? 'bg-white bg-opacity-10'
+			: ''}"
 	>
 		<div
-			class="flex-shrink-0 transition duration-200 ease-in-out {addFormIsFocused
+			class="sm:w-12 sm:h-12 w-6 h-6 flex-shrink-0 transition duration-200 ease-in-out {addFormIsFocused
 				? 'opacity-5 scale-95'
 				: ''}"
 		>
-			<SearchIcon size="48" strokeWidth="1" />
+			<SearchIcon strokeWidth="1" />
 		</div>
 		<div class="flex flex-row items-center justify-between w-full">
 			<input
@@ -199,17 +206,17 @@
 				on:focus={handleFocus}
 				on:blur={handleBlur}
 				on:input={handleInput}
-				disabled={editModeEnabled || addFormIsFocused}
+				disabled={addFormIsFocused}
 				autocomplete="false"
 				id="searchInput"
 				placeholder="Search"
-				class="ml-4 text-5xl w-2/3 border-0 outline-none bg-transparent text-white font-light placeholder-white placeholder-opacity-30 transition duration-200 ease-in-out {addFormIsFocused
+				class="ml-4 text-2xl sm:text-5xl w-2/3 border-0 outline-none bg-transparent text-white font-light placeholder-white placeholder-opacity-30 transition duration-200 ease-in-out {addFormIsFocused
 					? 'opacity-5 scale-95'
 					: ''}"
 			/>
 			{#if !searchIsFocused}
 				<span
-					class="absolute ml-48 border-2 border-white border-opacity-50 w-10 h-10 opacity-50 flex items-center justify-center rounded-md transition duration-200 ease-in-out {addFormIsFocused
+					class="absolute ml-24 sm:ml-48 sm:text-base text-xs border-2 border-white border-opacity-50 sm:w-10 sm:h-10 h-8 w-8 opacity-50 flex items-center justify-center rounded-md transition duration-200 ease-in-out {addFormIsFocused
 						? 'opacity-5 scale-95'
 						: ''}">⌘G</span
 				>
@@ -218,11 +225,11 @@
 					<div
 						on:click={handleEditModeToggle}
 						id="editToggle"
-						class="mr-8 {editModeEnabled
+						class="mr-8 sm:w-8 sm:h-8 w-6 h-6 {editModeEnabled
 							? ''
 							: 'cursor-pointer hover:opacity-100 hover:scale-110'} opacity-75 transition duration-200 ease-in-out"
 					>
-						<Edit2Icon size="36" strokeWidth="1" />
+						<Edit2Icon strokeWidth="1" />
 					</div>
 
 					<AddChannelPopover
@@ -246,7 +253,7 @@
 		use:dndzone={{
 			items: channels,
 			flipDurationMs,
-			dragDisabled: addFormIsFocused,
+			dragDisabled: addFormIsFocused || (isMobile && !editModeEnabled),
 			morphDisabled: true,
 			dropTargetClasses: ['target'],
 			dropTargetStyle: { outline: 'none' },
