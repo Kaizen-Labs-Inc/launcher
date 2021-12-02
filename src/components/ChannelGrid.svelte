@@ -343,7 +343,7 @@
 			</div>
 		{/each}
 	</section>
-	{#if editModeEnabled}
+	{#if editModeEnabled && !editModeInitializedByDrag}
 		<div class="flex flex-col items-center justify-center">
 			<div
 				on:click={handleEditModeToggle}
