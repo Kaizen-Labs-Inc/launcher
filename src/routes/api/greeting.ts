@@ -67,7 +67,7 @@ export async function get(request: ServerRequest): Promise<void | EndpointOutput
 
 		await Promise.all(allChannels.map(it => {
 			const mockChannel = mockChannels.find(c => c.title === it.name)
-			if (mockChannel?.defaultBoardPosition) {
+			if (typeof mockChannel?.defaultBoardPosition !== 'undefined') {
 				return prisma.position.create({
 					data: {
 						channelId: it.id,
