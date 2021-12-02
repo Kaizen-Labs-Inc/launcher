@@ -117,10 +117,10 @@
 		}
 	}}
 	id="addTarget"
-	class="transition duration-200 ease-in-out {popOverIsFocused ? 'rotate-45' : ''} {editModeEnabled
-		? 'cursor-default'
-		: 'cursor-pointer hover:opacity-100 hover:scale-110'}"
-	><PlusIcon size="48" strokeWidth="1" /></button
+	class="transition duration-200 ease-in-out sm:w-10 sm:h-10 w-6 h-6 {popOverIsFocused
+		? 'rotate-45'
+		: ''} {editModeEnabled ? 'cursor-default' : 'cursor-pointer hover:opacity-100 hover:scale-110'}"
+	><PlusIcon strokeWidth="1" /></button
 >
 {#if popOverIsFocused}
 	<div

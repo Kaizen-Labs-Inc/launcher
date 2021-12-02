@@ -54,7 +54,7 @@
 					selectedChannelIndex = i;
 				}}
 				on:focus
-				class="flex flex-row sm:grid sm:grid-cols-4 gap-6 sm:gap-12 text-left cursor-pointer p-6 transition duration-200 ease-in-out {filteredChannels.length ===
+				class="flex flex-row items-center sm:grid sm:grid-cols-4 sm:gap-16 text-left cursor-pointer p-6 transition duration-200 ease-in-out {filteredChannels.length ===
 				1
 					? 'rounded-b-lg'
 					: ''}  {selectedChannelIndex === i
@@ -82,7 +82,7 @@
 							</div>
 						{/if}
 					</div>
-					<div class="sm:text-2xl">
+					<div class="sm:text-2xl ">
 						{channel.title}
 						<div class="block text-sm {selectedChannelIndex === i ? 'opacity-50' : 'opacity-25'}">
 							{channel.url}
@@ -104,7 +104,7 @@
 					<div class="hidden sm:flex flex-wrap flex-row">
 						{#each channel.tags as tag}
 							<div
-								class="flex justify-center items-center h-8 mr-2 mb-2 text-xs sm:text-sm font-medium rounded bg-white bg-opacity-5 px-2 py-2"
+								class="flex justify-center items-center h-8 m-1 p-2 text-xs sm:text-sm font-medium  rounded bg-white bg-opacity-5"
 							>
 								#{tag}
 							</div>
