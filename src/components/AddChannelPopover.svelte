@@ -9,6 +9,7 @@
 	import { v4 as uuidv4 } from 'uuid';
 	import ChannelForm from './ChannelForm.svelte';
 	export let channels = [];
+	export let board;
 	export let editModeEnabled: boolean;
 	let tippyInstance: Instance;
 
@@ -33,6 +34,8 @@
 		)
 		// HACK dedupe - should do this by ID or just pull directly from airtable cache
 		.filter((c, i, a) => a.findIndex((t) => t.name === c.name) === i);
+
+	$: boardChannelIds = (board?.positions?.map((p) => p.channel.id) || [])
 
 	export let popOverIsFocused: boolean = false;
 	let stepOneComplete: boolean = false;
@@ -155,13 +158,11 @@
 									selectedChannelIndex = i;
 								}}
 								on:click={() => {
-									if (!channels.map((c) => c.id).includes(channel.id)) {
+									if (!boardChannelIds.includes(channel.id)) {
 										handleAdd(channel);
 									}
 								}}
-								class="my-1 rounded-lg p-2 flex items-center {channels
-									.map((c) => c.id)
-									.includes(channel.id)
+								class="my-1 rounded-lg p-2 flex items-center {boardChannelIds.includes(channel.id)
 									? 'opacity-60'
 									: selectedChannelIndex === i
 									? 'bg-opacity-10 bg-white selected cursor-pointer'
@@ -185,7 +186,7 @@
 									<!-- TODO We need a new store for the users individual channels -->
 									<!-- For now we're just using 'channels',
 									a prop passed from the parent that is keeping state -->
-									{#if channels.map((c) => c.id).includes(channel.id)}
+									{#if boardChannelIds.includes(channel.id)}
 										<div class="opacity-70">✓ Added</div>
 									{/if}
 								</div>

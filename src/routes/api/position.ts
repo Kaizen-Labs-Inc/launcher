@@ -68,8 +68,8 @@ export async function put(request: ServerRequest): Promise<void | EndpointOutput
 	}
 
 	const newPositions = positions.filter(p => {
-		!board.positions.find(it => it.channelId === p.channel.id);
-	});
+		return !board.positions.find(it => it.channelId === p.channel.id);
+	}).concat(positions.filter(p => !p.channel.id))
 	const updatedPositions = positions.filter(p => {
 		return !!board.positions.find(it => it.channelId === p.channel.id && it.position !== p.position);
 	});
@@ -77,62 +77,69 @@ export async function put(request: ServerRequest): Promise<void | EndpointOutput
 		return !board.positions.find(it => it.channelId === p.channel.id);
 	});
 
+	let created = []
 	// create new positions
-	const created = await Promise.all(newPositions.map(p => {
-		console.log('Creating new position: ' + JSON.stringify(p));
-		const dateCreated = new Date().toISOString();
-		const d = Object.assign({}, p, {
-			dateCreated: dateCreated,
-			lastModified: dateCreated,
-			board: {
-				connect: { id: board.id }
-			},
-			channel: {
-				connect: { id: p.channel.id }
-			}
+	if (newPositions.length > 0) {
+		console.log('Creating new positions: ' + newPositions.map(it => `${it.id}/${it.position}`));
+		created = await Promise.all(newPositions.map(p => {
+			const dateCreated = new Date().toISOString();
+			const d = Object.assign({}, p, {
+				dateCreated: dateCreated,
+				lastModified: dateCreated,
+				board: {
+					connect: { id: board.id }
+				},
+				channel: {
+					connect: { id: p.channel.id }
+				}
+			});
+			return prisma.position.create({
+				data: d
+			});
+		})).catch(e => {
+			console.error(e);
 		});
-		return prisma.position.create({
-			data: d
-		});
-	})).catch(e => {
-		console.error(e);
-	});
+	}
 
 	function later(delay) {
 		return new Promise(function(resolve) {
 			setTimeout(resolve, delay);
 		});
 	}
-
+	let updated = []
 	// update existing positions
-	console.log(updatedPositions.map(it => `${it.id}/${it.position}`));
-	const updated = await Promise.all(updatedPositions.map(async (p, i) => {
-		  await later(i * 100)
-			return prisma.position.update({
-				data: {
-					position: p.position,
-					lastModified: new Date().toISOString()
-				},
-				where: {
-					id: p.id
-				}
+	if (updatedPositions.length > 0) {
+		console.log(updatedPositions.map(it => `${it.id}/${it.position}`));
+		updated = await Promise.all(updatedPositions.map(async (p, i) => {
+				await later(i * 100)
+				return prisma.position.update({
+					data: {
+						position: p.position,
+						lastModified: new Date().toISOString()
+					},
+					where: {
+						id: p.id
+					}
+				})
 			})
-		})
-	).catch(e => {
-		console.error(e);
-	});
+		).catch(e => {
+			console.error(e);
+		});
+	}
 
 	// delete extraaneous positions
 	const idsToRemove = removedPositions.map(it => it.id);
-	console.log('Deleting positions: ' + idsToRemove);
-	await prisma.position.deleteMany({
-		where: {
-			id: {
-				in: idsToRemove
+	if (idsToRemove.length > 0) {
+		console.log('Deleting positions: ' + idsToRemove);
+		await prisma.position.deleteMany({
+			where: {
+				id: {
+					in: idsToRemove
+				}
 			}
-		}
-	}).catch(e => {
-		console.error(e);
-	});
-	return { body: (created || []).concat((updated || [])) };
+		}).catch(e => {
+			console.error(e);
+		});
+	}
+	return { body: (created).concat((updated)) };
 }

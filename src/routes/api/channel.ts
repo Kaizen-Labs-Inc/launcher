@@ -28,9 +28,10 @@ export async function get(request: ServerRequest): Promise<void | EndpointOutput
 		})
 	}
 }
+
 export async function post(request: ServerRequest): Promise<void | EndpointOutput> {
 
-	const user = validateUser(request, prisma)
+	const user = await validateUser(request, prisma)
 
 	if (!user) {
 		return {
@@ -45,17 +46,16 @@ export async function post(request: ServerRequest): Promise<void | EndpointOutpu
 	}
 	let channel
 	try {
-		const bodyAsString = request.body.toString()
-		console.log(bodyAsString)
-		channel = JSON.parse(bodyAsString)
+		channel = JSON.parse(request.body.toString())
 	} catch (e: unknown) {
 		console.error(e)
 		return {
 			status: 400
 		}
 	}
+	channel.userId = user.id;
 
-	channel.name = channel.name.trim()
+	channel.name = channel.name?.trim()
 
 	if (!channel.name || channel.name.length === 0) {
 		return {
@@ -63,7 +63,7 @@ export async function post(request: ServerRequest): Promise<void | EndpointOutpu
 		}
 	}
 
-	channel.url = channel.url.trim()
+	channel.url = channel.url?.trim()
 
 	if (!channel.url || channel.url.length === 0) {
 		return {
