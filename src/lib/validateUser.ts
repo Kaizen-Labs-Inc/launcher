@@ -23,6 +23,8 @@ export default function validateUser(request: ServerRequest, prisma: PrismaClien
 		if (res === null) {
 			// if a user doesn't exist, create one
 			return addUser(profile, prisma)
+		} else {
+			return res
 		}
 	})
 		.catch(e => {

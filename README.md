@@ -61,6 +61,14 @@ GRANT ALL PRIVILEGES ON DATABASE springboard TO app;
 
 `npm run dev -- --open`
 
+## Making schema changes
+
+Make changes to `prisma/schema.prisma` and run:
+```
+npx prisma format
+npx prisma generate
+npx prisma migrate dev --name <MIGRATION_NAME>
+```
 
 ## Building
 

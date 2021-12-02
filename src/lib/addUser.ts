@@ -9,11 +9,11 @@ export default function addUser(profile: any, prisma: PrismaClient): Promise<Use
 			dateCreated: dateCreated,
 			lastModified: dateCreated,
 			googleProfile: {
-				create: Object.assign({}, profile, { dateCreated: dateCreated, lastModified: dateCreated })
+				create: Object.assign({}, profile, { dateCreated: dateCreated, lastModified: dateCreated, provider: 'google' })
 			}
 		},
 		include: {
-
+			googleProfile: true
 		}
 	})
 }

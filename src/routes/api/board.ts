@@ -23,15 +23,19 @@ export async function get(request: ServerRequest): Promise<void | EndpointOutput
 
 	const user = await validateUser(request, prisma)
 
-	let board = await prisma.board.findFirst({
-		where: {
-			boardType: 2,
-			user: {
-				id: user.id
-			}
-		},
-		select: SELECTIONS
-	})
+	let board;
+	console.log(user)
+	if (user) {
+		board = await prisma.board.findFirst({
+			where: {
+				boardType: 2,
+				user: {
+					id: user.id
+				}
+			},
+			select: SELECTIONS
+		})
+	}
 	if (!board) {
 		board = await prisma.board.findFirst({
 			where: {

@@ -32,7 +32,8 @@ export async function get(request: ServerRequest): Promise<void | EndpointOutput
 				lastModified: dateCreated
 			}
 		});
-		const tags = Array.from(new Set(mockChannels.map(it => it.tags).flat()))
+		const tags = Array.from(new Set(mockChannels.map(it => it.tags).flat())).filter(it => it !== undefined)
+		console.log(tags)
 
 		const allTags = await Promise.all(tags.map(it => {
 			return prisma.tag.create({
@@ -41,36 +42,42 @@ export async function get(request: ServerRequest): Promise<void | EndpointOutput
 		}));
 
 		const allChannels = await Promise.all(mockChannels.map(it => {
-			return prisma.channel.create({
-				data: {
-					name: it.title,
-					url: it.url,
-					image: it.iconImageUrl,
-					channelType: ChannelType.DEFAULT.valueOf(),
-					emoji: it.emoji,
-					description: it.description,
-					dateCreated: dateCreated,
-					lastModified: dateCreated,
-					tags: {
-						connect: it.tags.map(t => {
-							const found = allTags.find(at => at.name === t)
-							return { id: found.id }
-						})
-					}
+			const d: any = {
+				name: it.title,
+				url: it.url,
+				image: it.iconImageUrl,
+				channelType: ChannelType.DEFAULT.valueOf(),
+				emoji: it.emoji,
+				description: it.description,
+				dateCreated: dateCreated,
+				lastModified: dateCreated,
+			}
+			if (it.tags) {
+				d.tags = {
+					connect: it.tags.map(t => {
+						const found = allTags.find(at => at.name === t)
+						return { id: found.id }
+					})
 				}
+			}
+			return prisma.channel.create({
+				data: d
 			});
 		}));
 
-		const positions = await Promise.all(allChannels.map((it, idx) => {
-			return prisma.position.create({
-				data: {
-					channelId: it.id,
-					boardId: defaultBoard.id,
-					position: idx,
-					dateCreated: dateCreated,
-					lastModified: dateCreated
-				}
-			});
+		await Promise.all(allChannels.map(it => {
+			const mockChannel = mockChannels.find(c => c.title === it.name)
+			if (mockChannel?.defaultBoardPosition) {
+				return prisma.position.create({
+					data: {
+						channelId: it.id,
+						boardId: defaultBoard.id,
+						position: mockChannel.defaultBoardPosition,
+						dateCreated: dateCreated,
+						lastModified: dateCreated
+					}
+				});
+			}
 		}));
 	}
 
