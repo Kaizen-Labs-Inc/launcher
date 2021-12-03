@@ -286,7 +286,7 @@
 					}
 				}}
 				class="channel flex items-center justify-center flex-col text-center transition duration-200 ease-in-out {addFormIsFocused
-					? 'opacity-5 scale-95'
+					? 'opacity-5 scale-95 pointer-events-none'
 					: 'opacity-100 hover:scale-105 cursor-pointer'}"
 			>
 				<div
