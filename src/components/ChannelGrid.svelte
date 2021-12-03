@@ -17,6 +17,7 @@
 	import { goto } from '$app/navigation';
 	import { addToast } from '../stores/toaststore';
 	import { isMobileDevice } from '../utils/DetectDevice';
+	import { trimUrl } from '../utils/TrimUrl';
 
 	let tippyInstance: Instance;
 	let query: string = '';
@@ -320,7 +321,9 @@
 				</div>
 				<div>
 					<div class="text-2xl">{channel.title}</div>
-					<div class="text-md opacity-30">{channel.url}</div>
+					<div class="text-md opacity-30">
+						{trimUrl('https://' + channel.url)}
+					</div>
 				</div>
 				{#if editModeEnabled && !editModeInitializedByDrag}
 					<div

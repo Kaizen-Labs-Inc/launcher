@@ -38,7 +38,7 @@
 		<div class="mt-16 mb-16 flex flex-col justify-center items-center">
 			<p class="text-2xl ">🤷‍♂️ Nothing found.</p>
 			<div
-				on:mousedown={onNewChannel}
+				on:click={onNewChannel}
 				class="bg-white bg-opacity-20 cursor-pointer text-lg font-medium mt-8 p-3 rounded"
 			>
 				Add something
@@ -47,7 +47,7 @@
 	{:else}
 		{#each filteredChannels.sort((a, b) => a.title.localeCompare(b.title)) as channel, i}
 			<div
-				on:mousedown|preventDefault={() => {
+				on:click|preventDefault={() => {
 					onSelect(channel);
 				}}
 				on:mouseover={() => {
