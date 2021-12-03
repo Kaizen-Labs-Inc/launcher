@@ -10,21 +10,14 @@ const prisma = new PrismaClient()
 export async function get(request: ServerRequest): Promise<void | EndpointOutput> {
 	const user = await validateUser(request, prisma)
 
-	if (!user) {
-		return {
-			status: 401
-		}
+	const searchConditions: any = [{ channelType: 0 }]
+	if (user) {
+		searchConditions.push({ channelType: 1, userId: user?.id })
 	}
 
 	return { body: await prisma.channel.findMany({
 			where: {
-				OR: [{
-					channelType: 0
-				},
-				{
-					channelType: 1,
-					userId: user.id
-				}]
+				OR: searchConditions
 			}
 		})
 	}
