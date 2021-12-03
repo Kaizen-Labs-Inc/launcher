@@ -42,12 +42,11 @@
 	"dependencies": {
 		"@fontsource/fira-mono": "^4.5.0",
 		"@joeattardi/emoji-button": "^4.6.0",
-		"@lukeed/uuid": "^2.0.0",
 		"@prisma/client": "^3.6.0",
 		"dotenv": "^10.0.0",
 		"metascraper": "^5.25.2",
 		"svelte-tags-input": "^2.8.0",
-		"tippy.js": "^6.3.2",
-		"uuid": "^8.3.2"
+		"uuid": "^8.3.2",
+		"tippy.js": "^6.3.2"
 	}
 }

@@ -74,7 +74,8 @@ export async function post(request: ServerRequest): Promise<void | EndpointOutpu
 	if (foundChannel) {
 		return {
 			// conflict
-			status: 409
+			status: 409,
+			body: channel
 		}
 	}
 

@@ -6,7 +6,6 @@
 	import 'tippy.js/themes/translucent.css';
 	import { PlusIcon } from 'svelte-feather-icons';
 	import type MockChannel from 'src/model/MockChannel';
-	import { v4 as uuidv4 } from 'uuid';
 	import ChannelForm from './ChannelForm.svelte';
 	export let channels = [];
 	export let board;
@@ -97,8 +96,6 @@
 	});
 
 	const handleAdd = (channel: MockChannel) => {
-		// Generate a new UUID
-		channel.id = uuidv4();
 		// Pass this channel back to the parent as an event
 		dispatch('channelAdded', {
 			channel: channel

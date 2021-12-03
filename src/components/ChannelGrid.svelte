@@ -73,14 +73,13 @@
 		board.positions = board.positions.map((p, i) => Object.assign({}, p, { position: i }));
 		if (!isDemo) {
 			if (board.boardType === BoardType.USER.valueOf()) {
-				fetch('/api/position', {
+				return fetch('/api/position', {
 					method: 'PUT',
 					credentials: 'include',
 					body: JSON.stringify(board.positions)
 				})
 			} else {
-				console.log("We need to create a board")
-				fetch('/api/board', {
+				return fetch('/api/board', {
 					method: 'POST',
 					credentials: 'include',
 					body: JSON.stringify(board)
@@ -117,26 +116,25 @@
 		selectedChannelIndex = 0;
 	};
 
-	const handleChannelAdded = (channel) => {
-		if (isDemo) {
-			const newPosition = { position: 0, channel: channel }
-			board.positions.unshift(newPosition);
-			orderAndSyncBoardPositions();
-		} else {
-			fetch('/api/channel', {
-				method: 'POST',
-				credentials: 'include',
-				body: JSON.stringify(channel)
-			}).then(async res => {
-				if (res.status === 201) {
-					const newChannel = await res.json()
-					const newPosition = { position: 0, channel: newChannel }
-					board.positions.unshift(newPosition);
-					await orderAndSyncBoardPositions();
-					addToast({ dismissible: false, message: 'Added', type: 'success', timeout: 3000 });
-				}
-			})
+	async function handleChannelAdded(channel) {
+		let newPosition = { position: 0, channel: channel }
+		if (!isDemo) {
+			if (!channel.id) {
+				await fetch('/api/channel', {
+					method: 'POST',
+					credentials: 'include',
+					body: JSON.stringify(channel)
+				}).then(async res => {
+					// 409 means a channel with this URL already exists; add it instead
+					if (res.status === 201 || res.status === 409) {
+						newPosition = { position: 0, channel: await res.json() }
+					}
+				})
+			}
 		}
+		board.positions.unshift(newPosition);
+		await orderAndSyncBoardPositions();
+		addToast({ dismissible: false, message: 'Added', type: 'success', timeout: 3000 });
 	};
 
 	const toggleAddForm = () => {
