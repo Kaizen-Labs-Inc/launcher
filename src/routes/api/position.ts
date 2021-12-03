@@ -110,7 +110,7 @@ export async function put(request: ServerRequest): Promise<void | EndpointOutput
 	let updated: void | Position[] = []
 	// update existing positions
 	if (updatedPositions.length > 0) {
-		console.log(updatedPositions.map(it => `${it.id}/${it.position}`));
+		console.log("Re-ordering positions: " + updatedPositions.map(it => `${it.id}/${it.position}`));
 		updated = await Promise.all(updatedPositions.map(async (p, i) => {
 				await later(i * 100)
 				return prisma.position.update({
