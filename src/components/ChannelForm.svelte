@@ -51,28 +51,15 @@
 	});
 </script>
 
-<div class="my-4 flex flex-col">
-	<label for="url" class="font-medium ">URL</label>
-	<input
-		on:blur={handleUrlScraping}
-		bind:value={channel.url}
-		name="url"
-		type="url"
-		placeholder="Paste the link here"
-		class="bg-white bg-opacity-10  rounded p-2"
-	/>
-</div>
-
-<div class="flex flex-row items-end justify-between mb-4 text-white ">
-	<div class="flex flex-col flex-1 mr-10">
-		<label for="name" class="font-medium ">Name it</label>
+<div class="flex flex-row items-end justify-between mb-4 mt-2">
+	<div class="flex flex-col">
+		<label for="url" class="font-medium ">URL</label>
 		<input
+			bind:value={channel.url}
 			autofocus
-			disabled={isScraping}
-			bind:value={channel.name}
-			name="name"
-			type="text"
-			placeholder="Type a name"
+			name="url"
+			type="url"
+			placeholder="Paste the link here"
 			class="bg-white bg-opacity-10 rounded p-2"
 		/>
 	</div>
@@ -94,6 +81,18 @@
 		{/if}
 	</div>
 </div>
+<div class="flex flex-col flex-1">
+	<label for="name" class="font-medium ">Name it</label>
+	<input
+		disabled={isScraping}
+		bind:value={channel.name}
+		name="name"
+		type="text"
+		placeholder="Type a name"
+		class="bg-white bg-opacity-10 rounded p-2"
+	/>
+</div>
+
 <div class="my-4 flex flex-col">
 	<label for="description" class="font-medium ">Describe it</label>
 	<textarea
@@ -122,7 +121,7 @@
 		/>
 	</div>
 </div>
-<div class="my-4 flex flex-row align-center cursor-pointer">
+<div class="my-4 flex flex-row items-center cursor-pointer">
 	<input
 		disabled={isScraping}
 		name="homescreen"

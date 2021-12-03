@@ -42,9 +42,9 @@
 	$: filteredChannels = (channelsToSearch || []).filter(
 		// TODO also filter by description, tags, and URL
 		(channel) => {
-			return channel.name.toLowerCase().indexOf(query.toLowerCase()) !== -1
+			return channel.name.toLowerCase().indexOf(query.toLowerCase()) !== -1;
 		}
-	)
+	);
 
 	const handleDndConsider = (e) => {
 		if (!editModeEnabled) {
@@ -61,10 +61,9 @@
 		}
 		isConsidering = false;
 		editModeInitializedByDrag = false;
-		board.positions = e.detail.items
+		board.positions = e.detail.items;
 		orderAndSyncBoardPositions();
 	};
-
 
 	function orderAndSyncBoardPositions() {
 		// ensure positions are numerically correct
@@ -74,14 +73,14 @@
 				method: 'PUT',
 				credentials: 'include',
 				body: JSON.stringify(board.positions)
-			})
+			});
 		} else {
-			console.log("We need to create a board")
+			console.log('We need to create a board');
 			fetch('/api/board', {
 				method: 'POST',
 				credentials: 'include',
 				body: JSON.stringify(board)
-			})
+			});
 		}
 	}
 
@@ -118,15 +117,15 @@
 			method: 'POST',
 			credentials: 'include',
 			body: JSON.stringify(channel)
-		}).then(async res => {
+		}).then(async (res) => {
 			if (res.status === 201) {
-				const newChannel = await res.json()
-				const newPosition = { position: 0, channel: newChannel }
+				const newChannel = await res.json();
+				const newPosition = { position: 0, channel: newChannel };
 				board.positions.unshift(newPosition);
 				await orderAndSyncBoardPositions();
 				addToast({ dismissible: false, message: 'Added', type: 'success', timeout: 3000 });
 			}
-		})
+		});
 	};
 
 	const toggleAddForm = () => {
@@ -142,30 +141,27 @@
 	};
 
 	onMount(() => {
-		fetch("api/board", {
+		fetch('api/board', {
 			credentials: 'include'
 		})
-			.then(async res => {
-				res.json().then(b => {
+			.then(async (res) => {
+				res.json().then((b) => {
 					b.positions.sort((a, b) => {
-						return a.position - b.position
-					})
-					board = b
-				})
-
+						return a.position - b.position;
+					});
+					board = b;
+				});
 			})
-			.catch(err => {
-				console.error(err.message)
-			})
+			.catch((err) => {
+				console.error(err.message);
+			});
 		fetch('/api/channel', {
 			credentials: 'include'
-		})
-			.then(async res => {
-				res.json().then(channels => {
-					channelsToSearch = channels
-				})
-
-			})
+		}).then(async (res) => {
+			res.json().then((channels) => {
+				channelsToSearch = channels;
+			});
+		});
 		tippyInstance = tippy(document.getElementById('editToggle'), {
 			content: 'Edit launcher',
 			arrow: false,
@@ -295,7 +291,7 @@
 
 					<AddChannelPopover
 						channels={channelsToSearch || []}
-						board={board}
+						{board}
 						bind:popOverIsFocused={addFormIsFocused}
 						bind:editModeEnabled
 						on:channelAdded={(e) => {
@@ -327,7 +323,7 @@
 		on:consider={handleDndConsider}
 		on:finalize={handleDndFinalize}
 	>
-		{#each (board?.positions || []) as position, i (position.id)}
+		{#each board?.positions || [] as position, i (position.id)}
 			<div
 				animate:flip={{ duration: flipDurationMs }}
 				on:focus
@@ -348,7 +344,7 @@
 					}
 				}}
 				class="channel flex items-center justify-center flex-col text-center transition duration-200 ease-in-out {addFormIsFocused
-					? 'opacity-5 scale-95'
+					? 'opacity-5 scale-95 pointer-events-none'
 					: 'opacity-100 hover:scale-105 cursor-pointer'}"
 			>
 				<div
@@ -401,7 +397,9 @@
 						<div
 							on:click={() => {
 								// TODO allow undo
-								board.positions = board.positions.filter((p) => p.channel.id !== position.channel.id);
+								board.positions = board.positions.filter(
+									(p) => p.channel.id !== position.channel.id
+								);
 							}}
 							class="cursor-pointer mx-2 rounded p-2  text-white bg-red-500 hover:bg-red-600"
 						>
