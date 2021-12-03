@@ -97,6 +97,12 @@
 		goto(`/app/edit?id=${channel.id}`);
 	};
 
+	const handleRemove = (channel: Channel) => {
+		// TODO allow undo
+		board.positions = board.positions.filter((p) => p.channel.id !== channel.id);
+		orderAndSyncBoardPositions()
+	}
+
 	const handleBlur = () => {
 		let searchInput = document.getElementById('searchInput');
 		searchIsFocused = false;
@@ -408,9 +414,9 @@
 						</div>
 						<div
 							on:click={() => {
-								// TODO allow undo
-								board.positions = board.positions.filter((p) => p.channel.id !== position.channel.id);
+								handleRemove(position.channel)
 							}}
+
 							class="cursor-pointer mx-2 rounded p-2  text-white bg-red-500 hover:bg-red-600"
 						>
 							<XIcon strokeWidth="2" size="16" />

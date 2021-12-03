@@ -2,6 +2,7 @@ import type { ServerRequest } from '@sveltejs/kit/types/hooks';
 import type { EndpointOutput } from '@sveltejs/kit/types/endpoint';
 import getAuth from '$lib/getAuth';
 import { PrismaClient } from '@prisma/client';
+import type { Position } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
@@ -73,11 +74,11 @@ export async function put(request: ServerRequest): Promise<void | EndpointOutput
 	const updatedPositions = positions.filter(p => {
 		return !!board.positions.find(it => it.channelId === p.channel.id && it.position !== p.position);
 	});
-	const removedPositions = positions.filter(p => {
-		return !board.positions.find(it => it.channelId === p.channel.id);
+	const removedPositions = board.positions.filter(p => {
+		return !positions.find(it => it.channel.id === p.channelId);
 	});
 
-	let created = []
+	let created: void | Position[] = []
 	// create new positions
 	if (newPositions.length > 0) {
 		console.log('Creating new positions: ' + newPositions.map(it => `${it.id}/${it.position}`));
@@ -106,7 +107,7 @@ export async function put(request: ServerRequest): Promise<void | EndpointOutput
 			setTimeout(resolve, delay);
 		});
 	}
-	let updated = []
+	let updated: void | Position[] = []
 	// update existing positions
 	if (updatedPositions.length > 0) {
 		console.log(updatedPositions.map(it => `${it.id}/${it.position}`));
@@ -141,5 +142,5 @@ export async function put(request: ServerRequest): Promise<void | EndpointOutput
 			console.error(e);
 		});
 	}
-	return { body: (created).concat(updated) };
+	return { body: (created || []).concat(updated || []) };
 }
