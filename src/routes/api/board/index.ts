@@ -1,8 +1,7 @@
 import type { ServerRequest } from '@sveltejs/kit/types/hooks';
 import type { EndpointOutput } from '@sveltejs/kit/types/endpoint';
 import { PrismaClient } from '@prisma/client'
-import getAuth from '$lib/getAuth';
-import { BoardType } from '../../model/api/BoardType';
+import { BoardType } from '../../../model/api/BoardType';
 import validateUser  from '$lib/validateUser';
 
 const prisma = new PrismaClient()
@@ -62,6 +61,7 @@ export async function post(request: ServerRequest): Promise<void | EndpointOutpu
 			status: 401
 		}
 	}
+
 	if (!request.body) {
 		return {
 			status: 400
@@ -77,18 +77,30 @@ export async function post(request: ServerRequest): Promise<void | EndpointOutpu
 		}
 	}
 
-	const positions = board.positions
-	delete board.id
-	delete board.positions
 	const dateCreated = new Date().toISOString()
-	board.dateCreated = dateCreated
-	board.lastModified = dateCreated
-	board.boardType = BoardType.USER.valueOf()
-	board.userId = user.id
 	let created;
 	try {
 		created = await prisma.board.create({
-			data: board
+			data: {
+				dateCreated: dateCreated,
+				lastModified: dateCreated,
+				boardType: BoardType.USER.valueOf(),
+				user: {
+					connect: {
+						id : user.id
+					}
+				},
+				positions: {
+					create: board.positions.map(p => {
+						return {
+							channelId: p.channel.id,
+							position: p.position,
+							dateCreated: dateCreated,
+							lastModified: dateCreated,
+						}
+					})
+				}
+			}
 		})
 	} catch (e: unknown) {
 		console.error(e)
@@ -98,28 +110,10 @@ export async function post(request: ServerRequest): Promise<void | EndpointOutpu
 		return {
 			status: 500
 		}
-	}
-
-	created.positions = []
-	for (const p of positions) {
-		try {
-			const newPosition = await prisma.position.create({
-				data: {
-					channelId: p.channel.id,
-					boardId: created.id,
-					position: p.position,
-					dateCreated: dateCreated,
-					lastModified: dateCreated
-				}
-			})
-			created.positions.push(newPosition)
-		} catch (e: unknown) {
-			console.error(e)
+	} else {
+		return {
+			status: 201,
+			body: created
 		}
 	}
-	return {
-		status: 201,
-		body: created
-	}
-
 }

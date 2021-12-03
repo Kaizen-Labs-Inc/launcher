@@ -1,48 +1,49 @@
 import type { ServerRequest } from '@sveltejs/kit/types/hooks';
 import type { EndpointOutput } from '@sveltejs/kit/types/endpoint';
 import getAuth from '$lib/getAuth';
-import { PrismaClient } from '@prisma/client';
+import { Position, PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
+const BAD_REQUEST = { status: 400 }
+const NOT_FOUND = { status: 404 }
+
 
 export async function put(request: ServerRequest): Promise<void | EndpointOutput> {
 
 	if (!request.body) {
-		return {
-			status: 400
-		};
+		return BAD_REQUEST
 	}
+
+	const parts = request.path.split('/')
+
 	let positions = [];
-	let boardId;
+	let boardId: number;
+
 	try {
 		const parsed = JSON.parse(request.body.toString());
-		if (Array.isArray(parsed)) {
-			positions = parsed;
-			boardId = positions[0].boardId;
-			positions.forEach(p => {
-				if (p.boardId !== boardId) {
-					return {
-						status: 400
-					};
-				}
-			});
-		} else {
-			positions = [parsed];
-			boardId = parsed.boardId;
+		if (!Array.isArray(parsed)) {
+			return BAD_REQUEST
 		}
+		positions = parsed;
+		boardId = Number.parseInt(parts[parts.length - 2])
 	} catch (e: unknown) {
 		console.error(e);
-		return {
-			status: 400
-		};
+		return BAD_REQUEST
 	}
 
 	const auth = getAuth(request);
 	const googleId = auth?.user?.connections?.google?.sub;
+
 	if (!googleId) {
-		return {
-			status: 404
-		};
+		return NOT_FOUND;
+	}
+
+	if (!boardId) {
+		return BAD_REQUEST
+	}
+
+	if (positions.find(p => p.boardId && p.boardId !== boardId)) {
+		return BAD_REQUEST
 	}
 
 	// check user access
@@ -62,51 +63,48 @@ export async function put(request: ServerRequest): Promise<void | EndpointOutput
 	});
 
 	if (!board) {
-		return {
-			status: 404
-		};
+		return NOT_FOUND;
 	}
 
 	const newPositions = positions.filter(p => {
 		return !board.positions.find(it => it.channelId === p.channel.id);
 	}).concat(positions.filter(p => !p.channel.id))
-	const updatedPositions = board.positions.filter(p => {
+
+	const updatedPositions = board.positions.map(p => {
 		const found = positions.find(it => it.channel.id === p.channelId && it.position !== p.position);
 		if (found) {
-			p.position = found.position
+			return Object.assign(p, { position: found.position })
+		} else {
+			return undefined
 		}
-		return !!found
- 	});
+ 	}).filter(it => it !== undefined);
+
 	const removedPositions = board.positions.filter(p => {
 		return !positions.find(it => it.channel.id === p.channelId);
 	});
 
 	// create new positions
 	if (newPositions.length > 0) {
-		console.log('Creating new positions: ' + newPositions.map(it => `${it.id}/${it.position}`));
-		await Promise.all(newPositions.map(p => {
-			const dateCreated = new Date().toISOString();
-			const d = Object.assign({}, p, {
-				dateCreated: dateCreated,
-				lastModified: dateCreated,
-				board: {
-					connect: { id: board.id }
-				},
-				channel: {
-					connect: { id: p.channel.id }
-				}
-			});
-			return prisma.position.create({
-				data: d
-			});
-		})).catch(e => {
-			console.error(e);
-		});
+		for (const p of newPositions) {
+			try {
+				const dateCreated = new Date().toISOString();
+				await prisma.position.create({
+					data: {
+						channelId: p.channel.id,
+						boardId: board.id,
+						position: p.position,
+						dateCreated: dateCreated,
+						lastModified: dateCreated
+					}
+				})
+			} catch (e: unknown) {
+				console.error(e)
+			}
+		}
 	}
 
 	// update existing positions
 	if (updatedPositions.length > 0) {
-		console.log("Re-ordering positions: " + updatedPositions.map(it => `${it.id}/${it.position}`));
 		await Promise.all(updatedPositions.map(async (p, i) => {
 			await later(i * 10) // todo delete me when off of SQLite
 			return await prisma.position.update({
@@ -126,7 +124,6 @@ export async function put(request: ServerRequest): Promise<void | EndpointOutput
 	// delete extraaneous positions
 	const idsToRemove = removedPositions.map(it => it.id);
 	if (idsToRemove.length > 0) {
-		console.log('Deleting positions: ' + idsToRemove);
 		await prisma.position.deleteMany({
 			where: {
 				id: {

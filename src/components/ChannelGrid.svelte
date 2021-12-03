@@ -70,10 +70,16 @@
 
 	function orderAndSyncBoardPositions() {
 		// ensure positions are numerically correct
-		board.positions = board.positions.map((p, i) => Object.assign({}, p, { position: i }));
+		// 5up3rH4ck (TM) assign an id if none so that DND can handle it
+		let maxId = Math.max(...board.positions.map(it => it.id || 0))
+		board.positions = board.positions.map((p, i) => Object.assign(
+			{ id: ++maxId },
+			p,
+			{ position: i }
+		));
 		if (!isDemo) {
 			if (board.boardType === BoardType.USER.valueOf()) {
-				return fetch('/api/position', {
+				return fetch(`/api/board/${board.id}/position`, {
 					method: 'PUT',
 					credentials: 'include',
 					body: JSON.stringify(board.positions)
@@ -166,7 +172,6 @@
 					})
 					board = b
 				})
-
 			})
 			.catch(err => {
 				console.error(err.message)
