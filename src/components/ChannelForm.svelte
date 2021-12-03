@@ -56,11 +56,7 @@
 	<div
 		id="emoji-trigger"
 		on:click={() => {
-			if (isScraping) {
-				return;
-			} else {
-				picker.togglePicker(document.querySelector('#emoji-trigger'));
-			}
+			picker.togglePicker(document.querySelector('#emoji-trigger'));
 		}}
 		class="cursor-pointer rounded-lg w-14 h-14 bg-white flex items-center justify-center text-2xl bg-opacity-10 transition duration-200 ease-in-out hover:scale-105"
 	>
