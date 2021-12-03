@@ -20,6 +20,8 @@
 	import { BoardType } from '../model/api/BoardType';
 	import { isMobileDevice } from '../utils/DetectDevice';
 
+	export let isDemo = false;
+
 	let tippyInstance: Instance;
 	let query: string = '';
 	let searchIsFocused: boolean = false;
@@ -69,19 +71,21 @@
 	function orderAndSyncBoardPositions() {
 		// ensure positions are numerically correct
 		board.positions = board.positions.map((p, i) => Object.assign({}, p, { position: i }));
-		if (board.boardType === BoardType.USER.valueOf()) {
-			fetch('/api/position', {
-				method: 'PUT',
-				credentials: 'include',
-				body: JSON.stringify(board.positions)
-			})
-		} else {
-			console.log("We need to create a board")
-			fetch('/api/board', {
-				method: 'POST',
-				credentials: 'include',
-				body: JSON.stringify(board)
-			})
+		if (!isDemo) {
+			if (board.boardType === BoardType.USER.valueOf()) {
+				fetch('/api/position', {
+					method: 'PUT',
+					credentials: 'include',
+					body: JSON.stringify(board.positions)
+				})
+			} else {
+				console.log("We need to create a board")
+				fetch('/api/board', {
+					method: 'POST',
+					credentials: 'include',
+					body: JSON.stringify(board)
+				})
+			}
 		}
 	}
 
@@ -114,19 +118,25 @@
 	};
 
 	const handleChannelAdded = (channel) => {
-		fetch('/api/channel', {
-			method: 'POST',
-			credentials: 'include',
-			body: JSON.stringify(channel)
-		}).then(async res => {
-			if (res.status === 201) {
-				const newChannel = await res.json()
-				const newPosition = { position: 0, channel: newChannel }
-				board.positions.unshift(newPosition);
-				await orderAndSyncBoardPositions();
-				addToast({ dismissible: false, message: 'Added', type: 'success', timeout: 3000 });
-			}
-		})
+		if (isDemo) {
+			const newPosition = { position: 0, channel: channel }
+			board.positions.unshift(newPosition);
+			orderAndSyncBoardPositions();
+		} else {
+			fetch('/api/channel', {
+				method: 'POST',
+				credentials: 'include',
+				body: JSON.stringify(channel)
+			}).then(async res => {
+				if (res.status === 201) {
+					const newChannel = await res.json()
+					const newPosition = { position: 0, channel: newChannel }
+					board.positions.unshift(newPosition);
+					await orderAndSyncBoardPositions();
+					addToast({ dismissible: false, message: 'Added', type: 'success', timeout: 3000 });
+				}
+			})
+		}
 	};
 
 	const toggleAddForm = () => {
@@ -348,7 +358,7 @@
 					}
 				}}
 				class="channel flex items-center justify-center flex-col text-center transition duration-200 ease-in-out {addFormIsFocused
-					? 'opacity-5 scale-95'
+					? 'opacity-5 scale-95 pointer-events-none'
 					: 'opacity-100 hover:scale-105 cursor-pointer'}"
 			>
 				<div

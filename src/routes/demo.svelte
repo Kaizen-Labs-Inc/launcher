@@ -33,5 +33,5 @@
 	>
 		{isHovering ? '👍' : '🚧'} This is a demo. Start your free trial today.
 	</div>
-	<ChannelGrid />
+	<ChannelGrid isDemo={true} />
 </div>
