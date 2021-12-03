@@ -19,6 +19,7 @@
 	import Board from '../model/Board';
 	import { BoardType } from '../model/api/BoardType';
 	import { isMobileDevice } from '../utils/DetectDevice';
+	import { trimUrl } from '../utils/TrimUrl';
 
 	export let isDemo = false;
 
@@ -401,7 +402,9 @@
 				</div>
 				<div>
 					<div class="text-2xl">{position.channel.name}</div>
-					<div class="text-md opacity-30">{position.channel.url}</div>
+					<div class="text-md opacity-30">
+						{trimUrl('https://' + position.channel.url)}
+					</div>
 				</div>
 				{#if editModeEnabled && !editModeInitializedByDrag}
 					<div
