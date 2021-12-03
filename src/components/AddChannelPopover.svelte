@@ -134,10 +134,7 @@
 				<div class="flex flex-col">
 					<input
 						bind:value={query}
-						name="url"
 						autofocus
-						type="url"
-						id="url"
 						placeholder="Search for an app"
 						class="bg-white bg-opacity-10 rounded p-2 outline-none"
 						on:input={() => {
@@ -171,7 +168,7 @@
 									: 'cursor-pointer'}"
 							>
 								<div
-									class="w-10 h-10 bg-white text-lg text-black rounded-md flex items-center justify-center mr-4"
+									class="w-10 h-10 flex-shrink-0 bg-white text-lg text-black rounded-md flex items-center justify-center mr-4"
 								>
 									{#if channel.iconImageUrl}
 										<img src={channel.iconImageUrl} class="w-6 h-6" alt={channel.title} />
