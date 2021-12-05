@@ -1,9 +1,8 @@
 import type { ServerRequest } from '@sveltejs/kit/types/hooks';
 import type { EndpointOutput } from '@sveltejs/kit/types/endpoint';
 import getAuth from '$lib/getAuth';
-import { Position, PrismaClient } from '@prisma/client';
+import { prisma } from '$lib/prismaClient';
 
-const prisma = new PrismaClient();
 const BAD_REQUEST = { status: 400 }
 const NOT_FOUND = { status: 404 }
 

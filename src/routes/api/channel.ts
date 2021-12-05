@@ -1,11 +1,10 @@
 import type { ServerRequest } from '@sveltejs/kit/types/hooks';
 import type { EndpointOutput } from '@sveltejs/kit/types/endpoint';
-import { PrismaClient } from '@prisma/client'
+import { prisma } from '$lib/prismaClient';
 import { ChannelType } from '../../model/ChannelType';
 import validateUser from '$lib/validateUser';
 import stripPrefix from '$lib/stripPrefix';
 
-const prisma = new PrismaClient()
 
 export const CHANNEL_SELECTIONS = {
 	tags: true

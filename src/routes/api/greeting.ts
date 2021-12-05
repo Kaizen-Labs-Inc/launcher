@@ -1,11 +1,9 @@
 import type { ServerRequest } from '@sveltejs/kit/types/hooks';
 import type { EndpointOutput } from '@sveltejs/kit/types/endpoint';
-import { PrismaClient } from '@prisma/client';
+import { prisma } from '$lib/prismaClient';
 import { ChannelType } from '../../model/ChannelType';
 import { BoardType } from '../../model/api/BoardType';
 import { mockChannels } from '../../model/MockChannel';
-
-const prisma = new PrismaClient();
 
 const BOARD_SELECTIONS = {
 	id: true,
@@ -77,7 +75,7 @@ export async function get(request: ServerRequest): Promise<void | EndpointOutput
 			await prisma.channel.create({
 				data: d
 			});
-		};
+		}
 	}
 
 
@@ -115,15 +113,4 @@ export async function get(request: ServerRequest): Promise<void | EndpointOutput
 	}
 
 	return { body: defaultBoard };
-}
-
-await prisma.myLinkedEntity.create({
-	data: {
-		myEntityId: {
-			connect: {
-				id: it.id
-			}
-		},
-		// ...
-	}
 }
