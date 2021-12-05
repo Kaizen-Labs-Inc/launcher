@@ -18,6 +18,9 @@ export async function get(request: ServerRequest): Promise<void | EndpointOutput
 	return { body: await prisma.channel.findMany({
 			where: {
 				OR: searchConditions
+			},
+			include: {
+				tags: true
 			}
 		})
 	}

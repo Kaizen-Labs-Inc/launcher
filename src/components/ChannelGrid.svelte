@@ -20,6 +20,7 @@
 	import { BoardType } from '../model/api/BoardType';
 	import { isMobileDevice } from '../utils/DetectDevice';
 	import { trimUrl } from '../utils/TrimUrl';
+	import filterChannelsByQuery from '../lib/filterChannelsByQuery';
 
 	export let isDemo = false;
 
@@ -42,12 +43,7 @@
 	const jiggleAnimDurationMin: number = 0.22;
 	const jiggleAnimDurationMax: number = 0.3;
 
-	$: filteredChannels = (channelsToSearch || []).filter(
-		// TODO also filter by description, tags, and URL
-		(channel) => {
-			return channel.name.toLowerCase().indexOf(query.toLowerCase()) !== -1
-		}
-	)
+	$: filteredChannels = (channelsToSearch || []).filter(channel => filterChannelsByQuery(channel, query.toLowerCase()))
 
 	const handleDndConsider = (e) => {
 		if (!editModeEnabled) {
@@ -167,12 +163,15 @@
 			credentials: 'include'
 		})
 			.then(async res => {
-				res.json().then(b => {
+
+				const b =await res.json()
+				console.log(b)
+
 					b.positions.sort((a, b) => {
 						return a.position - b.position
 					})
+
 					board = b
-				})
 			})
 			.catch(err => {
 				console.error(err.message)
@@ -181,9 +180,9 @@
 			credentials: 'include'
 		})
 			.then(async res => {
-				res.json().then(channels => {
-					channelsToSearch = channels
-				})
+				const j =await res.json()
+				console.log(j)
+					channelsToSearch = j
 
 			})
 		tippyInstance = tippy(document.getElementById('editToggle'), {

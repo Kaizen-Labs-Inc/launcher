@@ -7,7 +7,10 @@
 	import { PlusIcon } from 'svelte-feather-icons';
 	import type MockChannel from 'src/model/MockChannel';
 	import ChannelForm from './ChannelForm.svelte';
-	export let channels = [];
+	import Channel from '../model/Channel';
+	import filterChannelsByQuery from '../lib/filterChannelsByQuery';
+
+	export let channels: Channel[] = [];
 	export let board;
 	export let editModeEnabled: boolean;
 	let tippyInstance: Instance;
@@ -27,12 +30,7 @@
 	}
 
 	$: filteredChannels = channels
-		.filter(
-			// TODO also filter by description, tags, and URL
-			(channel) => channel.name.toLowerCase().indexOf(query.toLowerCase()) !== -1
-		)
-		// HACK dedupe - should do this by ID or just pull directly from airtable cache
-		.filter((c, i, a) => a.findIndex((t) => t.name === c.name) === i);
+		.filter(channel => filterChannelsByQuery(channel, query.toLowerCase()))
 
 	$: boardChannelIds = (board?.positions?.map((p) => p.channel.id) || [])
 

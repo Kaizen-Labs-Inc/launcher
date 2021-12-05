@@ -106,7 +106,7 @@
 							<div
 								class="flex justify-center items-center h-8 m-1 p-2 text-xs sm:text-sm font-medium  rounded bg-white bg-opacity-5"
 							>
-								#{tag}
+								#{tag.name}
 							</div>
 						{/each}
 					</div>
