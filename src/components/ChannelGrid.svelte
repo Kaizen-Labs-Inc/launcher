@@ -163,15 +163,11 @@
 			credentials: 'include'
 		})
 			.then(async res => {
-
-				const b =await res.json()
-				console.log(b)
-
-					b.positions.sort((a, b) => {
-						return a.position - b.position
-					})
-
-					board = b
+				const b = await res.json()
+				b.positions.sort((a, b) => {
+					return a.position - b.position
+				})
+				board = b
 			})
 			.catch(err => {
 				console.error(err.message)
@@ -180,10 +176,7 @@
 			credentials: 'include'
 		})
 			.then(async res => {
-				const j =await res.json()
-				console.log(j)
-					channelsToSearch = j
-
+				channelsToSearch = await res.json()
 			})
 		tippyInstance = tippy(document.getElementById('editToggle'), {
 			content: 'Edit launcher',

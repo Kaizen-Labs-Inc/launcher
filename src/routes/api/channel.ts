@@ -7,6 +7,10 @@ import stripPrefix from '$lib/stripPrefix';
 
 const prisma = new PrismaClient()
 
+export const CHANNEL_SELECTIONS = {
+	tags: true
+}
+
 export async function get(request: ServerRequest): Promise<void | EndpointOutput> {
 	const user = await validateUser(request, prisma)
 
@@ -19,9 +23,7 @@ export async function get(request: ServerRequest): Promise<void | EndpointOutput
 			where: {
 				OR: searchConditions
 			},
-			include: {
-				tags: true
-			}
+			include: CHANNEL_SELECTIONS
 		})
 	}
 }
@@ -71,7 +73,8 @@ export async function post(request: ServerRequest): Promise<void | EndpointOutpu
 	const foundChannel = await prisma.channel.findFirst({
 		where: {
 			url: channel.url
-		}
+		},
+		include: CHANNEL_SELECTIONS
 	})
 
 	if (foundChannel) {

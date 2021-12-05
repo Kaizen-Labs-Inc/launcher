@@ -6,13 +6,23 @@ import validateUser  from '$lib/validateUser';
 
 const prisma = new PrismaClient()
 
-const SELECTIONS = {
+const BOARD_SELECTIONS = {
 	id: true,
 	boardType: true,
 	positions: {
 		select: {
 			id: true,
-			channel: true,
+			channel: {
+				select: {
+					id: true,
+					name: true,
+					description: true,
+					emoji: true,
+					image: true,
+					url: true,
+					tags: true
+				}
+			},
 			position: true
 		}
 	}
@@ -32,7 +42,7 @@ export async function get(request: ServerRequest): Promise<void | EndpointOutput
 					id: user.id
 				}
 			},
-			select: SELECTIONS
+			select: BOARD_SELECTIONS
 		})
 	}
 	if (!board) {
@@ -40,7 +50,7 @@ export async function get(request: ServerRequest): Promise<void | EndpointOutput
 			where: {
 				boardType: 0
 			},
-			select: SELECTIONS
+			select: BOARD_SELECTIONS
 		})
 	}
 	if (!board) {
