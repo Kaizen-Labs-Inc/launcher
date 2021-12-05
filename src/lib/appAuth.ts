@@ -2,12 +2,10 @@ import { SvelteKitAuth } from 'sk-auth';
 import { GoogleOAuth2Provider } from "sk-auth/providers";
 import { config } from 'dotenv';
 import type { GoogleProfile } from '@prisma/client'
-import { PrismaClient } from '@prisma/client';
+import { prisma } from '$lib/./prismaClient';
 import addUser from '$lib/addUser';
 
 let environmentSetup = false
-
-const prisma = new PrismaClient()
 
 if (!environmentSetup) {
 	console.log("Setting up environment...")
