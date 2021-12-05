@@ -45,16 +45,30 @@ This starts cockroach postgresql wire interface on `postgresql://root@localhost:
 **Verify the connection** from a shell SQL client:
 
 ```zsh
-cockroach sql --certs-dir=certs --host=localhost:26257
+cockroach sql --certs-dir=certs --host=localhost:26257/launcher
 ```
 
 *Create a database and user* and assign privileges. While connected to cockroach using the above command:
 
 ```sql
 CREATE USER app WITH PASSWORD 'ujOs6jXjGXar';
-CREATE DATABASE springboard;
-GRANT ALL PRIVILEGES ON DATABASE springboard TO app;
+CREATE DATABASE launcher;
+GRANT ALL PRIVILEGES ON DATABASE launcher TO app;
 \q
+```
+
+You should now be able to connect to the app using:
+```
+psql -U app -p 26257 -h localhost launcher
+```
+
+Enter the password `ujOs6jXjGXar` when prompted.
+
+## Manually running a migration
+
+To manually run a migration (replacing `<MIGRATION_DIR>` with the directory containing the migration):
+```zsh
+psql -U app -p 26257 -h localhost launcher < prisma/migrations/<MIGRATION_DIR>/migration.sql
 ```
 
 ## Running the app

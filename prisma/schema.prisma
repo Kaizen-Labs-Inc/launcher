@@ -1,12 +1,13 @@
 datasource db {
-  //  provider = "postgresql"
-  //  url      = env("postgresql://root:ujOs6jXjGXar@localhost:26257/springboard")
-  provider = "sqlite"
-  url      = env("DATABASE_URL")
+  provider = "postgresql"
+  url      = env("PG_URL")
+  // provider = "sqlite"
+  // url      = env("DATABASE_URL")
 }
 
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["cockroachdb"]
 }
 
 model Organization {
