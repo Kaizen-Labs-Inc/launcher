@@ -10,38 +10,39 @@
 	import ConfettiGenerator from 'confetti-js';
 
 	let user: GoogleUser;
-	let workspaceName: string = '';
-	const workspaceNameRegex: string = '/^[a-z0-9]+$/i';
-	const regex = new RegExp(workspaceName);
 	userStore.subscribe((value) => {
 		user = value;
 	});
+	let confetti;
+	let workspaceName: string = '';
+	const workspaceNameRegex: string = '/^[w-]+$/';
+	const regex = new RegExp(workspaceName);
 
-	const isValidWorkspaceName = (): boolean => {
-		console.log(regex.test(workspaceName));
-		if (regex.test(workspaceName)) {
-			return true;
-		} else {
+	const isValidWorkspaceName = (name: string): boolean => {
+		if (regex.test(name)) {
 			return false;
+		} else {
+			return true;
 		}
 	};
 
 	const handleContinue = () => {
-		if (isValidWorkspaceName) {
-			goto('/home');
+		if (isValidWorkspaceName(workspaceName)) {
+			confetti.clear();
+			goto('/welcome/invite');
 		} else {
 			addToast({
 				dismissible: false,
-				message: 'Please choose a different name',
+				message: 'Please enter a different team name (letters and numbers only)',
 				type: 'error',
-				timeout: 3000
+				timeout: 5000
 			});
 		}
 	};
 
 	onMount(() => {
 		const confettiSettings = { target: 'my-canvas', respawn: false, rotate: true };
-		const confetti = new ConfettiGenerator(confettiSettings);
+		confetti = new ConfettiGenerator(confettiSettings);
 		confetti.render();
 	});
 </script>
@@ -66,7 +67,11 @@
 				class="bg-white bg-opacity-10 rounded p-2 outline-none text-xl"
 			/>
 		</div>
-		<Button label="Continue" disabled={isEmptyOrSpaces(workspaceName)} on:click={handleContinue} />
+		<Button
+			label="Continue"
+			disabled={isEmptyOrSpaces(workspaceName)}
+			on:clicked={handleContinue}
+		/>
 	</form>
 	{#if workspaceName}
 		<div transition:fade class="mt-2 text-base">
@@ -77,4 +82,4 @@
 	{/if}
 </div>
 
-<canvas on:click|preventDefault id="my-canvas" class="z-10 absolute top-0 left-0" />
+<canvas id="my-canvas" class="z-10 absolute top-0 left-0" />
