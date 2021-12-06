@@ -7,6 +7,8 @@
 	import type GoogleUser from '../model/api/GoogleUser';
 	import LoadingIndicator from '../components/LoadingIndicator.svelte';
 	import { goto } from '$app/navigation';
+	import AuthenticatedNav from '../components/nav/AuthenticatedNav.svelte';
+	import PublicNav from '../components/nav/PublicNav.svelte';
 
 	let user;
 	userStore.subscribe((value) => {
@@ -29,15 +31,12 @@
 				});
 			}
 			user = value;
-			if (user) {
-				goto('/home');
+			if (user && !user.workspaceId) {
+				goto('/welcome'); // user is logged-in but hasn't completed team onboarding
+				// TODO allow free users to bypass this logic
 			}
 		});
 		loading = false;
-
-		if (user) {
-			goto('/home');
-		}
 	});
 </script>
 
@@ -53,6 +52,11 @@
 			</div>
 		{:else}
 			<div in:fade>
+				{#if user}
+					<AuthenticatedNav />
+				{:else}
+					<PublicNav />
+				{/if}
 				<slot />
 			</div>
 		{/if}

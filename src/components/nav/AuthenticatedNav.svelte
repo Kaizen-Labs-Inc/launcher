@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
+
 	import { page } from '$app/stores';
 
 	import { logout } from '$lib/logout';
@@ -16,11 +18,14 @@
 			>
 		</li>
 		<li
+			on:click={() => {
+				goto('/invite');
+			}}
 			class="cursor-pointer mr-6 hover:opacity-100 {$page.path === '/invite'
 				? 'opacity-100'
 				: 'opacity-60'}"
 		>
-			Invite someone
+			Invite your team
 		</li>
 		<li
 			class="cursor-pointer mr-6 hover:opacity-100 {$page.path === '/team'

@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { logout } from '$lib/logout';
-	import AuthenticatedNav from '../../components/nav/AuthenticatedNav.svelte';
 	import { userStore } from '../../stores/userStore';
 
 	let user;
@@ -9,7 +8,6 @@
 	});
 </script>
 
-<AuthenticatedNav />
 <div class="flex flex-col justify-center items-center mt-16">
 	<img src={user.picture} class="rounded-full" />
 	<div class="mt-4 text-xl">{user.name}</div>

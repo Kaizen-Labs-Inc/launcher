@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import PublicNav from '../components/nav/PublicNav.svelte';
 	import {
 		CodeIcon,
 		CommandIcon,
@@ -14,7 +13,6 @@
 	let pricingCtaIsHovered = false;
 </script>
 
-<PublicNav />
 <ScrollingChannelIconBackground />
 <div class="container mx-auto">
 	<div class="text-center mt-24 flex flex-col">
