@@ -10,6 +10,7 @@
 	import Channel from '../model/Channel';
 	import filterChannelsByQuery from '../lib/filterChannelsByQuery';
 
+	import { isEmptyOrSpaces } from '../utils/isEmptyOrSpaces';
 	export let channels: Channel[] = [];
 	export let board;
 	export let editModeEnabled: boolean;
@@ -48,9 +49,6 @@
 		stepOneComplete = false;
 	};
 
-	const isEmptyOrSpaces = (str) => {
-		return str === null || str.match(/^ *$/) !== null;
-	};
 	onMount(() => {
 		tippyInstance = tippy(document.getElementById('addTarget'), {
 			content: 'Add an app',

@@ -5,7 +5,6 @@
 <script lang="ts">
 	import { fade } from 'svelte/transition';
 	import { goto } from '$app/navigation';
-	import PublicNav from '../components/nav/PublicNav.svelte';
 	import ChannelGrid from '../components/ChannelGrid.svelte';
 	let isHovering: boolean = false;
 </script>
@@ -13,7 +12,6 @@
 <svelte:head>
 	<title>Launcher</title>
 </svelte:head>
-<PublicNav />
 <div in:fade class="container mx-auto pb-12">
 	<div
 		on:click={() => {

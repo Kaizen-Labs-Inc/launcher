@@ -47,7 +47,7 @@
 	{:else}
 		{#each filteredChannels.sort((a, b) => a.name.localeCompare(b.name)) as channel, i}
 			<div
-				on:click|preventDefault={() => {
+				on:mousedown|preventDefault={() => {
 					onSelect(channel);
 				}}
 				on:mouseover={() => {

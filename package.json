@@ -43,6 +43,7 @@
 		"@fontsource/fira-mono": "^4.5.0",
 		"@joeattardi/emoji-button": "^4.6.0",
 		"@prisma/client": "2.30.3",
+		"confetti-js": "^0.0.18",
 		"dotenv": "^10.0.0",
 		"metascraper": "^5.25.2",
 		"svelte-tags-input": "^2.8.0",

@@ -1,9 +1,7 @@
 <script>
-	import PublicNav from '../components/nav/PublicNav.svelte';
 	import SignInWithGoogleButton from '../components/SignInWithGoogleButton.svelte';
 </script>
 
-<PublicNav />
 <div class="flex flex-col items-center mt-12">
 	<h1 class="mb-10">👋 Hello there</h1>
 	<SignInWithGoogleButton />
