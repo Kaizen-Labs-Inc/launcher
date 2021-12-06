@@ -7,6 +7,8 @@
 	import type GoogleUser from '../model/api/GoogleUser';
 	import LoadingIndicator from '../components/LoadingIndicator.svelte';
 	import { goto } from '$app/navigation';
+	import AuthenticatedNav from '../components/nav/AuthenticatedNav.svelte';
+	import PublicNav from '../components/nav/PublicNav.svelte';
 
 	let user;
 	userStore.subscribe((value) => {
@@ -29,17 +31,9 @@
 				});
 			}
 			user = value;
-			if (!user) {
-				goto('/');
-			} else if (user.workspaceId) {
-				// If the user is assigned a workspace, take them home.
-				// TODO update this logic so it works for free users, too
-				// Perhaps have a default workspace and check against it,
-				// similar to what we did @ Kaizen
-				goto('/home');
-			} else {
-				// Else, direct them to workspace onboarding
-				goto('/welcome');
+			if (user && !user.workspaceId) {
+				goto('/welcome'); // user is logged-in but hasn't completed team onboarding
+				// TODO allow free users to bypass this logic
 			}
 		});
 		loading = false;
@@ -58,6 +52,11 @@
 			</div>
 		{:else}
 			<div in:fade>
+				{#if user}
+					<AuthenticatedNav />
+				{:else}
+					<PublicNav />
+				{/if}
 				<slot />
 			</div>
 		{/if}

@@ -2,10 +2,7 @@
 	import { goto } from '$app/navigation';
 	import Button from '../components/Button.svelte';
 	import { CheckIcon } from 'svelte-feather-icons';
-	import PublicNav from '../components/nav/PublicNav.svelte';
 </script>
-
-<PublicNav />
 
 <h1 class="font-bold text-5xl md:text-8xl mt-24 text-center">Get started for free</h1>
 <h2 class=" mt-12  text-center">

@@ -3,13 +3,11 @@
 	import { goto } from '$app/navigation';
 	import Channel, { mockChannels } from '../../model/Channel';
 	import { page } from '$app/stores';
-	import AuthenticatedNav from '../../components/nav/AuthenticatedNav.svelte';
 	// Use channel ID to get details...
 	let channel: Channel = mockChannels.find((c) => c.id === $page.query.get('id'));
 	console.log(channel);
 </script>
 
-<AuthenticatedNav />
 <h1 class="mt-16">Edit {channel.title}</h1>
 
 <ChannelForm

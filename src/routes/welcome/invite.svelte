@@ -3,7 +3,6 @@
 	import { addToast } from '../../stores/toaststore';
 
 	import { sampleWorkspace } from '../../model/Workspace';
-	import AuthenticatedNav from '../../components/nav/AuthenticatedNav.svelte';
 	import { UserPlusIcon } from 'svelte-feather-icons';
 	import InviteForm from '../../components/InviteForm.svelte';
 	import { goto } from '$app/navigation';
@@ -13,7 +12,6 @@
 	};
 </script>
 
-<AuthenticatedNav />
 <div
 	class="rounded-xl w-20 h-20 mt-24 mx-auto flex items-center justify-center text-black bg-gradient-to-b from-yellow-300 to-green-100 "
 >
