@@ -29,7 +29,9 @@
 				});
 			}
 			user = value;
-			if (user.workspaceId) {
+			if (!user) {
+				goto('/');
+			} else if (user.workspaceId) {
 				// If the user is assigned a workspace, take them home.
 				// TODO update this logic so it works for free users, too
 				// Perhaps have a default workspace and check against it,

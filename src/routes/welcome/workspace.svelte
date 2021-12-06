@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
 	import { addToast } from '../../stores/toaststore';
 	import { fade } from 'svelte/transition';
@@ -6,16 +7,17 @@
 	import type GoogleUser from '../../model/api/GoogleUser';
 	import { userStore } from '../../stores/userStore';
 	import { isEmptyOrSpaces } from '../../utils/isEmptyOrSpaces';
+	import ConfettiGenerator from 'confetti-js';
 
 	let user: GoogleUser;
 	let workspaceName: string = '';
 	const workspaceNameRegex: string = '/^[a-z0-9]+$/i';
+	const regex = new RegExp(workspaceName);
 	userStore.subscribe((value) => {
 		user = value;
 	});
 
 	const isValidWorkspaceName = (): boolean => {
-		const regex = new RegExp(workspaceName);
 		console.log(regex.test(workspaceName));
 		if (regex.test(workspaceName)) {
 			return true;
@@ -36,13 +38,19 @@
 			});
 		}
 	};
+
+	onMount(() => {
+		const confettiSettings = { target: 'my-canvas', respawn: false, rotate: true };
+		const confetti = new ConfettiGenerator(confettiSettings);
+		confetti.render();
+	});
 </script>
 
-<div class="flex flex-col justify-center items-center mt-24 ">
+<div class="flex flex-col justify-center items-center mt-24 z-50 relative">
 	<img src={user.picture} alt={user.name} class="rounded-full" />
-	<h1 class="mt-8 text-5xl font-medium text-center">🎉 Hi, {user.given_name}</h1>
-	<h2 class="mt-12 opacity-75 text-3xl text-center">
-		Welcome to your free trial.<br /><br /> Get started by telling us a bit about your team.
+	<h1 class="mt-8 text-4xl font-medium text-center">🎉 Hi, {user.given_name}</h1>
+	<h2 class="mt-8 opacity-75 text-2xl text-center">
+		Welcome to your free trial. Get started by telling us a bit about your team.
 	</h2>
 	<form class="mt-10">
 		<div class="flex flex-col justify-start">
@@ -62,7 +70,11 @@
 	</form>
 	{#if workspaceName}
 		<div transition:fade class="mt-2 text-base">
-			Your own Launcher URL:<span class="opacity-50 ml-2"> {workspaceName}.launcher.team</span>
+			Your own Launcher URL:<span class="opacity-50 ml-2">
+				{workspaceName.replace(/\s+/g, '-').toLowerCase()}.launcher.team</span
+			>
 		</div>
 	{/if}
 </div>
+
+<canvas on:click|preventDefault id="my-canvas" class="z-10 absolute top-0 left-0" />
