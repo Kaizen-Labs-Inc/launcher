@@ -20,7 +20,7 @@
 				? 'opacity-100'
 				: 'opacity-60'}"
 		>
-			Invite someone
+			Invite your team
 		</li>
 		<li
 			class="cursor-pointer mr-6 hover:opacity-100 {$page.path === '/team'
