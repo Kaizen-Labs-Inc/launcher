@@ -1,6 +1,7 @@
 <script>
+	import { goto } from '$app/navigation';
+	import Button from '../components/Button.svelte';
 	import { CheckIcon } from 'svelte-feather-icons';
-
 	import PublicNav from '../components/nav/PublicNav.svelte';
 </script>
 
@@ -31,11 +32,13 @@
 				<CheckIcon strokeWidth="1" size="18" /><span class="ml-2">Upgrade anytime</span>
 			</li>
 		</ul>
-		<div
-			class="cursor-pointer rounded px-4 py-2 text-lg font-semibold bg-white text-black mt-8 flex items-center justify-center"
-		>
-			Sign up
-		</div>
+		<Button
+			label="Sign up"
+			on:clicked={() => {
+				goto('/sign-in');
+			}}
+		/>
+
 		<div class="mt-3 opacity-40 text-center">Free forever</div>
 	</div>
 	<div class="bg-white bg-opacity-5 rounded-tl rounded-bl p-6 mx-4">
@@ -58,11 +61,12 @@
 				<CheckIcon strokeWidth="1" size="18" /><span class="ml-2">Cancel anytime</span>
 			</li>
 		</ul>
-		<div
-			class="cursor-pointer rounded px-4 py-2 text-lg font-semibold bg-white text-black mt-8 flex items-center justify-center"
-		>
-			Sign up
-		</div>
+		<Button
+			label="Get started"
+			on:clicked={() => {
+				goto('/welcome');
+			}}
+		/>
 		<div class="mt-3 opacity-40 text-center">Paid annually</div>
 	</div>
 	<div class="bg-white bg-opacity-5 rounded-tl rounded-bl p-6 mx-4">
@@ -84,11 +88,13 @@
 				<CheckIcon strokeWidth="1" size="18" /><span class="ml-2">Custom contract</span>
 			</li>
 		</ul>
-		<div
-			class="cursor-pointer rounded px-4 py-2 text-lg font-semibold bg-white text-black mt-8 flex items-center justify-center"
-		>
-			Email us
-		</div>
+		<Button
+			label="Email us"
+			on:clicked={() => {
+				location = 'mailto:jordan@kaizenlabs.dev';
+			}}
+		/>
+
 		<div class="mt-3 opacity-40 text-center">Let's figure it out together</div>
 	</div>
 </section>

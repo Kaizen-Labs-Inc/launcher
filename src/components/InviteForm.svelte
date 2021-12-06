@@ -1,15 +1,22 @@
 <script lang="ts">
+	import { createEventDispatcher } from 'svelte';
 	import { sampleWorkspace } from '../model/Workspace';
-
 	import { PlusCircleIcon, Trash2Icon } from 'svelte-feather-icons';
 	import Button from './Button.svelte';
 	export let inviteFieldCount: number = 3;
+	const dispatch = createEventDispatcher();
+
 	let loading: boolean = false;
+
 	const incrementFieldCount = () => {
 		inviteFieldCount += 1;
 	};
 	const handleInvite = async () => {
 		loading = true;
+		setTimeout(function () {
+			loading = false;
+			dispatch('success');
+		}, 2000);
 	};
 </script>
 
@@ -42,5 +49,5 @@
 		<div class="ml-4">Add another email address</div>
 	</div>
 	<Button label="Send invites" on:clicked={handleInvite} disabled={loading} />
-	<a href="/" class="mt-6 opacity-60 hover:opacity-100 mx-auto">Skip this for now →</a>
+	<a href="/home" class="mt-6 opacity-60 hover:opacity-100 mx-auto">Skip this for now →</a>
 </div>

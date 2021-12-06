@@ -15,6 +15,7 @@
 	});
 	let confetti;
 	let workspaceName: string = '';
+	let workspaceDomain: string = user.email.split('@').pop();
 
 	const handleContinue = () => {
 		// TODO handle workspace name validation server-side
@@ -48,11 +49,30 @@
 				class="bg-white bg-opacity-10 rounded p-2 outline-none text-xl"
 			/>
 		</div>
-		<Button
-			label="Continue"
-			disabled={isEmptyOrSpaces(workspaceName)}
-			on:clicked={handleContinue}
-		/>
+		{#if !isEmptyOrSpaces(workspaceName)}
+			<div in:fade class="flex flex-col justify-start mt-4">
+				<label class="mb-1" for="workspaceName">Primary email domain of team</label>
+				<input
+					bind:value={workspaceDomain}
+					name="workspaceDomain"
+					type="text"
+					required
+					placeholder={workspaceDomain}
+					class="bg-white bg-opacity-10 rounded p-2 outline-none text-xl"
+				/>
+			</div>
+			<div class="flex flex-row items-center mt-4 mb-8">
+				<label>
+					<input type="checkbox" checked />
+					Restrict sign-ups to those with a <span class="font-bold">{workspaceDomain}</span> email address
+				</label>
+			</div>
+			<Button
+				label="Continue"
+				disabled={isEmptyOrSpaces(workspaceName)}
+				on:clicked={handleContinue}
+			/>
+		{/if}
 	</form>
 	{#if workspaceName}
 		<div in:fade class="mt-2 text-base">

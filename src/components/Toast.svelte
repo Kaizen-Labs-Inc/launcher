@@ -24,7 +24,7 @@
 <style lang="postcss">
 	article {
 		color: white;
-		padding: 0.75rem 1.5rem 0.75rem 0.75rem;
+		padding: 0.75rem;
 		border-radius: 0.4rem;
 		display: flex;
 		align-items: center;
