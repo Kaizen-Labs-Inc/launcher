@@ -9,6 +9,7 @@
 	import { v4 as uuidv4 } from 'uuid';
 	import ChannelForm from './ChannelForm.svelte';
 	import { mockChannels } from '../model/Channel';
+	import { isEmptyOrSpaces } from '../utils/isEmptyOrSpaces';
 	export let channels = [];
 	export let editModeEnabled: boolean;
 	let tippyInstance: Instance;
@@ -49,9 +50,6 @@
 		stepOneComplete = false;
 	};
 
-	const isEmptyOrSpaces = (str) => {
-		return str === null || str.match(/^ *$/) !== null;
-	};
 	onMount(() => {
 		tippyInstance = tippy(document.getElementById('addTarget'), {
 			content: 'Add an app',
