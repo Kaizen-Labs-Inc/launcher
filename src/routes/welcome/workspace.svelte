@@ -15,29 +15,11 @@
 	});
 	let confetti;
 	let workspaceName: string = '';
-	const workspaceNameRegex: string = '/^[w-]+$/';
-	const regex = new RegExp(workspaceName);
-
-	const isValidWorkspaceName = (name: string): boolean => {
-		if (regex.test(name)) {
-			return false;
-		} else {
-			return true;
-		}
-	};
 
 	const handleContinue = () => {
-		if (isValidWorkspaceName(workspaceName)) {
-			confetti.clear();
-			goto('/welcome/invite');
-		} else {
-			addToast({
-				dismissible: false,
-				message: 'Please enter a different team name (letters and numbers only)',
-				type: 'error',
-				timeout: 5000
-			});
-		}
+		// TODO handle workspace name validation server-side
+		confetti.clear();
+		goto('/welcome/invite');
 	};
 
 	onMount(() => {
@@ -61,7 +43,6 @@
 				name="workspaceName"
 				type="text"
 				autofocus
-				pattern={workspaceNameRegex}
 				required
 				placeholder="Your team's name"
 				class="bg-white bg-opacity-10 rounded p-2 outline-none text-xl"
@@ -74,7 +55,7 @@
 		/>
 	</form>
 	{#if workspaceName}
-		<div transition:fade class="mt-2 text-base">
+		<div in:fade class="mt-2 text-base">
 			Your own Launcher URL:<span class="opacity-50 ml-2">
 				{workspaceName.replace(/\s+/g, '-').toLowerCase()}.launcher.team</span
 			>
