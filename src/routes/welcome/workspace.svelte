@@ -36,8 +36,8 @@
 	<h2 class="mt-8 opacity-75 text-2xl text-center">
 		Welcome to your free trial. Get started by telling us a bit about your team.
 	</h2>
-	<form class="mt-10">
-		<div class="flex flex-col justify-start">
+	<form class="mt-10 flex flex-col w-full sm:w-1/3 md:w-1/2">
+		<div class="flex flex-col justify-start w-full">
 			<label class="mb-1" for="workspaceName">What's the name of your team?</label>
 			<input
 				bind:value={workspaceName}
@@ -50,7 +50,7 @@
 			/>
 		</div>
 		{#if !isEmptyOrSpaces(workspaceName)}
-			<div in:fade class="flex flex-col justify-start mt-4">
+			<div in:fade class="flex flex-col justify-start mt-4 w-full">
 				<label class="mb-1" for="workspaceName">Primary email domain of team</label>
 				<input
 					bind:value={workspaceDomain}
@@ -61,7 +61,7 @@
 					class="bg-white bg-opacity-10 rounded p-2 outline-none text-xl"
 				/>
 			</div>
-			<div class="flex flex-row items-center mt-4 mb-8">
+			<div class="flex flex-row items-center my-4 w-full">
 				<label>
 					<input type="checkbox" checked />
 					Restrict sign-ups to those with a <span class="font-bold">{workspaceDomain}</span> email address

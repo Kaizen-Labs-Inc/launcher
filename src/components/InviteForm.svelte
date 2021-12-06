@@ -34,8 +34,13 @@
 					class="bg-white bg-opacity-10 rounded p-2 outline-none text-xl"
 				/>
 			</div>
-			{#if i > 2}
-				<div class="cursor-pointer opacity-70 hover:opacity-100 p-2 mt-5 ml-1">
+			{#if i > inviteFieldCount - 2 && i > 0}
+				<div
+					on:click={() => {
+						inviteFieldCount -= 1;
+					}}
+					class="cursor-pointer opacity-70 hover:opacity-100 p-2 mt-5 ml-1"
+				>
 					<Trash2Icon size="20" strokeWidth="1" />
 				</div>
 			{/if}
