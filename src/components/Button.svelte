@@ -14,7 +14,7 @@
 
 <div
 	on:click={handleOnClick}
-	class="rounded px-4 py-1 text-lg bg-white flex items-center justify-center text-black mt-4 {disabled
+	class="rounded px-4 py-2 text-lg bg-white flex items-center justify-center text-black mt-4 {disabled
 		? 'opacity-50'
 		: 'cursor-pointer'}"
 >
