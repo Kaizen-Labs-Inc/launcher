@@ -41,6 +41,7 @@
 
 	const togglePopover = () => {
 		popOverIsFocused = !popOverIsFocused;
+		analytics.track('Add channel button clicked');
 	};
 
 	const resetPopover = () => {
@@ -48,6 +49,7 @@
 		selectedChannelIndex = null;
 		query = '';
 		stepOneComplete = false;
+		analytics.track('Add channel window closed');
 	};
 
 	onMount(() => {
@@ -104,6 +106,7 @@
 	const handleContinue = () => {
 		stepOneComplete = true;
 		selectedChannelIndex = null;
+		analytics.track('Channel added step one completed');
 	};
 </script>
 

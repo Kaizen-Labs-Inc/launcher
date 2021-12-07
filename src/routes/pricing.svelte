@@ -38,6 +38,9 @@
 			label="Sign up"
 			on:clicked={() => {
 				goto('/sign-in');
+				analytics.track('Pricing CTA Clicked', {
+					plan: 'Solo'
+				});
 			}}
 		/>
 
@@ -67,6 +70,9 @@
 			label="Get started"
 			on:clicked={() => {
 				goto('/welcome');
+				analytics.track('Pricing CTA Clicked', {
+					plan: 'Team'
+				});
 			}}
 		/>
 		<div class="mt-3 opacity-40 text-center">Paid annually</div>
@@ -94,6 +100,9 @@
 			label="Email us"
 			on:clicked={() => {
 				location = 'mailto:jordan@kaizenlabs.dev';
+				analytics.track('Pricing CTA Clicked', {
+					plan: 'Enterprise'
+				});
 			}}
 		/>
 
