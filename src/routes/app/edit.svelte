@@ -1,11 +1,14 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import ChannelForm from '../../components/ChannelForm.svelte';
 	import { goto } from '$app/navigation';
 	import Channel, { mockChannels } from '../../model/Channel';
 	import { page } from '$app/stores';
 	// Use channel ID to get details...
 	let channel: Channel = mockChannels.find((c) => c.id === $page.query.get('id'));
-	console.log(channel);
+	onMount(() => {
+		window.analytics.page();
+	});
 </script>
 
 <h1 class="mt-16">Edit {channel.title}</h1>

@@ -1,5 +1,10 @@
 <script>
+	import { onMount } from 'svelte';
+
 	import SvelteMarkdown from 'svelte-markdown';
+	onMount(() => {
+		window.analytics.page();
+	});
 	const source = `
 
 Privacy Policy

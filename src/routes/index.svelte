@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
+
 	import { goto } from '$app/navigation';
 	import {
 		CodeIcon,
@@ -11,6 +13,9 @@
 	import ScrollingChannelIconBackground from '../components/ScrollingChannelIconBackground.svelte';
 	let demoCtaIsHovered = false;
 	let pricingCtaIsHovered = false;
+	onMount(() => {
+		window.analytics.page();
+	});
 </script>
 
 <ScrollingChannelIconBackground />
