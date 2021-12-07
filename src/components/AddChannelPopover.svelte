@@ -49,7 +49,6 @@
 		selectedChannelIndex = null;
 		query = '';
 		stepOneComplete = false;
-		// document.removeEventListener('click', setClickListener);
 	};
 
 	const handleClickOutside = () => {
