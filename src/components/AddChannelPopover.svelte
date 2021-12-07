@@ -10,6 +10,7 @@
 	import ChannelForm from './ChannelForm.svelte';
 	import { mockChannels } from '../model/Channel';
 	import { isEmptyOrSpaces } from '../utils/isEmptyOrSpaces';
+	import { clickOutside } from '../utils/DetectClickOutsideOfElement';
 	export let channels = [];
 	export let editModeEnabled: boolean;
 	let tippyInstance: Instance;
@@ -48,6 +49,11 @@
 		selectedChannelIndex = null;
 		query = '';
 		stepOneComplete = false;
+		// document.removeEventListener('click', setClickListener);
+	};
+
+	const handleClickOutside = () => {
+		resetPopover();
 	};
 
 	onMount(() => {
@@ -123,6 +129,8 @@
 {#if popOverIsFocused}
 	<div
 		transition:scale={{ duration: 200, opacity: 0, start: 0.9 }}
+		use:clickOutside
+		on:click_outside={handleClickOutside}
 		id="addModal"
 		style="width: 340px;"
 		class="p-4 bg-white bg-opacity-10 backdrop-blur-2xl shadow-2xl rounded-xl mr-2 absolute top-2 right-16"
