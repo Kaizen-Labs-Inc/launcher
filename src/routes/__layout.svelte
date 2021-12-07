@@ -31,10 +31,10 @@
 				});
 			}
 			user = value;
-			if (user && !user.workspaceId) {
-				goto('/welcome'); // user is logged-in but hasn't completed team onboarding
-				// TODO allow free users to bypass this logic
-			}
+			// if (user && !user.workspaceId) { // comment out this logic for now
+			// goto('/welcome'); // user is logged-in but hasn't completed team onboarding
+			// TODO allow free users to bypass this logic
+			// }
 		});
 		loading = false;
 	});
@@ -65,8 +65,8 @@
 
 <footer class="opacity-50 hover:opacity-100">
 	<p class="mx-3">Kaizen Labs Inc 2021</p>
-	<a href="#" class="mx-3">Privacy policy</a>
-	<a href="#" class="mx-3">Terms of use</a>
+	<a href="/privacy" class="mx-3">Privacy policy</a>
+	<a href="/terms" class="mx-3">Terms of use</a>
 </footer>
 
 <style>
