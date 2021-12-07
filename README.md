@@ -2,12 +2,14 @@
 
 Powered by Sveltekit
 
-## Requirements
+## Setup
+
+**Requirements**
 
  - node.js
- - cockroachdb
-
-## Setup
+ - postgresql
+ 
+### Setting up node.js and the frontend environment
 
 **Install node.js** using Homebrew (if not already installed):
 ```zsh
@@ -17,6 +19,37 @@ brew install node
 **Install node packages.** From the project root:
 
 `npm install`
+
+### Setting up a local PostgreSQL database
+
+If Postgresql is not installed:
+```
+brew update
+brew install postgresql
+brew services start postgresql
+```
+
+Create the database
+```
+createdb launcher
+```
+
+Create a user
+```
+psql launcher
+CREATE USER app WITH PASSWORD 'ujOs6jXjGXar';
+GRANT ALL PRIVILEGES ON DATABASE launcher TO app;
+```
+
+## Connecting to the production DB
+
+The following connection string will connect you to the prod heroku db:
+```
+psql -U keupcsyxrzwgrt -p 5432 -h ec2-44-193-111-218.compute-1.amazonaws.com d23jb9b00ccftl
+```
+You will be prompted to enter a password. You will find the password in heroku -> databases -> credentials.
+
+### Installing Cockroach (unused)
 
 **Install cockroach** using Homebrew:
 ```zsh
