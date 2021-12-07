@@ -7,7 +7,7 @@ datasource db {
 
 generator client {
   provider = "prisma-client-js"
-  engineType = "binary"
+  previewFeatures = ["nApi"]
 }
 
 model Organization {
