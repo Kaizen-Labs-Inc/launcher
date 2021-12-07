@@ -1,6 +1,5 @@
 .DS_Store
 node_modules
-!node_modules/.prisma/
 build
 .svelte-kit
 package
