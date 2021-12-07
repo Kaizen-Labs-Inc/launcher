@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { userStore } from '../../stores/userStore';
+	import { onMount } from 'svelte';
 	import { addToast } from '../../stores/toaststore';
 
 	import { sampleWorkspace } from '../../model/Workspace';
@@ -10,6 +10,9 @@
 		addToast({ dismissible: false, message: '👍 Invites sent', type: 'success', timeout: 2000 });
 		goto('/home');
 	};
+	onMount(() => {
+		window.analytics.page();
+	});
 </script>
 
 <div

@@ -1,5 +1,10 @@
 <script>
+	import { onMount } from 'svelte';
+
 	import SignInWithGoogleButton from '../components/SignInWithGoogleButton.svelte';
+	onMount(() => {
+		window.analytics.page();
+	});
 </script>
 
 <div class="flex flex-col items-center mt-12">

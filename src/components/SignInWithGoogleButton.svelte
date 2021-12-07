@@ -6,6 +6,9 @@
 <div
 	on:click={() => {
 		goto('/api/auth/signin/google');
+		analytics.track('Sign-in button clicked', {
+			provider: 'Google'
+		});
 	}}
 	class="rounded px-3 py-2 text-xl bg-white flex items-center justify-center text-black cursor-pointer no-underline"
 >

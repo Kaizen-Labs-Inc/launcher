@@ -27,6 +27,7 @@
 		const confettiSettings = { target: 'my-canvas', respawn: false, rotate: true };
 		confetti = new ConfettiGenerator(confettiSettings);
 		confetti.render();
+		window.analytics.page();
 	});
 </script>
 
