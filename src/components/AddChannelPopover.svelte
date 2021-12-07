@@ -11,6 +11,7 @@
 	import filterChannelsByQuery from '../lib/filterChannelsByQuery';
 
 	import { isEmptyOrSpaces } from '../utils/isEmptyOrSpaces';
+	import { clickOutside } from '../utils/DetectClickOutsideOfElement';
 	export let channels: Channel[] = [];
 	export let board;
 	export let editModeEnabled: boolean;
@@ -40,6 +41,7 @@
 
 	const togglePopover = () => {
 		popOverIsFocused = !popOverIsFocused;
+		analytics.track('Add channel button clicked');
 	};
 
 	const resetPopover = () => {
@@ -47,6 +49,11 @@
 		selectedChannelIndex = null;
 		query = '';
 		stepOneComplete = false;
+		analytics.track('Add channel window closed');
+	};
+
+	const handleClickOutside = () => {
+		resetPopover();
 	};
 
 	onMount(() => {
@@ -101,6 +108,7 @@
 	const handleContinue = () => {
 		stepOneComplete = true;
 		selectedChannelIndex = null;
+		analytics.track('Channel added step one completed');
 	};
 </script>
 
@@ -120,6 +128,8 @@
 {#if popOverIsFocused}
 	<div
 		transition:scale={{ duration: 200, opacity: 0, start: 0.9 }}
+		use:clickOutside
+		on:clickOutside={handleClickOutside}
 		id="addModal"
 		style="width: 340px;"
 		class="p-4 bg-white bg-opacity-10 backdrop-blur-2xl shadow-2xl rounded-xl mr-2 absolute top-2 right-16"

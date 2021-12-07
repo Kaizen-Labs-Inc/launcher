@@ -94,6 +94,9 @@
 	const handleProceed = (channel: Channel) => {
 		selectedChannelIndex = null;
 		window.open('https://' + channel.url, '_blank').focus();
+		analytics.track('Channel clicked', {
+			channel: channel
+		});
 	};
 
 	const handleEdit = (channel: Channel) => {
@@ -144,6 +147,9 @@
 		board.positions.unshift(newPosition);
 		await orderAndSyncBoardPositions();
 		addToast({ dismissible: false, message: 'Added', type: 'success', timeout: 3000 });
+		analytics.track('Channel added', {
+			channel: channel
+		});
 	};
 
 	const toggleAddForm = () => {
@@ -151,11 +157,13 @@
 		setTimeout(function () {
 			addFormIsFocused = !addFormIsFocused;
 		}, 100);
+		analytics.track('Add channel button clicked');
 	};
 
 	const handleEditModeToggle = () => {
 		editModeEnabled = true;
 		tippyInstance.disable();
+		analytics.track('Edit mode button clicked');
 	};
 
 	onMount(() => {
@@ -415,8 +423,10 @@
 						<div
 							on:click={() => {
 								handleRemove(position.channel)
+								analytics.track('Delete channel button clicked', {
+									channel: channel
+								});
 							}}
-
 							class="cursor-pointer mx-2 rounded p-2  text-white bg-red-500 hover:bg-red-600"
 						>
 							<XIcon strokeWidth="2" size="16" />

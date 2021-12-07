@@ -1,7 +1,12 @@
 <script>
+	import { onMount } from 'svelte';
+
 	import { goto } from '$app/navigation';
 	import Button from '../components/Button.svelte';
 	import { CheckIcon } from 'svelte-feather-icons';
+	onMount(() => {
+		window.analytics.page();
+	});
 </script>
 
 <h1 class="font-bold text-5xl md:text-8xl mt-24 text-center">Get started for free</h1>
@@ -33,6 +38,9 @@
 			label="Sign up"
 			on:clicked={() => {
 				goto('/sign-in');
+				analytics.track('Pricing CTA Clicked', {
+					plan: 'Solo'
+				});
 			}}
 		/>
 
@@ -62,6 +70,9 @@
 			label="Get started"
 			on:clicked={() => {
 				goto('/welcome');
+				analytics.track('Pricing CTA Clicked', {
+					plan: 'Team'
+				});
 			}}
 		/>
 		<div class="mt-3 opacity-40 text-center">Paid annually</div>
@@ -89,6 +100,9 @@
 			label="Email us"
 			on:clicked={() => {
 				location = 'mailto:jordan@kaizenlabs.dev';
+				analytics.track('Pricing CTA Clicked', {
+					plan: 'Enterprise'
+				});
 			}}
 		/>
 

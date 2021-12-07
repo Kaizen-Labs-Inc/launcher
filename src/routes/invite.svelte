@@ -1,7 +1,11 @@
 <script>
-	import { UserPlusIcon } from 'svelte-feather-icons';
+	import { onMount } from 'svelte';
 
+	import { UserPlusIcon } from 'svelte-feather-icons';
 	import InviteForm from '../components/InviteForm.svelte';
+	onMount(() => {
+		window.analytics.page();
+	});
 </script>
 
 <div
