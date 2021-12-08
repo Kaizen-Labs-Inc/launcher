@@ -5,13 +5,15 @@
 	import 'tippy.js/dist/tippy.css';
 	import 'tippy.js/themes/translucent.css';
 	import { PlusIcon } from 'svelte-feather-icons';
-	import type Channel from 'src/model/Channel';
-	import { v4 as uuidv4 } from 'uuid';
+	import type MockChannel from 'src/model/MockChannel';
 	import ChannelForm from './ChannelForm.svelte';
-	import { mockChannels } from '../model/Channel';
+	import Channel from '../model/Channel';
+	import filterChannelsByQuery from '../lib/filterChannelsByQuery';
+
 	import { isEmptyOrSpaces } from '../utils/isEmptyOrSpaces';
 	import { clickOutside } from '../utils/DetectClickOutsideOfElement';
-	export let channels = [];
+	export let channels: Channel[] = [];
+	export let board;
 	export let editModeEnabled: boolean;
 	let tippyInstance: Instance;
 
@@ -29,13 +31,10 @@
 		}
 	}
 
-	$: filteredChannels = mockChannels
-		.filter(
-			// TODO also filter by description, tags, and URL
-			(channel) => channel.title.toLowerCase().indexOf(query.toLowerCase()) !== -1
-		)
-		// HACK dedupe - should do this by ID or just pull directly from airtable cache
-		.filter((c, i, a) => a.findIndex((t) => t.title === c.title) === i);
+	$: filteredChannels = channels
+		.filter(channel => filterChannelsByQuery(channel, query.toLowerCase()))
+
+	$: boardChannelIds = (board?.positions?.map((p) => p.channel.id) || [])
 
 	export let popOverIsFocused: boolean = false;
 	let stepOneComplete: boolean = false;
@@ -99,9 +98,7 @@
 		);
 	});
 
-	const handleAdd = (channel: Channel) => {
-		// Generate a new UUID
-		channel.id = uuidv4();
+	const handleAdd = (channel: MockChannel) => {
 		// Pass this channel back to the parent as an event
 		dispatch('channelAdded', {
 			channel: channel
@@ -161,15 +158,11 @@
 									selectedChannelIndex = i;
 								}}
 								on:click={() => {
-									if (channels.map((c) => c.id).includes(channel.id)) {
-										return; // don't do anything - the channel is already added to the homescreen
-									} else {
+									if (!boardChannelIds.includes(channel.id)) {
 										handleAdd(channel);
 									}
 								}}
-								class="my-1 rounded-lg p-2 flex items-center {channels
-									.map((c) => c.id)
-									.includes(channel.id)
+								class="my-1 rounded-lg p-2 flex items-center {boardChannelIds.includes(channel.id)
 									? 'opacity-60'
 									: selectedChannelIndex === i
 									? 'bg-opacity-10 bg-white selected cursor-pointer'
@@ -178,22 +171,22 @@
 								<div
 									class="w-10 h-10 flex-shrink-0 bg-white text-lg text-black rounded-md flex items-center justify-center mr-4"
 								>
-									{#if channel.iconImageUrl}
-										<img src={channel.iconImageUrl} class="w-6 h-6" alt={channel.title} />
+									{#if channel.image}
+										<img src={channel.image} class="w-6 h-6" alt={channel.name} />
 									{:else if channel.emoji}
 										{channel.emoji}
 									{:else}
-										{channel.title.charAt(0)}
+										{channel.name.charAt(0)}
 									{/if}
 								</div>
 								<div class="flex justify-between align-center w-full">
 									<div>
-										{channel.title}
+										{channel.name}
 									</div>
 									<!-- TODO We need a new store for the users individual channels -->
 									<!-- For now we're just using 'channels',
 									a prop passed from the parent that is keeping state -->
-									{#if channels.map((c) => c.id).includes(channel.id)}
+									{#if boardChannelIds.includes(channel.id)}
 										<div class="opacity-70">✓ Added</div>
 									{/if}
 								</div>
@@ -227,7 +220,7 @@
 			{:else}
 				<ChannelForm
 					channel={{
-						title: query.charAt(0).toUpperCase() + query.substr(1).toLowerCase() || undefined
+						name: query.charAt(0).toUpperCase() + query.substr(1).toLowerCase() || undefined
 					}}
 					on:submit={(event) => {
 						console.log(event);

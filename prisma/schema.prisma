@@ -1,0 +1,114 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("PG_URL")
+  // provider = "sqlite"
+  // url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+  engineType = "library"
+  previewFeatures = ["interactiveTransactions"]
+}
+
+model Organization {
+  id           Int          @id @default(autoincrement())
+  name         String
+  User         User[]
+  Channel      Channel[]
+  Invitation   Invitation[]
+  dateCreated  DateTime
+  lastModified DateTime
+}
+
+model User {
+  id              Int           @id @default(autoincrement())
+  googleProfile   GoogleProfile @relation(fields: [googleProfileId], references: [id])
+  googleProfileId Int           @unique
+  organization    Organization? @relation(fields: [organizationId], references: [id])
+  organizationId  Int?
+  boards          Board[]
+  channels        Channel[]
+  invitations     Invitation[]
+  tags            Tag[]
+  dateCreated     DateTime
+  lastModified    DateTime
+}
+
+model GoogleProfile {
+  id             Int      @id @default(autoincrement())
+  sub            String
+  name           String
+  given_name     String
+  family_name    String
+  picture        String
+  email          String   @unique
+  email_verified Boolean
+  locale         String
+  hd             String
+  provider       String
+  User           User?
+  dateCreated    DateTime
+  lastModified   DateTime
+}
+
+model Board {
+  id           Int        @id @default(autoincrement())
+  user         User?      @relation(fields: [userId], references: [id])
+  boardType    Int
+  userId       Int?
+  positions    Position[]
+  dateCreated  DateTime
+  lastModified DateTime
+}
+
+model Position {
+  id           Int      @id @default(autoincrement())
+  position     Int
+  board        Board    @relation(fields: [boardId], references: [id])
+  channel      Channel  @relation(fields: [channelId], references: [id])
+  boardId      Int
+  channelId    Int
+  dateCreated  DateTime
+  lastModified DateTime
+}
+
+model Channel {
+  id             Int           @id @default(autoincrement())
+  name           String
+  url            String        @unique
+  channelType    Int
+  image          String?
+  description    String?
+  emoji          String?
+  user           User?         @relation(fields: [userId], references: [id])
+  organization   Organization? @relation(fields: [organizationId], references: [id])
+  userId         Int?
+  organizationId Int?
+  positions      Position[]
+  tags           Tag[]
+  dateCreated    DateTime
+  lastModified   DateTime
+}
+
+model Invitation {
+  id             Int          @id @default(autoincrement())
+  user           User         @relation(fields: [userId], references: [id])
+  userId         Int
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  inviteeEmail   String
+  inviteeName    String?
+  organizationId Int
+  dateCreated    DateTime
+  lastModified   DateTime
+}
+
+model Tag {
+  id           Int       @id @default(autoincrement())
+  name         String
+  user         User?     @relation(fields: [userId], references: [id])
+  userId       Int?
+  channels     Channel[]
+  dateCreated  DateTime
+  lastModified DateTime
+}
