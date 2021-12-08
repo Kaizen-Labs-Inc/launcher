@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-
+	import { userStore } from '../stores/userStore';
 	import { goto } from '$app/navigation';
 	import {
 		CodeIcon,
@@ -13,6 +13,11 @@
 	import ScrollingChannelIconBackground from '../components/ScrollingChannelIconBackground.svelte';
 	let demoCtaIsHovered = false;
 	let pricingCtaIsHovered = false;
+	userStore.subscribe((value) => {
+		if (value.user) {
+			goto('/home');
+		}
+	});
 	onMount(() => {
 		window.analytics.page();
 	});

@@ -1,30 +1,29 @@
 import { SvelteKitAuth } from 'sk-auth';
-import { GoogleOAuth2Provider } from "sk-auth/providers";
+import { GoogleOAuth2Provider } from 'sk-auth/providers';
 import { config } from 'dotenv';
 import type { GoogleProfile } from '@prisma/client'
 import { prisma } from '$lib/./prismaClient';
 import addUser from '$lib/addUser';
 
-let environmentSetup = false
+let environmentSetup = false;
 
 if (!environmentSetup) {
-	console.log("Setting up environment...")
+	console.log('Setting up environment...');
 	// this sets up dotenv explicitly and is necessary to get variables
 	// not prefixed with VITE_ and expose them server-side
-	config()
-	environmentSetup = true
+	config();
+	environmentSetup = true;
 }
 
 export const appAuth = new SvelteKitAuth({
 	providers: [
 		new GoogleOAuth2Provider({
-			clientId: process.env["GOOGLE_ID"],
-			clientSecret: process.env["GOOGLE_SECRET"],
+			clientId: process.env['GOOGLE_ID'],
+			clientSecret: process.env['GOOGLE_SECRET'],
 			profile(profile) {
-				console.log("processing google profile " + JSON.stringify(profile))
-				return { ...profile, provider: "google" };
-			},
-		}),
+				return { ...profile, provider: 'google' };
+			}
+		})
 	],
 	callbacks: {
 		async jwt(token, profile) {
@@ -44,17 +43,17 @@ export const appAuth = new SvelteKitAuth({
 					...token,
 					user: {
 						...(token.user ?? {}),
-						connections: { ...(token.user?.connections ?? {}), [provider]: account },
-					},
+						connections: { ...(token.user?.connections ?? {}), [provider]: account }
+					}
 				};
 			}
 
 			return token;
 		},
 		redirect(url: string) {
-			return "/home"
+			return '/home';
 		}
 	},
-	jwtSecret: process.env["JWT_SECRET_KEY"],
-	host: process.env["BASE_URL"],
+	jwtSecret: process.env['JWT_SECRET_KEY'],
+	host: process.env['BASE_URL']
 });

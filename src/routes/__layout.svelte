@@ -3,7 +3,7 @@
 	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
 	import Toasts from '../components/Toasts.svelte';
-	import { userStore } from '../stores/userStore';
+	import { UserStatus, userStore } from '../stores/userStore';
 	import type GoogleUser from '../model/api/GoogleUser';
 	import LoadingIndicator from '../components/LoadingIndicator.svelte';
 	import { goto } from '$app/navigation';
@@ -11,13 +11,11 @@
 	import AuthenticatedNav from '../components/nav/AuthenticatedNav.svelte';
 	import PublicNav from '../components/nav/PublicNav.svelte';
 
-	let user;
+	let userStatus: UserStatus;
 
 	userStore.subscribe((value) => {
-		user = value;
+		userStatus = value;
 	});
-
-	let loading: boolean = true;
 
 	onMount(async () => {
 		const analytics = (window.analytics = window.analytics || []);
@@ -76,31 +74,34 @@
 			}
 
 		await userStore.subscribe((value) => {
-			if (!value && loading) {
-				fetch('/api/auth/session').then((res) => {
-					if (res.status === 200) {
-						res.json().then((s: any) => {
-							if (s.session?.user?.connections?.google) {
-								userStore.set(s.session.user.connections.google as GoogleUser);
-							}
-						});
-					}
-				});
+			if (value.loading) {
+				fetch('/api/auth/session')
+					.then((res) => {
+						if (res.status === 200) {
+							res.json().then((s: any) => {
+								userStore.set({
+									loading: false,
+									user: s?.session?.user?.connections?.google as GoogleUser
+								});
+							});
+						} else {
+							userStore.set({ loading: false, user: undefined });
+						}
+					})
+					.catch((e) => {
+						console.error(e.message);
+						userStore.set({ loading: false, user: undefined });
+					});
 			}
-			user = value;
-			// if (user && !user.workspaceId) { // comment out this logic for now
-			// goto('/welcome'); // user is logged-in but hasn't completed team onboarding
-			// TODO allow free users to bypass this logic
-			// }
+			userStatus = value;
 		});
-		loading = false;
 	});
 </script>
 
 <main>
 	<div class="container">
 		<Toasts />
-		{#if loading}
+		{#if userStatus.loading}
 			<!-- hardcode some styles so that there is no flash before tailwind classes are loaded -->
 			<div
 				style="height: 100vh; margin-right: auto; margin-left: auto; display: flex; align-items: center; justify-content: center"
@@ -109,7 +110,7 @@
 			</div>
 		{:else}
 			<div in:fade>
-				{#if user}
+				{#if userStatus.user}
 					<AuthenticatedNav />
 				{:else}
 					<PublicNav />

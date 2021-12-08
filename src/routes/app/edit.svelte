@@ -4,21 +4,31 @@
 	import { goto } from '$app/navigation';
 	import MockChannel, { mockChannels } from '../../model/MockChannel';
 	import { page } from '$app/stores';
+	import { userStore } from '../../stores/userStore';
+	import checkUserAndRedirect from '$lib/checkUserAndRedirect';
 	// Use channel ID to get details...
-	let channel: MockChannel = mockChannels.find((c) => c.id === $page.query.get('id'));
+
+	let channel: Channel = mockChannels.find((c) => c.id === $page.query.get('id'));
+	let user;
+	userStore.subscribe((value) => {
+		checkUserAndRedirect(value);
+		user = value.user;
+	});
+
 	onMount(() => {
 		window.analytics.page();
 	});
 </script>
 
-<h1 class="mt-16">Edit {channel.name}</h1>
-
-<ChannelForm
-	{channel}
-	on:submit={(event) => {
-		goto('/');
-	}}
-/>
+{#if user}
+	<h1 class="mt-16">Edit {channel.title}</h1>
+	<ChannelForm
+		{channel}
+		on:submit={(event) => {
+			goto('/');
+		}}
+	/>
+{/if}
 
 <style>
 	.tagsContainer :global(.svelte-tags-input) {
