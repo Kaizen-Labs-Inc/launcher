@@ -88,10 +88,6 @@
 				});
 			}
 			user = value;
-			// if (user && !user.workspaceId) { // comment out this logic for now
-			// goto('/welcome'); // user is logged-in but hasn't completed team onboarding
-			// TODO allow free users to bypass this logic
-			// }
 		});
 		loading = false;
 	});

@@ -4,9 +4,11 @@
 	import { goto } from '$app/navigation';
 	import Channel, { mockChannels } from '../../model/Channel';
 	import { page } from '$app/stores';
+	import { authorizeUser } from '$lib/authorizeUser';
 	// Use channel ID to get details...
 	let channel: Channel = mockChannels.find((c) => c.id === $page.query.get('id'));
 	onMount(() => {
+		authorizeUser();
 		window.analytics.page();
 	});
 </script>

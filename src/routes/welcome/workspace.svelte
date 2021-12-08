@@ -8,6 +8,7 @@
 	import { userStore } from '../../stores/userStore';
 	import { isEmptyOrSpaces } from '../../utils/isEmptyOrSpaces';
 	import ConfettiGenerator from 'confetti-js';
+	import { authorizeUser } from '$lib/authorizeUser';
 
 	let user: GoogleUser;
 	userStore.subscribe((value) => {
@@ -24,6 +25,7 @@
 	};
 
 	onMount(() => {
+		authorizeUser();
 		const confettiSettings = { target: 'my-canvas', respawn: false, rotate: true };
 		confetti = new ConfettiGenerator(confettiSettings);
 		confetti.render();

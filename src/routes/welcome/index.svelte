@@ -3,10 +3,12 @@
 	import { goto } from '$app/navigation';
 
 	import Button from '../../components/Button.svelte';
+	import { authorizeUser } from '$lib/authorizeUser';
 	const handleContinue = () => {
 		goto('/welcome/workspace');
 	};
 	onMount(() => {
+		authorizeUser();
 		window.analytics.page();
 	});
 </script>

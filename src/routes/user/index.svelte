@@ -2,12 +2,14 @@
 	import { onMount } from 'svelte';
 	import { logout } from '$lib/logout';
 	import { userStore } from '../../stores/userStore';
+	import { authorizeUser } from '$lib/authorizeUser';
 
 	let user;
 	userStore.subscribe((value) => {
 		user = value;
 	});
 	onMount(() => {
+		authorizeUser();
 		window.analytics.page();
 	});
 </script>

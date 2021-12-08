@@ -6,11 +6,13 @@
 	import { UserPlusIcon } from 'svelte-feather-icons';
 	import InviteForm from '../../components/InviteForm.svelte';
 	import { goto } from '$app/navigation';
+	import { authorizeUser } from '$lib/authorizeUser';
 	const handleSuccess = () => {
 		addToast({ dismissible: false, message: '👍 Invites sent', type: 'success', timeout: 2000 });
 		goto('/home');
 	};
 	onMount(() => {
+		authorizeUser();
 		window.analytics.page();
 	});
 </script>

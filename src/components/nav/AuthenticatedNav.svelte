@@ -12,7 +12,7 @@
 				: 'opacity-60'}"
 		>
 			<a href="/home" class="flex items-center"
-				><img src="favicon-32x32.png" class="w-4 h-4 mr-1" alt="Logo" />Home</a
+				><img src="favicon-32x32.png" class="w-4 h-4 mr-1" alt="Logo" />Apps</a
 			>
 		</li>
 		<li

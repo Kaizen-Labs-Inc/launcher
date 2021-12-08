@@ -1,9 +1,10 @@
 <script>
+	import { authorizeUser } from '$lib/authorizeUser';
 	import { onMount } from 'svelte';
-
 	import { UserPlusIcon } from 'svelte-feather-icons';
 	import InviteForm from '../components/InviteForm.svelte';
 	onMount(() => {
+		authorizeUser();
 		window.analytics.page();
 	});
 </script>
