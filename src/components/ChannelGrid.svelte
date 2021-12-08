@@ -86,7 +86,7 @@
 					method: 'POST',
 					credentials: 'include',
 					body: JSON.stringify(board)
-				})
+				}).then(assignBoard)
 			}
 		}
 	}
@@ -166,17 +166,18 @@
 		analytics.track('Edit mode button clicked');
 	};
 
+	async function assignBoard(res) {
+		const b = await res.json()
+		b.positions.sort((a, b) => {
+			return a.position - b.position
+		})
+		board = b
+	}
 	onMount(() => {
 		fetch("api/board", {
 			credentials: 'include'
 		})
-			.then(async res => {
-				const b = await res.json()
-				b.positions.sort((a, b) => {
-					return a.position - b.position
-				})
-				board = b
-			})
+			.then(assignBoard)
 			.catch(err => {
 				console.error(err.message)
 			})

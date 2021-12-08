@@ -121,7 +121,12 @@ export async function post(request: ServerRequest): Promise<void | EndpointOutpu
 	} else {
 		return {
 			status: 201,
-			body: created
+			body: await prisma.board.findFirst({
+				where: {
+					id: created.id
+				},
+				select: BOARD_SELECTIONS
+			})
 		}
 	}
 }
