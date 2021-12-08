@@ -41,6 +41,14 @@ CREATE USER app WITH PASSWORD 'ujOs6jXjGXar';
 GRANT ALL PRIVILEGES ON DATABASE launcher TO app;
 ```
 
+## Configuring local settings
+
+**Copy the exmaple .env file** and make any changes necessary to your local settings
+
+```zsh
+cp .env.example .env
+```
+
 ## Connecting to the production DB
 
 The following connection string will connect you to the prod heroku db:
