@@ -39,6 +39,8 @@ Create a user
 psql launcher
 CREATE USER app WITH PASSWORD 'ujOs6jXjGXar';
 GRANT ALL PRIVILEGES ON DATABASE launcher TO app;
+ALTER USER app CREATEDB;
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO my_user;
 ```
 
 ## Configuring local settings
