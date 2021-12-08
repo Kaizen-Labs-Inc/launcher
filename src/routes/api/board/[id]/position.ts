@@ -81,59 +81,60 @@ export async function put(request: ServerRequest): Promise<void | EndpointOutput
 	const removedPositions = board.positions.filter(p => {
 		return !positions.find(it => it.channel.id === p.channelId);
 	});
+	let syncdPositions;
 
-	// create new positions
-	if (newPositions.length > 0) {
-		for (const p of newPositions) {
-			try {
-				const dateCreated = new Date().toISOString();
-				await prisma.position.create({
-					data: {
-						channelId: p.channel.id,
-						boardId: board.id,
-						position: p.position,
-						dateCreated: dateCreated,
-						lastModified: dateCreated
-					}
-				})
-			} catch (e: unknown) {
-				console.error(e)
+	await prisma.$transaction(async (prisma) => {
+		// create new positions
+		if (newPositions.length > 0) {
+			for (const p of newPositions) {
+				try {
+					const dateCreated = new Date().toISOString();
+					await prisma.position.create({
+						data: {
+							channelId: p.channel.id,
+							boardId: board.id,
+							position: p.position,
+							dateCreated: dateCreated,
+							lastModified: dateCreated
+						}
+					})
+				} catch (e: unknown) {
+					console.error(e)
+				}
 			}
 		}
-	}
 
-	// update existing positions
-	if (updatedPositions.length > 0) {
-		await Promise.all(updatedPositions.map(async (p, i) => {
-			await later(i * 10) // todo delete me when off of SQLite
-			return await prisma.position.update({
-				data: {
-					position: p.position,
-					lastModified: new Date().toISOString()
-				},
+		// update existing positions
+		if (updatedPositions.length > 0) {
+			await Promise.all(updatedPositions.map(async (p, i) => {
+				return await prisma.position.update({
+					data: {
+						position: p.position,
+						lastModified: new Date().toISOString()
+					},
+					where: {
+						id: p.id
+					}
+				})
+			})).catch(e => {
+				console.error(e);
+			});
+		}
+
+		// delete extraaneous positions
+		const idsToRemove = removedPositions.map(it => it.id);
+		if (idsToRemove.length > 0) {
+			await prisma.position.deleteMany({
 				where: {
-					id: p.id
+					id: {
+						in: idsToRemove
+					}
 				}
-			})
-		})).catch(e => {
-			console.error(e);
-		});
-	}
-
-	// delete extraaneous positions
-	const idsToRemove = removedPositions.map(it => it.id);
-	if (idsToRemove.length > 0) {
-		await prisma.position.deleteMany({
-			where: {
-				id: {
-					in: idsToRemove
-				}
-			}
-		}).catch(e => {
-			console.error(e);
-		});
-	}
-	return { body: await prisma.position.findMany({
+			}).catch(e => {
+				console.error(e);
+			});
+		}
+		syncdPositions = await prisma.position.findMany({
 			where: {
 				boardId: boardId
 			},
@@ -143,11 +144,14 @@ export async function put(request: ServerRequest): Promise<void | EndpointOutput
 			include: {
 				channel: true
 			}
-		}) };
-}
+		})
+	})
 
-function later(delay) {
-	return new Promise(function(resolve) {
-		setTimeout(resolve, delay);
-	});
+	if (syncdPositions) {
+		return { body: syncdPositions};
+	} else {
+		return {
+			status: 500
+		}
+	}
 }

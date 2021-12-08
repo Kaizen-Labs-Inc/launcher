@@ -8,3 +8,4 @@ local
 *.key
 *.crt
 cockroach-data
+.env

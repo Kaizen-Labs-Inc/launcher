@@ -4,7 +4,7 @@
 
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import ChannelGrid from '../components/ChannelGrid.svelte';
+	import ChannelGrid from '../../components/ChannelGrid.svelte';
 	onMount(() => {
 		window.analytics.page();
 	});
