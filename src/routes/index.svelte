@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-
+	import { userStore } from '../stores/userStore';
 	import { goto } from '$app/navigation';
 	import {
 		CodeIcon,
@@ -13,6 +13,10 @@
 	import ScrollingChannelIconBackground from '../components/ScrollingChannelIconBackground.svelte';
 	let demoCtaIsHovered = false;
 	let pricingCtaIsHovered = false;
+	let user;
+	userStore.subscribe((value) => {
+		user = value;
+	});
 	onMount(() => {
 		window.analytics.page();
 	});
@@ -26,48 +30,64 @@
 		</h1>
 		<h2 class="text-3xl mt-12 opacity-80 z-20">Shared shortcuts to your team's daily apps.</h2>
 		<div class="flex sm:flex-row flex-col justify-center items-top mt-16 z-20">
-			<div class="flex flex-col sm:mx-4 my-4 sm:my-0">
-				<div
-					on:focus
-					on:blur
-					on:mouseover={() => {
-						demoCtaIsHovered = true;
-					}}
-					on:mouseout={() => {
-						demoCtaIsHovered = false;
-					}}
-					on:click={() => {
-						goto('/demo');
-					}}
-					class="cta mx-auto rounded-md cursor-pointer text-2xl font-medium py-3 px-6 flex items-center justify-center text-black"
-				>
-					Play with the demo
+			{#if !user}
+				<div class="flex flex-col sm:mx-4 my-4 sm:my-0">
+					<div
+						on:focus
+						on:blur
+						on:mouseover={() => {
+							demoCtaIsHovered = true;
+						}}
+						on:mouseout={() => {
+							demoCtaIsHovered = false;
+						}}
+						on:click={() => {
+							goto('/demo');
+						}}
+						class="cta mx-auto rounded-md cursor-pointer text-2xl font-medium py-3 px-6 flex items-center justify-center text-black"
+					>
+						Play with the demo
+					</div>
+					<div class="mt-3 {demoCtaIsHovered ? 'opacity-100' : 'opacity-60'}">
+						No sign-up required 🙂
+					</div>
 				</div>
-				<div class="mt-3 {demoCtaIsHovered ? 'opacity-100' : 'opacity-60'}">
-					No sign-up required 🙂
+				<div class="mx-4">
+					<div
+						on:focus
+						on:blur
+						on:mouseover={() => {
+							pricingCtaIsHovered = true;
+						}}
+						on:mouseout={() => {
+							pricingCtaIsHovered = false;
+						}}
+						on:click={() => {
+							goto('/pricing');
+						}}
+						class="bg-white bg-opacity-5 hover:bg-opacity-10 rounded-md cursor-pointer text-2xl font-medium py-3 px-6 flex items-center justify-center"
+					>
+						See pricing
+					</div>
+					<div class="mt-3 {pricingCtaIsHovered ? 'opacity-100' : 'opacity-60'}">
+						Limited-time free trial
+					</div>
 				</div>
-			</div>
-			<div class="mx-4">
-				<div
-					on:focus
-					on:blur
-					on:mouseover={() => {
-						pricingCtaIsHovered = true;
-					}}
-					on:mouseout={() => {
-						pricingCtaIsHovered = false;
-					}}
-					on:click={() => {
-						goto('/pricing');
-					}}
-					class="bg-white bg-opacity-5 hover:bg-opacity-10 rounded-md cursor-pointer text-2xl font-medium py-3 px-6 flex items-center justify-center"
-				>
-					See pricing
+			{:else}
+				<div class="flex flex-col sm:mx-4 my-4 sm:my-0">
+					<div
+						on:click={() => {
+							goto('/home');
+						}}
+						class="cta mx-auto rounded-md cursor-pointer text-2xl font-medium py-3 px-6 flex items-center justify-center text-black"
+					>
+						Launch the app
+					</div>
+					<div class="mt-3 {demoCtaIsHovered ? 'opacity-100' : 'opacity-60'}">
+						Signed in as {user.email}
+					</div>
 				</div>
-				<div class="mt-3 {pricingCtaIsHovered ? 'opacity-100' : 'opacity-60'}">
-					Limited-time free trial
-				</div>
-			</div>
+			{/if}
 		</div>
 	</div>
 
