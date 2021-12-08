@@ -7,6 +7,7 @@ userStore.subscribe((value) => {
 });
 
 export const authorizeUser = () => {
+	console.log(user); // undefined. likely hasn't loaded yet
 	if (!user) {
 		goto('/');
 	}

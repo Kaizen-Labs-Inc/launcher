@@ -230,7 +230,6 @@
 						title: query.charAt(0).toUpperCase() + query.substr(1).toLowerCase() || undefined
 					}}
 					on:submit={(event) => {
-						console.log(event);
 						handleAdd(event.detail.channel);
 					}}
 				/>
