@@ -4,6 +4,6 @@ import { userStore } from '../stores/userStore';
 
 export const logout = () => {
 	signOut();
-	userStore.set(undefined);
+	userStore.set({ loading: false, user: undefined });
 	goto('/');
 };
