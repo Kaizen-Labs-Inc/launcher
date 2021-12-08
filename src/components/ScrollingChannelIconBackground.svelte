@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { mockChannels } from '../model/Channel';
+	import { mockChannels } from '../model/MockChannel';
 	const channelRowLength = Math.floor(mockChannels.length / 3);
 	const channelsRow1 = mockChannels.slice(0, channelRowLength);
 	const channelsRow2 = mockChannels.slice(channelRowLength, channelRowLength * 2);

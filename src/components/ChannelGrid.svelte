@@ -9,15 +9,20 @@
 	import { dndzone } from 'svelte-dnd-action';
 	import AddChannelPopover from '../components/AddChannelPopover.svelte';
 	import ChannelSearchDropdown from '../components/ChannelSearchDropdown.svelte';
-	import Channel, { mockChannels } from '../model/Channel';
+	import Channel from '../model/Channel';
 	import tippy, { Instance } from 'tippy.js';
 	import 'tippy.js/dist/tippy.css';
 	import 'tippy.js/themes/translucent.css';
 	import { SearchIcon, Edit2Icon, XIcon } from 'svelte-feather-icons';
 	import { goto } from '$app/navigation';
 	import { addToast } from '../stores/toaststore';
+	import Board from '../model/Board';
+	import { BoardType } from '../model/api/BoardType';
 	import { isMobileDevice } from '../utils/DetectDevice';
 	import { trimUrl } from '../utils/TrimUrl';
+	import filterChannelsByQuery from '../lib/filterChannelsByQuery';
+
+	export let isDemo = false;
 
 	let tippyInstance: Instance;
 	let query: string = '';
@@ -25,7 +30,8 @@
 	let addFormIsFocused: boolean = false;
 	let selectedChannelIndex: number;
 	let isMobile: boolean = false;
-	let channels: Channel[] = mockChannels.splice(0, 12); // TODO update this
+	let board: Board;
+	let channelsToSearch: Channel[];
 	const flipDurationMs: number = 200;
 	let isConsidering: boolean = false;
 	let editModeEnabled: boolean = false;
@@ -37,17 +43,15 @@
 	const jiggleAnimDurationMin: number = 0.22;
 	const jiggleAnimDurationMax: number = 0.3;
 
-	$: filteredChannels = channels.filter(
-		// TODO also filter by description, tags, and URL
-		(channel) => channel.title.toLowerCase().indexOf(query.toLowerCase()) !== -1
-	);
+	$: filteredChannels = (channelsToSearch || []).filter(channel => filterChannelsByQuery(channel, query.toLowerCase()))
+
 	const handleDndConsider = (e) => {
 		if (!editModeEnabled) {
 			editModeInitializedByDrag = true;
 		}
 		isConsidering = true;
 		editModeEnabled = true;
-		channels = e.detail.items;
+		board.positions = e.detail.items;
 		selectedChannelIndex = null;
 	};
 	const handleDndFinalize = (e) => {
@@ -56,8 +60,36 @@
 		}
 		isConsidering = false;
 		editModeInitializedByDrag = false;
-		channels = e.detail.items;
+		board.positions = e.detail.items
+		orderAndSyncBoardPositions();
 	};
+
+
+	function orderAndSyncBoardPositions() {
+		// ensure positions are numerically correct
+		// 5up3rH4ck (TM) assign an id if none so that DND can handle it
+		let maxId = Math.max(...board.positions.map(it => it.id || 0))
+		board.positions = board.positions.map((p, i) => Object.assign(
+			{ id: ++maxId },
+			p,
+			{ position: i }
+		));
+		if (!isDemo) {
+			if (board.boardType === BoardType.USER.valueOf()) {
+				return fetch(`/api/board/${board.id}/position`, {
+					method: 'PUT',
+					credentials: 'include',
+					body: JSON.stringify(board.positions)
+				})
+			} else {
+				return fetch('/api/board', {
+					method: 'POST',
+					credentials: 'include',
+					body: JSON.stringify(board)
+				}).then(assignBoard)
+			}
+		}
+	}
 
 	const handleProceed = (channel: Channel) => {
 		selectedChannelIndex = null;
@@ -70,6 +102,12 @@
 	const handleEdit = (channel: Channel) => {
 		goto(`/app/edit?id=${channel.id}`);
 	};
+
+	const handleRemove = (channel: Channel) => {
+		// TODO allow undo
+		board.positions = board.positions.filter((p) => p.channel.id !== channel.id);
+		orderAndSyncBoardPositions()
+	}
 
 	const handleBlur = () => {
 		let searchInput = document.getElementById('searchInput');
@@ -90,9 +128,24 @@
 		selectedChannelIndex = 0;
 	};
 
-	const handleChannelAdded = (channel) => {
-		channels.unshift(channel);
-		channels = channels;
+	async function handleChannelAdded(channel) {
+		let newPosition = { position: 0, channel: channel }
+		if (!isDemo) {
+			if (!channel.id) {
+				await fetch('/api/channel', {
+					method: 'POST',
+					credentials: 'include',
+					body: JSON.stringify(channel)
+				}).then(async res => {
+					// 409 means a channel with this URL already exists; add it instead
+					if (res.status === 201 || res.status === 409) {
+						newPosition = { position: 0, channel: await res.json() }
+					}
+				})
+			}
+		}
+		board.positions.unshift(newPosition);
+		await orderAndSyncBoardPositions();
 		addToast({ dismissible: false, message: 'Added', type: 'success', timeout: 3000 });
 		analytics.track('Channel added', {
 			channel: channel
@@ -113,7 +166,27 @@
 		analytics.track('Edit mode button clicked');
 	};
 
+	async function assignBoard(res) {
+		const b = await res.json()
+		b.positions.sort((a, b) => {
+			return a.position - b.position
+		})
+		board = b
+	}
 	onMount(() => {
+		fetch("api/board", {
+			credentials: 'include'
+		})
+			.then(assignBoard)
+			.catch(err => {
+				console.error(err.message)
+			})
+		fetch('/api/channel', {
+			credentials: 'include'
+		})
+			.then(async res => {
+				channelsToSearch = await res.json()
+			})
 		tippyInstance = tippy(document.getElementById('editToggle'), {
 			content: 'Edit launcher',
 			arrow: false,
@@ -242,7 +315,8 @@
 					</div>
 
 					<AddChannelPopover
-						{channels}
+						channels={channelsToSearch || []}
+						board={board}
 						bind:popOverIsFocused={addFormIsFocused}
 						bind:editModeEnabled
 						on:channelAdded={(e) => {
@@ -260,7 +334,7 @@
 			? '-translate-y-10'
 			: ''}"
 		use:dndzone={{
-			items: channels,
+			items: board?.positions || [],
 			flipDurationMs,
 			dragDisabled: addFormIsFocused || (isMobile && !editModeEnabled),
 			morphDisabled: true,
@@ -274,7 +348,7 @@
 		on:consider={handleDndConsider}
 		on:finalize={handleDndFinalize}
 	>
-		{#each channels as channel, i (channel.id)}
+		{#each (board?.positions || []) as position, i (position.id)}
 			<div
 				animate:flip={{ duration: flipDurationMs }}
 				on:focus
@@ -291,7 +365,7 @@
 				}}
 				on:click={() => {
 					if (!editModeEnabled && !addFormIsFocused) {
-						handleProceed(channel);
+						handleProceed(position.channel);
 					}
 				}}
 				class="channel flex items-center justify-center flex-col text-center transition duration-200 ease-in-out {addFormIsFocused
@@ -310,27 +384,27 @@
 						: ''}
 					class="text-6xl mb-4 icon flex items-center justify-center"
 				>
-					{#if channel.iconImageUrl}
+					{#if position.channel.image}
 						<img
-							alt={channel.title}
+							alt={position.channel.name}
 							style="z-index: 0;"
 							class="transition w-16 h-16 duration-300 ease-in-out"
-							src={channel.iconImageUrlDark ? channel.iconImageUrlDark : channel.iconImageUrl}
+							src={position.channel.image}
 						/>
-					{:else if channel.emoji}
+					{:else if position.channel.emoji}
 						<div class=" transition w-16 h-16 duration-300 ease-in-out">
-							{channel.emoji}
+							{position.channel.emoji}
 						</div>
 					{:else}
 						<div class="text-black font-light transition w-16 h-16 duration-300 ease-in-out">
-							{channel.title.charAt(0)}
+							{position.channel.name.charAt(0)}
 						</div>
 					{/if}
 				</div>
 				<div>
-					<div class="text-2xl">{channel.title}</div>
+					<div class="text-2xl">{position.channel.name}</div>
 					<div class="text-md opacity-30">
-						{trimUrl('https://' + channel.url)}
+						{trimUrl('https://' + position.channel.url)}
 					</div>
 				</div>
 				{#if editModeEnabled && !editModeInitializedByDrag}
@@ -341,7 +415,7 @@
 					>
 						<div
 							on:click={() => {
-								handleEdit(channel);
+								handleEdit(position.channel);
 							}}
 							class="cursor-pointer mx-2 rounded bg-white bg-opacity-5 p-2 hover:bg-opacity-10"
 						>
@@ -349,8 +423,7 @@
 						</div>
 						<div
 							on:click={() => {
-								// TODO allow undo
-								channels = channels.filter((c) => c.id !== channel.id);
+								handleRemove(position.channel)
 								analytics.track('Delete channel button clicked', {
 									channel: channel
 								});
