@@ -22,14 +22,12 @@
 
 	export const handleSubmit = (channel: Channel) => {
 		channel.emoji = emoji;
-		console.log(channel)
 		dispatch('submit', {
 			channel: channel
 		});
 	};
 
 	const handleTags = (event: any) => {
-		console.log(event.detail.tags)
 		channel.tags = event.detail.tags;
 	};
 
