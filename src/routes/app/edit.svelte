@@ -2,17 +2,19 @@
 	import { onMount } from 'svelte';
 	import ChannelForm from '../../components/ChannelForm.svelte';
 	import { goto } from '$app/navigation';
-	import Channel, { mockChannels } from '../../model/Channel';
+	import MockChannel, { mockChannels } from '../../model/MockChannel';
 	import { page } from '$app/stores';
 	import { userStore } from '$app/stores/userStore';
 	import checkUserAndRedirect from '$lib/checkUserAndRedirect';
 	// Use channel ID to get details...
+
 	let channel: Channel = mockChannels.find((c) => c.id === $page.query.get('id'));
 	let user;
 	userStore.subscribe((value) => {
 		checkUserAndRedirect(value);
 		user = value.user;
 	});
+
 	onMount(() => {
 		window.analytics.page();
 	});
@@ -20,7 +22,6 @@
 
 {#if user}
 	<h1 class="mt-16">Edit {channel.title}</h1>
-
 	<ChannelForm
 		{channel}
 		on:submit={(event) => {

@@ -45,7 +45,7 @@
 			</div>
 		</div>
 	{:else}
-		{#each filteredChannels.sort((a, b) => a.title.localeCompare(b.title)) as channel, i}
+		{#each filteredChannels.sort((a, b) => a.name.localeCompare(b.name)) as channel, i}
 			<div
 				on:mousedown|preventDefault={() => {
 					onSelect(channel);
@@ -66,11 +66,11 @@
 					<div
 						class="icon sm:rounded-2xl rounded-lg flex-shrink-0 w-10 h-10 sm:w-14 sm:h-14 flex items-center justify-center mr-2 sm:mr-4"
 					>
-						{#if channel.iconImageUrl}
+						{#if channel.image}
 							<img
 								class="sm:w-8 sm:h-8 w-5 h-5"
-								src={channel.iconImageUrlDark ? channel.iconImageUrlDark : channel.iconImageUrl}
-								alt={channel.title}
+								src={channel.image}
+								alt={channel.name}
 							/>
 						{:else if channel.emoji}
 							<div class="text-lg sm:text-2xl">
@@ -78,12 +78,12 @@
 							</div>
 						{:else}
 							<div class="text-black text-lg sm:text-2xl">
-								{channel.title.charAt(0)}
+								{channel.name.charAt(0)}
 							</div>
 						{/if}
 					</div>
 					<div class="sm:text-2xl ">
-						{channel.title}
+						{channel.name}
 						<div class="block text-sm {selectedChannelIndex === i ? 'opacity-50' : 'opacity-25'}">
 							{channel.url}
 						</div>
@@ -106,7 +106,7 @@
 							<div
 								class="flex justify-center items-center h-8 m-1 p-2 text-xs sm:text-sm font-medium  rounded bg-white bg-opacity-5"
 							>
-								#{tag}
+								#{tag.name}
 							</div>
 						{/each}
 					</div>
