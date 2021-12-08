@@ -1,7 +1,10 @@
 <script context="module" lang="ts">
+	export const prerender = true;
+</script>
+
+<script lang="ts">
 	import { onMount } from 'svelte';
 	import ChannelGrid from '../../components/ChannelGrid.svelte';
-	export const prerender = true;
 	onMount(() => {
 		window.analytics.page();
 	});
