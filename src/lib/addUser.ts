@@ -1,4 +1,5 @@
 import type { User, PrismaClient } from '@prisma/client'
+import camelcaseKeys from 'camelcase-keys';
 
 export default function addUser(profile: any, prisma: PrismaClient): Promise<User> {
 	console.log("Adding user " + profile.email)
@@ -9,7 +10,7 @@ export default function addUser(profile: any, prisma: PrismaClient): Promise<Use
 			dateCreated: dateCreated,
 			lastModified: dateCreated,
 			googleProfile: {
-				create: Object.assign({}, profile, { dateCreated: dateCreated, lastModified: dateCreated, provider: 'google' })
+				create: camelcaseKeys(Object.assign({}, profile, { dateCreated: dateCreated, lastModified: dateCreated, provider: 'google' }))
 			}
 		},
 		include: {
