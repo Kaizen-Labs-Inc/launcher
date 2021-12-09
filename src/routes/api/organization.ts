@@ -1,44 +1,71 @@
 import type { ServerRequest } from '@sveltejs/kit/types/hooks';
 import type { EndpointOutput } from '@sveltejs/kit/types/endpoint';
 import { prisma } from '$lib/prismaClient';
-import { ChannelType } from '../../model/ChannelType';
+import type { Organization } from '@prisma/client';
 import validateUser from '$lib/validateUser';
-import stripPrefix from '$lib/stripPrefix';
-
-
-export const CHANNEL_SELECTIONS = {
-	tags: true
-}
+import { RoleType } from '../../model/RoleType';
 
 export async function post(request: ServerRequest): Promise<void | EndpointOutput> {
 
-	const user = await validateUser(request, prisma)
+	const user = await validateUser(request, prisma);
 
 	if (!user) {
 		return {
 			status: 401
-		}
+		};
 	}
 
 	if (!request.body) {
 		return {
 			status: 400
-		}
+		};
 	}
 	let organization: Organization;
+
 	try {
-		organization = JSON.parse(request.body.toString())
-		console.log(organization)
+		const dateCreated = new Date().toISOString();
+		const body = JSON.parse(request.body.toString());
+		const emailDomains = body.emailDomains;
+		const domainRestricted = !!emailDomains?.length;
+		organization = await prisma.organization.create({
+			data: Object.assign(body, {
+				dateCreated: dateCreated,
+				lastModified: dateCreated,
+				domainRestricted: domainRestricted,
+				emailDomains: {
+					create: emailDomains.map(it => Object.assign(it, { dateCreated: dateCreated, lastModified: dateCreated }))
+				},
+				members: {
+					create: [{
+						user: { connect: { id: user.id } },
+						roleType: RoleType.OWNER.valueOf(),
+						dateCreated: dateCreated,
+						lastModified: dateCreated
+					}]
+				},
+				subscription: {
+					connect: {
+						id: 1
+					}
+				}
+			})
+		});
 	} catch (e: unknown) {
-		console.error(e)
+		console.error(e);
 		return {
 			status: 400
-		}
+		};
 	}
 
-	return {
-		status: 201,
-		body: organization || {}
+	if (organization) {
+		return {
+			status: 201,
+			body: organization || {}
+		};
+	} else {
+		return {
+			status: 500
+		};
 	}
 }
 

@@ -12,7 +12,7 @@ generator client {
 model Organization {
   id               Int           @id @default(autoincrement())
   name             String
-  slug             String
+  slug             String        @unique
   subscription     Subscription  @relation(fields: [subscriptionId], references: [id])
   subscriptionId   Int           @map("subscription_id")
   domainRestricted Boolean       @map("domain_restricted")
@@ -22,7 +22,6 @@ model Organization {
   dateCreated      DateTime      @map("date_created")
   lastModified     DateTime      @map("last_modified")
   members          Role[]
-  User             User[]
 
   @@map("organization")
 }
@@ -75,8 +74,6 @@ model User {
   dateCreated     DateTime      @map("date_created")
   lastModified    DateTime      @map("last_modified")
 
-  Organization   Organization? @relation(fields: [organizationId], references: [id])
-  organizationId Int?
   @@map("_user")
 }
 

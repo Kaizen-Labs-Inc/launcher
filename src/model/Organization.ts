@@ -1,4 +1,5 @@
 import type EmailDomain from './EmailDomain';
+import type Invitation from './Invitation';
 
 export default interface Organization {
 	id: number;

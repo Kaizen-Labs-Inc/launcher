@@ -52,7 +52,6 @@ CREATE TABLE "_user" (
     "role_id" INTEGER,
     "date_created" TIMESTAMP(3) NOT NULL,
     "last_modified" TIMESTAMP(3) NOT NULL,
-    "organizationId" INTEGER,
 
     CONSTRAINT "_user_pkey" PRIMARY KEY ("id")
 );
@@ -148,6 +147,9 @@ CREATE TABLE "_ChannelToTag" (
 );
 
 -- CreateIndex
+CREATE UNIQUE INDEX "organization_slug_key" ON "organization"("slug");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "role_user_id_key" ON "role"("user_id");
 
 -- CreateIndex
@@ -185,9 +187,6 @@ ALTER TABLE "email_domain" ADD CONSTRAINT "email_domain_organization_id_fkey" FO
 
 -- AddForeignKey
 ALTER TABLE "_user" ADD CONSTRAINT "_user_google_profile_id_fkey" FOREIGN KEY ("google_profile_id") REFERENCES "google_profile"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "_user" ADD CONSTRAINT "_user_organizationId_fkey" FOREIGN KEY ("organizationId") REFERENCES "organization"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "board" ADD CONSTRAINT "board_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "_user"("id") ON DELETE SET NULL ON UPDATE CASCADE;

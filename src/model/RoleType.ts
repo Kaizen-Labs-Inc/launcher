@@ -1,4 +1,4 @@
-export enum ChannelType {
+export enum RoleType {
 	USER = 0,
 	ADMIN,
 	OWNER

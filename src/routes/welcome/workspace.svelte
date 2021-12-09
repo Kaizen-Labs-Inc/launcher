@@ -16,11 +16,20 @@
 	});
 
 	let confetti;
-	let workspaceName: string = '';
+	let workspaceName = '';
+	$: slug = workspaceName.trim().replace(/\s+/g, '-').toLowerCase()
 	let workspaceDomain: string = user.email.split('@').pop();
 
 	const handleContinue = () => {
-
+		fetch('/api/organization', {
+			method: 'POST',
+			body: JSON.stringify({
+				name: workspaceName,
+				emailDomains: [{domain: workspaceDomain}],
+				slug: slug
+			})
+		}).then(res => res.json())
+		.then(console.log)
 		// TODO handle workspace name validation server-side
 		confetti.clear();
 		goto('/welcome/invite');
@@ -83,7 +92,7 @@
 		{#if workspaceName}
 			<div in:fade class="mt-2 text-base">
 				Your own Launcher URL:<span class="opacity-50 ml-2">
-					{workspaceName.replace(/\s+/g, '-').toLowerCase()}.launcher.team</span
+					{slug}.launcher.team</span
 				>
 			</div>
 		{/if}
