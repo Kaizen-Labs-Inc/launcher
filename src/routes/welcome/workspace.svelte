@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
-	import { addToast } from '../../stores/toaststore';
 	import { fade } from 'svelte/transition';
 	import Button from '../../components/Button.svelte';
 	import { userStore } from '../../stores/userStore';

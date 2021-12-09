@@ -5,6 +5,38 @@ import type { Organization } from '@prisma/client';
 import validateUser from '$lib/validateUser';
 import { RoleType } from '../../model/RoleType';
 
+
+export async function get(request: ServerRequest): Promise<void | EndpointOutput> {
+
+	const user = await validateUser(request, prisma);
+
+	if (!user) {
+		return {
+			status: 401
+		};
+	}
+
+	const role = await prisma.role.findFirst({
+		where: {
+			userId: user.id
+		},
+		include: {
+			organization: true
+		}
+	})
+
+	console.log(role)
+	if (role) {
+		return {
+			body: role.organization
+		};
+	} else {
+		return {
+			status: 404
+		};
+	}
+}
+
 export async function post(request: ServerRequest): Promise<void | EndpointOutput> {
 
 	const user = await validateUser(request, prisma);
@@ -60,7 +92,7 @@ export async function post(request: ServerRequest): Promise<void | EndpointOutpu
 	if (organization) {
 		return {
 			status: 201,
-			body: organization || {}
+			body: organization
 		};
 	} else {
 		return {

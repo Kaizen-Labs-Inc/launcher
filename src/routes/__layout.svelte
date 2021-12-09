@@ -6,15 +6,20 @@
 	import { UserStatus, userStore } from '../stores/userStore';
 	import type GoogleUser from '../model/api/GoogleUser';
 	import LoadingIndicator from '../components/LoadingIndicator.svelte';
-	import { goto } from '$app/navigation';
 	import { variables } from '$lib/env';
 	import AuthenticatedNav from '../components/nav/AuthenticatedNav.svelte';
 	import PublicNav from '../components/nav/PublicNav.svelte';
+	import { OrganizationStatus, organizationStore } from '../stores/organizationStore';
 
 	let userStatus: UserStatus;
 
 	userStore.subscribe((value) => {
 		userStatus = value;
+	});
+	let organizationStatus: OrganizationStatus;
+
+	organizationStore.subscribe((value) => {
+		organizationStatus = value;
 	});
 
 	onMount(async () => {
@@ -73,7 +78,7 @@
 				analytics.load(variables.segmentKey);
 			}
 
-		await userStore.subscribe((value) => {
+		userStore.subscribe((value) => {
 			if (value.loading) {
 				fetch('/api/auth/session')
 					.then((res) => {
@@ -93,7 +98,28 @@
 						userStore.set({ loading: false, user: undefined });
 					});
 			}
-			userStatus = value;
+		});
+
+		organizationStore.subscribe((value) => {
+			if (value.loading) {
+				fetch('/api/organization')
+					.then((res) => {
+						if (res.status === 200) {
+							res.json().then((org: any) => {
+								organizationStore.set({
+									loading: false,
+									organization: org
+								});
+							});
+						} else {
+							organizationStore.set({ loading: false, organization: undefined });
+						}
+					})
+					.catch((e) => {
+						console.error(e.message);
+						organizationStore.set({ loading: false, organization: undefined });
+					});
+			}
 		});
 	});
 </script>
@@ -101,7 +127,7 @@
 <main>
 	<div class="container">
 		<Toasts />
-		{#if userStatus.loading}
+		{#if userStatus.loading || organizationStatus.loading}
 			<!-- hardcode some styles so that there is no flash before tailwind classes are loaded -->
 			<div
 				style="height: 100vh; margin-right: auto; margin-left: auto; display: flex; align-items: center; justify-content: center"
@@ -111,7 +137,7 @@
 		{:else}
 			<div in:fade>
 				{#if userStatus.user}
-					<AuthenticatedNav />
+					<AuthenticatedNav user={userStatus.user} organization={organizationStatus.organization} />
 				{:else}
 					<PublicNav />
 				{/if}
