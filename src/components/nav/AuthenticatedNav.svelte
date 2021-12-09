@@ -2,6 +2,11 @@
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import { logout } from '$lib/logout';
+	import { GoogleProfile } from 'sk-auth/providers';
+	import Organization from '../../model/Organization';
+
+	export let user: GoogleProfile;
+	export let organization: Organization;
 </script>
 
 <nav class="mt-4">
@@ -25,13 +30,15 @@
 		>
 			Invite your team
 		</li>
-		<li
-			class="cursor-pointer mr-6 hover:opacity-100 {$page.path === '/team'
-				? 'opacity-100'
-				: 'opacity-60'}"
-		>
-			Kaizen Labs
-		</li>
+		{#if organization}
+			<li
+				class="cursor-pointer mr-6 hover:opacity-100 {$page.path === '/workspace'
+					? 'opacity-100'
+					: 'opacity-60'}"
+			>
+				{organization.name}
+			</li>
+		{/if}
 		<li
 			class="cursor-pointer mr-6 hover:opacity-100 {$page.path === '/user'
 				? 'opacity-100'

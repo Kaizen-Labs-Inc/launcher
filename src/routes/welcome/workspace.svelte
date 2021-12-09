@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
-	import { addToast } from '../../stores/toaststore';
 	import { fade } from 'svelte/transition';
 	import Button from '../../components/Button.svelte';
 	import { userStore } from '../../stores/userStore';
@@ -16,13 +15,30 @@
 	});
 
 	let confetti;
-	let workspaceName: string = '';
+	let submitting = false;
+	let workspaceName = '';
+	$: slug = workspaceName.trim().replace(/\s+/g, '-').toLowerCase()
 	let workspaceDomain: string = user.email.split('@').pop();
 
 	const handleContinue = () => {
-		// TODO handle workspace name validation server-side
-		confetti.clear();
-		goto('/welcome/invite');
+		submitting = true;
+		fetch('/api/organization', {
+			method: 'POST',
+			body: JSON.stringify({
+				name: workspaceName,
+				emailDomains: [{domain: workspaceDomain}],
+				slug: slug
+			})
+		}).then(res => {
+			if (res.status === 201) {
+				confetti.clear();
+				goto('/welcome/invite');
+			} else {
+				// todo: error messaging
+				alert("Error creating workspace")
+				submitting = false;
+			}
+		})
 	};
 
 	onMount(() => {
@@ -74,16 +90,19 @@
 				</div>
 				<Button
 					label="Continue"
-					disabled={isEmptyOrSpaces(workspaceName)}
+					disabled={isEmptyOrSpaces(workspaceName) || submitting}
 					on:clicked={handleContinue}
 				/>
 			{/if}
 		</form>
 		{#if workspaceName}
 			<div in:fade class="mt-2 text-base">
-				Your own Launcher URL:<span class="opacity-50 ml-2">
-					{workspaceName.replace(/\s+/g, '-').toLowerCase()}.launcher.team</span
-				>
+				{#if submitting}
+					Creating your workspace...
+				{:else}
+					Your own Launcher URL:<span class="opacity-50 ml-2">
+						{slug}.launcher.team</span>
+				{/if}
 			</div>
 		{/if}
 	</div>

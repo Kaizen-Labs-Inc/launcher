@@ -18,7 +18,10 @@ brew install node
 ```
 **Install node packages.** From the project root:
 
-`npm install`
+```
+npm install
+npx prisma generate
+```
 
 ### Setting up a local PostgreSQL database
 
@@ -43,6 +46,11 @@ ALTER USER app CREATEDB;
 GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO my_user;
 ```
 
+Apply any migrations:
+```zsh
+npx prisma migrate reset
+```
+
 ## Configuring local settings
 
 **Copy the exmaple .env file** and make any changes necessary to your local settings
@@ -50,6 +58,51 @@ GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO my_user;
 ```zsh
 cp .env.example .env
 ```
+
+
+# Development
+
+Commands for development workflow
+
+## Running the app
+
+`npm run dev -- --open`
+
+## Making schema changes
+
+Make changes to `prisma/schema.prisma` and run:
+```
+npx prisma format
+npx prisma generate
+npx prisma migrate dev --name <MIGRATION_NAME>
+```
+
+## Applying migrations
+
+To apply migrations locally e.g. from another branch that has been merged:
+
+```zsh
+npx prisma migrate reset
+```
+
+This will delete all data in your local database
+
+## Building
+
+Before creating a production version of your app, install an [adapter](https://kit.svelte.dev/docs#adapters) for your target environment. Then:
+
+```bash
+npm run build
+```
+
+> You can preview the built app with `npm run preview`, regardless of whether you installed an adapter. This should _not_ be used to serve your app in production.
+
+## Toasts
+
+This app uses toasts to notify users of outcomes and updates. Simple import `addToast` from our own custom store, then call that method like so:
+`addToast({ dismissible: false, message: 'Added', type: 'success', timeout: 3000 });`
+
+The types of toasts are `'success'`, `'info`, and `'error'`.
 
 ## Connecting to the production DB
 
@@ -106,40 +159,3 @@ psql -U app -p 26257 -h localhost launcher
 ```
 
 Enter the password `ujOs6jXjGXar` when prompted.
-
-## Manually running a migration
-
-To manually run a migration (replacing `<MIGRATION_DIR>` with the directory containing the migration):
-```zsh
-psql -U app -p 26257 -h localhost launcher < prisma/migrations/<MIGRATION_DIR>/migration.sql
-```
-
-## Running the app
-
-`npm run dev -- --open`
-
-## Making schema changes
-
-Make changes to `prisma/schema.prisma` and run:
-```
-npx prisma format
-npx prisma generate
-npx prisma migrate dev --name <MIGRATION_NAME>
-```
-
-## Building
-
-Before creating a production version of your app, install an [adapter](https://kit.svelte.dev/docs#adapters) for your target environment. Then:
-
-```bash
-npm run build
-```
-
-> You can preview the built app with `npm run preview`, regardless of whether you installed an adapter. This should _not_ be used to serve your app in production.
-
-## Toasts
-
-This app uses toasts to notify users of outcomes and updates. Simple import `addToast` from our own custom store, then call that method like so:
-`addToast({ dismissible: false, message: 'Added', type: 'success', timeout: 3000 });`
-
-The types of toasts are `'success'`, `'info`, and `'error'`.
