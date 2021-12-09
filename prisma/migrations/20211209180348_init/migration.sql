@@ -2,6 +2,8 @@
 CREATE TABLE "organization" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
+    "slug" TEXT NOT NULL,
+    "subscription_id" INTEGER NOT NULL,
     "domain_restricted" BOOLEAN NOT NULL,
     "date_created" TIMESTAMP(3) NOT NULL,
     "last_modified" TIMESTAMP(3) NOT NULL,
@@ -10,9 +12,32 @@ CREATE TABLE "organization" (
 );
 
 -- CreateTable
-CREATE TABLE "email_domain" (
+CREATE TABLE "role" (
+    "id" SERIAL NOT NULL,
+    "user_id" INTEGER NOT NULL,
+    "organization_id" INTEGER NOT NULL,
+    "role_type" INTEGER NOT NULL,
+    "date_created" TIMESTAMP(3) NOT NULL,
+    "last_modified" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "role_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "subscription" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
+    "annual_price" DOUBLE PRECISION NOT NULL,
+    "date_created" TIMESTAMP(3) NOT NULL,
+    "last_modified" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "subscription_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "email_domain" (
+    "id" SERIAL NOT NULL,
+    "domain" TEXT NOT NULL,
     "organization_id" INTEGER NOT NULL,
     "date_created" TIMESTAMP(3) NOT NULL,
     "last_modified" TIMESTAMP(3) NOT NULL,
@@ -24,9 +49,10 @@ CREATE TABLE "email_domain" (
 CREATE TABLE "_user" (
     "id" SERIAL NOT NULL,
     "google_profile_id" INTEGER NOT NULL,
-    "organization_id" INTEGER,
+    "role_id" INTEGER,
     "date_created" TIMESTAMP(3) NOT NULL,
     "last_modified" TIMESTAMP(3) NOT NULL,
+    "organizationId" INTEGER,
 
     CONSTRAINT "_user_pkey" PRIMARY KEY ("id")
 );
@@ -122,7 +148,10 @@ CREATE TABLE "_ChannelToTag" (
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "email_domain_name_key" ON "email_domain"("name");
+CREATE UNIQUE INDEX "role_user_id_key" ON "role"("user_id");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "email_domain_domain_key" ON "email_domain"("domain");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "_user_google_profile_id_key" ON "_user"("google_profile_id");
@@ -143,13 +172,22 @@ CREATE UNIQUE INDEX "_ChannelToTag_AB_unique" ON "_ChannelToTag"("A", "B");
 CREATE INDEX "_ChannelToTag_B_index" ON "_ChannelToTag"("B");
 
 -- AddForeignKey
+ALTER TABLE "organization" ADD CONSTRAINT "organization_subscription_id_fkey" FOREIGN KEY ("subscription_id") REFERENCES "subscription"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "role" ADD CONSTRAINT "role_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "_user"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "role" ADD CONSTRAINT "role_organization_id_fkey" FOREIGN KEY ("organization_id") REFERENCES "organization"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "email_domain" ADD CONSTRAINT "email_domain_organization_id_fkey" FOREIGN KEY ("organization_id") REFERENCES "organization"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "_user" ADD CONSTRAINT "_user_google_profile_id_fkey" FOREIGN KEY ("google_profile_id") REFERENCES "google_profile"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "_user" ADD CONSTRAINT "_user_organization_id_fkey" FOREIGN KEY ("organization_id") REFERENCES "organization"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "_user" ADD CONSTRAINT "_user_organizationId_fkey" FOREIGN KEY ("organizationId") REFERENCES "organization"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "board" ADD CONSTRAINT "board_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "_user"("id") ON DELETE SET NULL ON UPDATE CASCADE;

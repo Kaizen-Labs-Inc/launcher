@@ -20,6 +20,7 @@
 	let workspaceDomain: string = user.email.split('@').pop();
 
 	const handleContinue = () => {
+
 		// TODO handle workspace name validation server-side
 		confetti.clear();
 		goto('/welcome/invite');
