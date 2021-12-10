@@ -61,7 +61,7 @@ export async function post(request: ServerRequest): Promise<void | EndpointOutpu
 		const dateCreated = new Date().toISOString();
 		const body = JSON.parse(request.body.toString());
 		const emailDomains = body.emailDomains;
-		const domainRestricted = !!emailDomains?.length;
+		const domainRestricted = body.domainRestricted && !!emailDomains?.length;
 		organization = await prisma.organization.create({
 			data: Object.assign(body, {
 				dateCreated: dateCreated,

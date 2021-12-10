@@ -5,8 +5,8 @@ import { prisma } from '$lib/prismaClient';
 
 const BAD_REQUEST = { status: 400 }
 const NOT_FOUND = { status: 404 }
-const slugChars = 'bcdefghjklmnopqrstvwxyz1234567890'
-const sourceArray = [1,2,3,4,5,6,7,8,9,0,1,2]
+const slugChars = 'bcdefghjklmnopqrstvwxyz1234567890';
+const sourceArray = [1,2,3,4,5,6,7,8,9,10,11,12];
 
 export async function post(request: ServerRequest): Promise<void | EndpointOutput> {
 
@@ -63,10 +63,11 @@ export async function post(request: ServerRequest): Promise<void | EndpointOutpu
 		return NOT_FOUND;
 	}
 
+	// todo validate invitation email addresses
+
 	const created = [];
 
 	await prisma.$transaction(async (prisma) => {
-		// create new positions
 		if (invitations.length > 0) {
 			for (const i of invitations) {
 				try {
@@ -98,7 +99,8 @@ export async function post(request: ServerRequest): Promise<void | EndpointOutpu
 		}
 	})
 
-	if (created) {
+	if (created.length) {
+		// todo: send postmark invitations
 		return {
 			status: 201,
 			body: created

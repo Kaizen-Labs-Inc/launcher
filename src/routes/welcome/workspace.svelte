@@ -18,6 +18,7 @@
 	let confetti;
 	let submitting = false;
 	let workspaceName = '';
+	let domainRestricted = true;
 	$: slug = workspaceName.trim().replace(/\s+/g, '-').toLowerCase()
 	let workspaceDomain: string = user.email.split('@').pop();
 
@@ -27,6 +28,7 @@
 			method: 'POST',
 			body: JSON.stringify({
 				name: workspaceName,
+				domainRestricted: domainRestricted,
 				emailDomains: [{domain: workspaceDomain}],
 				slug: slug
 			})
@@ -87,7 +89,7 @@
 				</div>
 				<div class="flex flex-row items-center my-4 w-full">
 					<label>
-						<input type="checkbox" checked />
+						<input bind:checked={domainRestricted} type="checkbox" />
 						Restrict sign-ups to those with a <span class="font-bold">{workspaceDomain}</span> email
 						address
 					</label>
