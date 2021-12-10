@@ -31,17 +31,18 @@
 		}
 	}
 
-	$: filteredChannels = channels
-		.filter(channel => filterChannelsByQuery(channel, query.toLowerCase()))
+	$: filteredChannels = channels.filter((channel) =>
+		filterChannelsByQuery(channel, query.toLowerCase())
+	);
 
-	$: boardChannelIds = (board?.positions?.map((p) => p.channel.id) || [])
+	$: boardChannelIds = board?.positions?.map((p) => p.channel.id) || [];
 
 	export let popOverIsFocused: boolean = false;
 	let stepOneComplete: boolean = false;
 
 	const togglePopover = () => {
 		popOverIsFocused = !popOverIsFocused;
-		analytics.track('Add channel button clicked');
+		analytics.track('Toggle new channel button clicked');
 	};
 
 	const resetPopover = () => {
@@ -119,7 +120,7 @@
 			resetPopover();
 		}
 	}}
-	id="addTarget"
+	id={popOverIsFocused ? 'closeTarget' : 'addTarget'}
 	class="transition duration-200 ease-in-out sm:w-10 sm:h-10 w-6 h-6 {popOverIsFocused
 		? 'rotate-45'
 		: ''} {editModeEnabled ? 'cursor-default' : 'cursor-pointer hover:opacity-100 hover:scale-110'}"
