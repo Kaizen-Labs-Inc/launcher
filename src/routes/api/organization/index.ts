@@ -29,7 +29,6 @@ export async function get(request: ServerRequest): Promise<void | EndpointOutput
 		}
 	})
 
-	console.log(role)
 	if (role) {
 		return {
 			body: role.organization

@@ -2,7 +2,6 @@ import type { User, PrismaClient } from '@prisma/client'
 import camelcaseKeys from 'camelcase-keys';
 
 export default function addUser(profile: any, prisma: PrismaClient): Promise<User> {
-	console.log("Adding user " + profile.email)
 	const dateCreated = new Date().toISOString()
 
 	return prisma.user.create({
