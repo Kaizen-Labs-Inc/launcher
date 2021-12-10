@@ -1,4 +1,4 @@
 export default function isEmail(str: string) {
-	// todo make sure all valid email characters are represented here
-	return /[0-9a-zA-Z\-_\.]@[0-9a-zA-Z\-_\.].[0-9a-zA-Z\-_\.]/.test(str)
+	// source https://stackoverflow.com/a/46181
+	return /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(str)
 }
