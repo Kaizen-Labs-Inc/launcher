@@ -3,7 +3,7 @@ import type { EndpointOutput } from '@sveltejs/kit/types/endpoint';
 import { prisma } from '$lib/prismaClient';
 import type { Organization } from '@prisma/client';
 import validateUser from '$lib/validateUser';
-import { RoleType } from '../../../model/RoleType';
+import { RoleType } from '../../model/RoleType';
 
 
 export async function get(request: ServerRequest): Promise<void | EndpointOutput> {

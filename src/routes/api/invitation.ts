@@ -2,6 +2,7 @@ import type { ServerRequest } from '@sveltejs/kit/types/hooks';
 import type { EndpointOutput } from '@sveltejs/kit/types/endpoint';
 import getAuth from '$lib/getAuth';
 import { prisma } from '$lib/prismaClient';
+import isEmail from '$lib/isEmail';
 
 const BAD_REQUEST = { status: 400 }
 const NOT_FOUND = { status: 404 }
@@ -13,8 +14,6 @@ export async function post(request: ServerRequest): Promise<void | EndpointOutpu
 	if (!request.body) {
 		return BAD_REQUEST
 	}
-
-	const parts = request.path.split('/')
 
 	let invitations = [];
 	let organizationId: number;
@@ -28,42 +27,55 @@ export async function post(request: ServerRequest): Promise<void | EndpointOutpu
 			return BAD_REQUEST
 		}
 		invitations = parsed;
-		organizationId = Number.parseInt(parts[parts.length - 2])
+		organizationId = invitations.find(it => it.organizationId)?.organizationId
 	} catch (e: unknown) {
 		console.error(e);
 		return BAD_REQUEST
 	}
 
-	if (!organizationId) {
+	if (organizationId && invitations.find(it => it.organizationId && it.organizationId !== organizationId)) {
 		return BAD_REQUEST
 	}
 
 	const auth = getAuth(request);
 	const googleId = auth?.user?.connections?.google?.sub;
 
-	console.log(request.body)
+	console.log(invitations)
 
 	if (!googleId) {
 		return NOT_FOUND;
 	}
 
-	// check user access
-	const role = await prisma.role.findFirst({
+	const user = await prisma.user.findFirst({
 		where: {
-			organizationId: organizationId,
-			user: {
-				googleProfile: {
-					sub: googleId
-				}
+			googleProfile: {
+				sub: googleId
 			}
 		}
 	});
 
-	if (!role) {
-		return NOT_FOUND;
+	if (organizationId) {
+		// check user access
+		const role = await prisma.role.findFirst({
+			where: {
+				organizationId: organizationId,
+				user: {
+					googleProfile: {
+						sub: googleId
+					}
+				}
+			}
+		});
+
+		if (!role) {
+			return NOT_FOUND;
+		}
 	}
 
-	// todo validate invitation email addresses
+	if (invitations.find(it => !isEmail(it.inviteeEmail))) {
+		// todo validate if organization is domain restricted
+		return BAD_REQUEST
+	}
 
 	const created = [];
 
@@ -76,18 +88,18 @@ export async function post(request: ServerRequest): Promise<void | EndpointOutpu
 					console.log(slug)
 					created.push(await prisma.invitation.create({
 						data: {
-							inviteeEmail: i.email,
+							inviteeEmail: i.inviteeEmail,
 							slug: slug,
 							dateCreated: dateCreated,
 							lastModified: dateCreated,
 							organization: {
 								connect: {
-									id: organizationId
+									id: i.organizationId
 								}
 							},
 							user: {
 								connect: {
-									id: role.userId
+									id: user.id
 								}
 							}
 						}

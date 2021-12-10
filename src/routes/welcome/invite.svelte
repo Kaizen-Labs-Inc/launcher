@@ -41,8 +41,7 @@
 		Launcher works best for your entire team.<br /> Enter your team's email addresses and we'll invite
 		them.
 	</h2>
-	<InviteForm organization={organization} on:success={handleSuccess} />
 {:else}
 	<h1 class="mt-8 text-4xl font-medium text-center">Invite your colleagues, coworkers, or friends</h1>
-	<InviteForm on:success={handleSuccess} />
 {/if}
+<InviteForm organization={organization} on:success={handleSuccess} />

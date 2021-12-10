@@ -9,10 +9,10 @@
 	export let organization: Organization;
 	const domain = organization?.emailDomains?.find(_ => true)?.domain
 
-	let invites = [{email: ''}, {email: ''}, {email: ''}]
+	let invites = [{inviteeEmail: ''}, {inviteeEmail: ''}, {inviteeEmail: ''}]
 
 	const addInvite = () => {
-		invites = [...invites, {email: ''}]
+		invites = [...invites, {inviteeEmail: ''}]
 	};
 	const destroyLastInvite = () => {
 		invites.pop()
@@ -20,9 +20,13 @@
 	}
 	const handleInvite = async () => {
 		loading = true;
-		fetch(`/api/organization/${organization.id}/invitation`, {
+		let data = invites.filter(it => it.inviteeEmail.trim() !== '')
+		if (organization) {
+			data = data.map(it => Object.assign(it, { organizationId: organization.id }))
+		}
+		fetch(`/api/invitation`, {
 			method: 'POST',
-			body: JSON.stringify(invites.filter(it => it.email.trim() !== ''))
+			body: JSON.stringify(data)
 		}).then(res => {
 			if (res.status === 201) {
 				loading = false;
@@ -40,7 +44,7 @@
 			<div class="flex flex-col justify-start my-3 flex-grow">
 				<label class="mb-1" for="workspaceName">Invite someone by email</label>
 				<input
-					bind:value={invite.email}
+					bind:value={invite.inviteeEmail}
 					name="workspaceName"
 					type="text"
 					autofocus={i === 0}
