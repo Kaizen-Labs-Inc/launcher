@@ -85,7 +85,7 @@ To apply migrations locally e.g. from another branch that has been merged:
 npx prisma migrate reset
 ```
 
-This will delete all data in your local database
+This will delete all data in your local database. You can rebuild the database base layer by hitting http://localhost:3000/api/greeting from your browser.
 
 ## Building
 

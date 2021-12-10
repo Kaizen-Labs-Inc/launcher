@@ -4,6 +4,7 @@
 	import { fade } from 'svelte/transition';
 	import Button from '../../components/Button.svelte';
 	import { userStore } from '../../stores/userStore';
+	import { organizationStore } from '../../stores/organizationStore';
 	import { isEmptyOrSpaces } from '../../utils/isEmptyOrSpaces';
 	import ConfettiGenerator from 'confetti-js';
 	import checkUserAndRedirect from '$lib/checkUserAndRedirect';
@@ -17,6 +18,7 @@
 	let confetti;
 	let submitting = false;
 	let workspaceName = '';
+	let domainRestricted = true;
 	$: slug = workspaceName.trim().replace(/\s+/g, '-').toLowerCase()
 	let workspaceDomain: string = user.email.split('@').pop();
 
@@ -26,13 +28,17 @@
 			method: 'POST',
 			body: JSON.stringify({
 				name: workspaceName,
+				domainRestricted: domainRestricted,
 				emailDomains: [{domain: workspaceDomain}],
 				slug: slug
 			})
 		}).then(res => {
 			if (res.status === 201) {
-				confetti.clear();
-				goto('/welcome/invite');
+				res.json().then(data => {
+					organizationStore.set({loading: false, organization: data})
+					confetti.clear();
+					goto('/welcome/invite');
+				})
 			} else {
 				// todo: error messaging
 				alert("Error creating workspace")
@@ -83,7 +89,7 @@
 				</div>
 				<div class="flex flex-row items-center my-4 w-full">
 					<label>
-						<input type="checkbox" checked />
+						<input bind:checked={domainRestricted} type="checkbox" />
 						Restrict sign-ups to those with a <span class="font-bold">{workspaceDomain}</span> email
 						address
 					</label>

@@ -21,11 +21,14 @@ export async function get(request: ServerRequest): Promise<void | EndpointOutput
 			userId: user.id
 		},
 		include: {
-			organization: true
+			organization: {
+				include: {
+					emailDomains: true
+				}
+			}
 		}
 	})
 
-	console.log(role)
 	if (role) {
 		return {
 			body: role.organization
@@ -58,7 +61,7 @@ export async function post(request: ServerRequest): Promise<void | EndpointOutpu
 		const dateCreated = new Date().toISOString();
 		const body = JSON.parse(request.body.toString());
 		const emailDomains = body.emailDomains;
-		const domainRestricted = !!emailDomains?.length;
+		const domainRestricted = body.domainRestricted && !!emailDomains?.length;
 		organization = await prisma.organization.create({
 			data: Object.assign(body, {
 				dateCreated: dateCreated,
@@ -79,8 +82,11 @@ export async function post(request: ServerRequest): Promise<void | EndpointOutpu
 					connect: {
 						id: 1
 					}
-				}
-			})
+				},
+			}),
+			include: {
+				emailDomains: true
+			}
 		});
 	} catch (e: unknown) {
 		console.error(e);

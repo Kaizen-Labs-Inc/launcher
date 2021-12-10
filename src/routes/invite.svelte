@@ -4,12 +4,25 @@
 	import { onMount } from 'svelte';
 	import { UserPlusIcon } from 'svelte-feather-icons';
 	import InviteForm from '../components/InviteForm.svelte';
+	import { organizationStore } from '../stores/organizationStore';
+	import { addToast } from '../stores/toaststore';
+	import { goto } from '$app/navigation';
 
 	let user;
 	userStore.subscribe((value) => {
 		checkUserAndRedirect(value);
 		user = value.user;
 	});
+
+	let organization;
+	organizationStore.subscribe((value) => {
+		organization = value.organization
+	});
+
+	const handleSuccess = () => {
+		addToast({ dismissible: false, message: '👍 Invites sent', type: 'success', timeout: 2000 });
+		goto('/home');
+	}
 
 	onMount(() => {
 		window.analytics.page();
@@ -26,5 +39,5 @@
 	<h2 class="mt-8 opacity-75 text-2xl text-center">
 		Enter your team's email addresses and we'll invite them.
 	</h2>
-	<InviteForm />
+	<InviteForm organization={organization} on:success={handleSuccess}  />
 {/if}
