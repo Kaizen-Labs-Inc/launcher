@@ -3,7 +3,7 @@ import type { EndpointOutput } from '@sveltejs/kit/types/endpoint';
 import { prisma } from '$lib/prismaClient';
 import type { Organization } from '@prisma/client';
 import validateUser from '$lib/validateUser';
-import { RoleType } from '../../model/RoleType';
+import { RoleType } from '../../../model/RoleType';
 
 
 export async function get(request: ServerRequest): Promise<void | EndpointOutput> {
@@ -21,7 +21,11 @@ export async function get(request: ServerRequest): Promise<void | EndpointOutput
 			userId: user.id
 		},
 		include: {
-			organization: true
+			organization: {
+				include: {
+					emailDomains: true
+				}
+			}
 		}
 	})
 
@@ -79,8 +83,11 @@ export async function post(request: ServerRequest): Promise<void | EndpointOutpu
 					connect: {
 						id: 1
 					}
-				}
-			})
+				},
+			}),
+			include: {
+				emailDomains: true
+			}
 		});
 	} catch (e: unknown) {
 		console.error(e);

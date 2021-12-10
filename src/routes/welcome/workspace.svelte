@@ -4,6 +4,7 @@
 	import { fade } from 'svelte/transition';
 	import Button from '../../components/Button.svelte';
 	import { userStore } from '../../stores/userStore';
+	import { organizationStore } from '../../stores/organizationStore';
 	import { isEmptyOrSpaces } from '../../utils/isEmptyOrSpaces';
 	import ConfettiGenerator from 'confetti-js';
 	import checkUserAndRedirect from '$lib/checkUserAndRedirect';
@@ -31,8 +32,11 @@
 			})
 		}).then(res => {
 			if (res.status === 201) {
-				confetti.clear();
-				goto('/welcome/invite');
+				res.json().then(data => {
+					organizationStore.set({loading: false, organization: data})
+					confetti.clear();
+					goto('/welcome/invite');
+				})
 			} else {
 				// todo: error messaging
 				alert("Error creating workspace")
