@@ -19,7 +19,7 @@
 	let submitting = false;
 	let workspaceName = '';
 	let domainRestricted = true;
-	$: slug = workspaceName.trim().replace(/\s+/g, '-').toLowerCase()
+	$: slug = workspaceName.trim().replace(/\s+/g, '-').toLowerCase();
 	let workspaceDomain: string = user.email.split('@').pop();
 
 	const handleContinue = () => {
@@ -29,22 +29,22 @@
 			body: JSON.stringify({
 				name: workspaceName,
 				domainRestricted: domainRestricted,
-				emailDomains: [{domain: workspaceDomain}],
+				emailDomains: [{ domain: workspaceDomain }],
 				slug: slug
 			})
-		}).then(res => {
+		}).then((res) => {
 			if (res.status === 201) {
-				res.json().then(data => {
-					organizationStore.set({loading: false, organization: data})
+				res.json().then((data) => {
+					organizationStore.set({ loading: false, organization: data });
 					confetti.clear();
-					goto('/welcome/invite');
-				})
+					goto('/invite');
+				});
 			} else {
 				// todo: error messaging
-				alert("Error creating workspace")
+				alert('Error creating workspace');
 				submitting = false;
 			}
-		})
+		});
 	};
 
 	onMount(() => {
@@ -106,8 +106,7 @@
 				{#if submitting}
 					Creating your workspace...
 				{:else}
-					Your own Launcher URL:<span class="opacity-50 ml-2">
-						{slug}.launcher.team</span>
+					Your own Launcher URL:<span class="opacity-50 ml-2"> {slug}.launcher.team</span>
 				{/if}
 			</div>
 		{/if}
