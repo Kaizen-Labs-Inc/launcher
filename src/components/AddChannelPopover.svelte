@@ -12,6 +12,7 @@
 
 	import { isEmptyOrSpaces } from '../utils/isEmptyOrSpaces';
 	import { clickOutside } from '../utils/DetectClickOutsideOfElement';
+	import { logout } from '$lib/logout';
 	export let channels: Channel[] = [];
 	export let board;
 	export let editModeEnabled: boolean;
@@ -50,7 +51,6 @@
 		selectedChannelIndex = null;
 		query = '';
 		stepOneComplete = false;
-		analytics.track('Add channel window closed');
 	};
 
 	const handleClickOutside = () => {
