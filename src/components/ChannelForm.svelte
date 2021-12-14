@@ -11,7 +11,7 @@
 	// import { scrape } from '../routes/api/scrape';
 	const dispatch = createEventDispatcher();
 	export let channel: Channel = {
-		title: '',
+		name: '',
 		description: '',
 		url: '',
 		icon: '',
@@ -41,7 +41,7 @@
 	});
 </script>
 
-<div class="flex flex-row items-end justify-between mb-4 mt-2">
+<div class="flex flex-row items-end justify-between mb-4 mt-2 z-50">
 	<div class="flex flex-col">
 		<label for="url" class="font-medium ">URL</label>
 		<input
@@ -107,6 +107,7 @@
 </div>
 <div
 	on:click={() => {
+		console.log('wtf');
 		handleSubmit(channel);
 	}}
 	class="flex mt-2 cursor-pointer justify-center items-center rounded bg-white bg-opacity-90 text-black font-medium py-2 text-lg"
@@ -115,32 +116,32 @@
 </div>
 
 <style>
-    .tagsContainer :global(.svelte-tags-input) {
-        background: transparent;
-        padding-top: 4px;
-        padding-bottom: 4px;
-        font-size: 16px;
-    }
-    .tagsContainer :global(.svelte-tags-input-tag) {
-        border-radius: 3px;
-        background: rgba(255, 255, 255, 0.1);
-        font-size: 16px;
-        padding: 4px;
-    }
+	.tagsContainer :global(.svelte-tags-input) {
+		background: transparent;
+		padding-top: 4px;
+		padding-bottom: 4px;
+		font-size: 16px;
+	}
+	.tagsContainer :global(.svelte-tags-input-tag) {
+		border-radius: 3px;
+		background: rgba(255, 255, 255, 0.1);
+		font-size: 16px;
+		padding: 4px;
+	}
 
-    .tagsContainer :global(.svelte-tags-input-tag-remove) {
-        margin-left: 5px;
-    }
-    .tagsContainer :global(.svelte-tags-input-layout) {
-        background-color: rgba(255, 255, 255, 0.1);
-        border: none;
-        outline: none;
-    }
+	.tagsContainer :global(.svelte-tags-input-tag-remove) {
+		margin-left: 5px;
+	}
+	.tagsContainer :global(.svelte-tags-input-layout) {
+		background-color: rgba(255, 255, 255, 0.1);
+		border: none;
+		outline: none;
+	}
 
-    .tagsContainer :global(.svelte-tags-input-layout:focus) {
-        border: none;
-    }
-    .tagsContainer :global(.svelte-tags-input-layout:hover) {
-        border: none;
-    }
+	.tagsContainer :global(.svelte-tags-input-layout:focus) {
+		border: none;
+	}
+	.tagsContainer :global(.svelte-tags-input-layout:hover) {
+		border: none;
+	}
 </style>
