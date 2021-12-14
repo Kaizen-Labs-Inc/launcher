@@ -1,8 +1,15 @@
+export interface ClickOutsideParameters {
+	exclusionFilter: (node: Node) => boolean;
+}
 /** Dispatch event on click outside of node */
-export const clickOutside = (node) => {
+export const clickOutside = (node: Node, parameters: ClickOutsideParameters) => {
 	const handleClick = (event) => {
-		console.log(event.target);
-		if (node && !node.contains(event.target) && !event.defaultPrevented) {
+		if (
+			node &&
+			!node.contains(event.target) &&
+			!event.defaultPrevented &&
+			!(parameters.exclusionFilter && parameters.exclusionFilter(event.target))
+		) {
 			node.dispatchEvent(new CustomEvent('clickOutside', node));
 		}
 	};

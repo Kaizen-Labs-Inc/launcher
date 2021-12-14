@@ -121,12 +121,11 @@
 	</div>
 </main>
 
-<footer class="opacity-50 hover:opacity-100">
+<!-- <footer class="z-0">
 	<p class="mx-3">Kaizen Labs Inc 2021</p>
 	<a href="/privacy" class="mx-3">Privacy policy</a>
 	<a href="/terms" class="mx-3">Terms of use</a>
-</footer>
-
+</footer> -->
 <style>
 	.container {
 		flex: 1;

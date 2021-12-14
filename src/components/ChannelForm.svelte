@@ -41,7 +41,7 @@
 	});
 </script>
 
-<div class="flex flex-row items-end justify-between mb-4 mt-2">
+<div class="flex flex-row items-end justify-between mb-4 mt-2 z-50">
 	<div class="flex flex-col">
 		<label for="url" class="font-medium ">URL</label>
 		<input
@@ -107,6 +107,7 @@
 </div>
 <div
 	on:click={() => {
+		console.log('wtf');
 		handleSubmit(channel);
 	}}
 	class="flex mt-2 cursor-pointer justify-center items-center rounded bg-white bg-opacity-90 text-black font-medium py-2 text-lg"

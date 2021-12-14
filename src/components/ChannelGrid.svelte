@@ -43,7 +43,9 @@
 	const jiggleAnimDurationMin: number = 0.22;
 	const jiggleAnimDurationMax: number = 0.3;
 
-	$: filteredChannels = (channelsToSearch || []).filter(channel => filterChannelsByQuery(channel, query.toLowerCase()))
+	$: filteredChannels = (channelsToSearch || []).filter((channel) =>
+		filterChannelsByQuery(channel, query.toLowerCase())
+	);
 
 	const handleDndConsider = (e) => {
 		if (!editModeEnabled) {
@@ -60,33 +62,30 @@
 		}
 		isConsidering = false;
 		editModeInitializedByDrag = false;
-		board.positions = e.detail.items
+		board.positions = e.detail.items;
 		orderAndSyncBoardPositions();
 	};
-
 
 	function orderAndSyncBoardPositions() {
 		// ensure positions are numerically correct
 		// 5up3rH4ck (TM) assign an id if none so that DND can handle it
-		let maxId = Math.max(...board.positions.map(it => it.id || 0))
-		board.positions = board.positions.map((p, i) => Object.assign(
-			{ id: ++maxId },
-			p,
-			{ position: i }
-		));
+		let maxId = Math.max(...board.positions.map((it) => it.id || 0));
+		board.positions = board.positions.map((p, i) =>
+			Object.assign({ id: ++maxId }, p, { position: i })
+		);
 		if (!isDemo) {
 			if (board.boardType === BoardType.USER.valueOf()) {
 				return fetch(`/api/board/${board.id}/position`, {
 					method: 'PUT',
 					credentials: 'include',
 					body: JSON.stringify(board.positions)
-				})
+				});
 			} else {
 				return fetch('/api/board', {
 					method: 'POST',
 					credentials: 'include',
 					body: JSON.stringify(board)
-				}).then(assignBoard)
+				}).then(assignBoard);
 			}
 		}
 	}
@@ -106,8 +105,8 @@
 	const handleRemove = (channel: Channel) => {
 		// TODO allow undo
 		board.positions = board.positions.filter((p) => p.channel.id !== channel.id);
-		orderAndSyncBoardPositions()
-	}
+		orderAndSyncBoardPositions();
+	};
 
 	const handleBlur = () => {
 		let searchInput = document.getElementById('searchInput');
@@ -129,19 +128,19 @@
 	};
 
 	async function handleChannelAdded(channel) {
-		let newPosition = { position: 0, channel: channel }
+		let newPosition = { position: 0, channel: channel };
 		if (!isDemo) {
 			if (!channel.id) {
 				await fetch('/api/channel', {
 					method: 'POST',
 					credentials: 'include',
 					body: JSON.stringify(channel)
-				}).then(async res => {
+				}).then(async (res) => {
 					// 409 means a channel with this URL already exists; add it instead
 					if (res.status === 201 || res.status === 409) {
-						newPosition = { position: 0, channel: await res.json() }
+						newPosition = { position: 0, channel: await res.json() };
 					}
-				})
+				});
 			}
 		}
 		board.positions.unshift(newPosition);
@@ -150,7 +149,7 @@
 		analytics.track('Channel added', {
 			channel: channel
 		});
-	};
+	}
 
 	const toggleAddForm = () => {
 		// This prevents the popover from appearing in a strange place
@@ -167,30 +166,32 @@
 	};
 
 	async function assignBoard(res) {
-		const b = await res.json()
+		const b = await res.json();
 		b.positions.sort((a, b) => {
-			return a.position - b.position
-		})
-		board = b
+			return a.position - b.position;
+		});
+		board = b;
+		// Toggle Tippy off if there are no channels on the board
+		if (board.positions.length > 0) {
+			tippyInstance = tippy(document.getElementById('editToggle'), {
+				content: 'Edit launcher',
+				arrow: false,
+				theme: 'translucent'
+			});
+		}
 	}
 	onMount(() => {
-		fetch("api/board", {
+		fetch('api/board', {
 			credentials: 'include'
 		})
 			.then(assignBoard)
-			.catch(err => {
-				console.error(err.message)
-			})
+			.catch((err) => {
+				console.error(err.message);
+			});
 		fetch('/api/channel', {
 			credentials: 'include'
-		})
-			.then(async res => {
-				channelsToSearch = await res.json()
-			})
-		tippyInstance = tippy(document.getElementById('editToggle'), {
-			content: 'Edit launcher',
-			arrow: false,
-			theme: 'translucent'
+		}).then(async (res) => {
+			channelsToSearch = await res.json();
 		});
 
 		isMobile = isMobileDevice();
@@ -304,19 +305,20 @@
 				>
 
 				<div class="flex flex-row items-center">
-					<div
-						on:click={handleEditModeToggle}
-						id="editToggle"
-						class="mr-8 sm:w-8 sm:h-8 w-6 h-6 {editModeEnabled
-							? ''
-							: 'cursor-pointer hover:opacity-100 hover:scale-110'} opacity-75 transition duration-200 ease-in-out"
-					>
-						<Edit2Icon strokeWidth="1" />
-					</div>
-
+					{#if board?.positions.length > 0}
+						<div
+							on:click={handleEditModeToggle}
+							id="editToggle"
+							class="mr-8 sm:w-8 sm:h-8 w-6 h-6 {editModeEnabled
+								? ''
+								: 'cursor-pointer hover:opacity-100 hover:scale-110'} opacity-75 transition duration-200 ease-in-out"
+						>
+							<Edit2Icon strokeWidth="1" />
+						</div>
+					{/if}
 					<AddChannelPopover
 						channels={channelsToSearch || []}
-						board={board}
+						{board}
 						bind:popOverIsFocused={addFormIsFocused}
 						bind:editModeEnabled
 						on:channelAdded={(e) => {
@@ -348,7 +350,7 @@
 		on:consider={handleDndConsider}
 		on:finalize={handleDndFinalize}
 	>
-		{#each (board?.positions || []) as position, i (position.id)}
+		{#each board?.positions || [] as position, i (position.id)}
 			<div
 				animate:flip={{ duration: flipDurationMs }}
 				on:focus
@@ -423,7 +425,7 @@
 						</div>
 						<div
 							on:click={() => {
-								handleRemove(position.channel)
+								handleRemove(position.channel);
 								analytics.track('Delete channel button clicked', {
 									channel: channel
 								});

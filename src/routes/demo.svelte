@@ -30,7 +30,7 @@
 		on:focus
 		on:blur
 		class="hover:-translate-y-1 hover:bg-white transform transition-all duration-150
-		ease-in-out fixed z-50 bottom-10 inset-x-0 mx-4 md:mx-auto sm:w-full md:w-2/3 lg:w-1/3
+		ease-in-out fixed z-40 bottom-10 inset-x-0 mx-4 md:mx-auto sm:w-full md:w-2/3 lg:w-1/3
 		<5></5>  text-center  bg-yellow-200 flex items-center justify-center text-lg shadow-lg px-4 py-2 text-black rounded-lg cursor-pointer"
 	>
 		{isHovering ? '👍' : '🚧'} This is a demo. Start your free trial today.
