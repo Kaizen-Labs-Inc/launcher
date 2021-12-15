@@ -11,7 +11,8 @@
 	import PublicNav from '../components/nav/PublicNav.svelte';
 	import { OrganizationStatus, organizationStore } from '../stores/organizationStore';
 	import { Gradient } from '$lib/gradient';
-
+	import { backdropStore } from '../stores/backdropStore';
+	import type { Backdrop } from '../model/Backdrop';
 	let userStatus: UserStatus;
 
 	userStore.subscribe((value) => {
@@ -22,12 +23,19 @@
 	organizationStore.subscribe((value) => {
 		organizationStatus = value;
 	});
-	const gradient = new Gradient();
 
+	let selectedBackdrop: Backdrop;
+	backdropStore.subscribe((value) => {
+		selectedBackdrop = value;
+	});
+
+	const gradient = new Gradient();
 	onMount(async () => {
 		const analytics = (window.analytics = window.analytics || []);
-		gradient.initGradient('#gradient-canvas');
-		gradient.amp = 200;
+		if (selectedBackdrop.animated) {
+			gradient.initGradient('#gradient-canvas');
+			gradient.amp = 200;
+		}
 
 		if (!analytics.initialize)
 			if (analytics.invoked)
@@ -128,7 +136,15 @@
 	});
 </script>
 
-<main class="z-10">
+<main
+	class="z-10 h-screen w-screen transition ease-in-out duration-300"
+	style={selectedBackdrop.colors.length === 1
+		? 'background-color: ' + selectedBackdrop.colors[0]
+		: `background-image: radial-gradient(at 0% 50%, ${selectedBackdrop.colors[0]} 0, transparent 100%),
+radial-gradient(at 0% 100%, ${selectedBackdrop.colors[1]} 0, transparent 50%),
+radial-gradient(at 80% 100%, ${selectedBackdrop.colors[2]} 0, transparent 50%),
+radial-gradient(at 0% 0%, ${selectedBackdrop.colors[3]} 0, transparent 50%);`}
+>
 	<div class="container">
 		<Toasts />
 		{#if userStatus.loading || organizationStatus.loading}
@@ -150,7 +166,12 @@
 		{/if}
 	</div>
 </main>
-<canvas id="gradient-canvas" style="width: 100vw; height: 100vh; position: absolute; z-index: 0" />
+{#if selectedBackdrop && selectedBackdrop.animated === true}
+	<canvas
+		id="gradient-canvas"
+		style="width: 100vw; height: 100vh; position: absolute; z-index: 0"
+	/>
+{/if}
 
 <!-- <footer class="z-0">
 	<p class="mx-3">Kaizen Labs Inc 2021</p>

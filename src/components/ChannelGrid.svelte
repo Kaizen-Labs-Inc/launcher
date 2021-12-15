@@ -22,9 +22,10 @@
 	import { trimUrl } from '../utils/TrimUrl';
 	import filterChannelsByQuery from '../lib/filterChannelsByQuery';
 	import { backdropOptions } from '../model/Backdrop';
+	import { backdropStore } from '../stores/backdropStore';
 
 	export let isDemo = false;
-
+	export let selectedBackdropId: number;
 	let tippyInstance: Instance;
 	let query: string = '';
 	let searchIsFocused: boolean = false;
@@ -164,6 +165,10 @@
 		editModeEnabled = true;
 		tippyInstance.disable();
 		analytics.track('Edit mode button clicked');
+	};
+
+	const handleSelectedBackdrop = (id: number) => {
+		backdropStore.set(backdropOptions.find((b) => b.id === id));
 	};
 
 	async function assignBoard(res) {
@@ -337,10 +342,27 @@
 		class="flex items center justify-center"
 	>
 		{#each backdropOptions as backdropOption}
-			<li
-				style="background-color: {backdropOption.colors[0]}"
-				class="mx-2 rounded-full w-10 h-10 border-4 border-white shadow-lg cursor-pointer bg-opacity-75 hover:bg-opacity-100 hover:shadow-xl transition duration-200 ease-in-out hover:scale-110"
-			/>
+			{#if backdropOption.colors.length === 1}
+				<li
+					on:click={() => {
+						handleSelectedBackdrop(backdropOption.id);
+					}}
+					style="background-color: {backdropOption.colors[0]}"
+					class="mx-2 rounded-full w-10 h-10 border-4 border-white shadow-lg cursor-pointer bg-opacity-75 hover:bg-opacity-100 hover:shadow-xl transition duration-200 ease-in-out hover:scale-110"
+				/>
+			{:else}
+				<li
+					on:click={() => {
+						handleSelectedBackdrop(backdropOption.id);
+					}}
+					style="background-image: radial-gradient(at 0% 50%, {backdropOption
+						.colors[0]} 0, transparent 100%),
+				radial-gradient(at 0% 100%, {backdropOption.colors[1]} 0, transparent 50%),
+				radial-gradient(at 80% 100%, {backdropOption.colors[2]} 0, transparent 50%),
+				radial-gradient(at 0% 0%, {backdropOption.colors[3]} 0, transparent 50%);"
+					class="mx-2 rounded-full w-10 h-10 border-4 border-white shadow-lg cursor-pointer bg-opacity-75 hover:bg-opacity-100 hover:shadow-xl transition duration-200 ease-in-out hover:scale-110"
+				/>
+			{/if}
 		{/each}
 	</ul>
 	<section
