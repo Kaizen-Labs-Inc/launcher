@@ -1,10 +1,13 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
-	import { Edit2Icon, PlusIcon } from 'svelte-feather-icons';
+	import { CheckIcon, Edit2Icon, PlusIcon } from 'svelte-feather-icons';
 	export let selectedChannelIndex;
 	export let filteredChannels;
-	const dispatch = createEventDispatcher();
+	export let positions;
+	let channelIds: number[];
+	channelIds = positions.map((p) => p.channel.id);
 
+	const dispatch = createEventDispatcher();
 	const onSelect = (channel) => {
 		dispatch('appSelected', {
 			channel: channel
@@ -67,11 +70,7 @@
 						class="icon sm:rounded-2xl rounded-lg flex-shrink-0 w-10 h-10 sm:w-14 sm:h-14 flex items-center justify-center mr-2 sm:mr-4"
 					>
 						{#if channel.image}
-							<img
-								class="sm:w-8 sm:h-8 w-5 h-5"
-								src={channel.image}
-								alt={channel.name}
-							/>
+							<img class="sm:w-8 sm:h-8 w-5 h-5" src={channel.image} alt={channel.name} />
 						{:else if channel.emoji}
 							<div class="text-lg sm:text-2xl">
 								{channel.emoji}
@@ -113,15 +112,23 @@
 				{:else}
 					<div />
 				{/if}
-				<div class=" w-full flex justify-end">
+				<div class="w-full flex justify-end">
 					<div
 						on:mousedown|preventDefault={(channel) => {
-							onAdd(channel);
+							if (channelIds.includes(channel.id)) {
+								onAdd(channel);
+							}
 						}}
-						class="w-12 h-12 mr-3 hover:bg-white hover:bg-opacity-10 rounded-md flex justify-center items-center"
+						class="w-12 h-12 mr-3 {channelIds.includes(channel.id)
+							? 'cursor-default opacity-70'
+							: 'hover:bg-white hover:bg-opacity-10 rounded-md cursor-pointer'} flex justify-center items-center"
 					>
 						<!-- TODO if already added to homescreen, show a checkmark with no-op -->
-						<PlusIcon size="20" strokeWidth="1" />
+						{#if channelIds.includes(channel.id)}
+							<CheckIcon size="20" strokeWidth="1" />
+						{:else}
+							<PlusIcon size="20" strokeWidth="1" />
+						{/if}
 					</div>
 					<div
 						on:mousedown|preventDefault={(channel) => {

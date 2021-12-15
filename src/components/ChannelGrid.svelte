@@ -456,6 +456,7 @@
 	<ChannelSearchDropdown
 		bind:selectedChannelIndex
 		bind:filteredChannels
+		bind:positions={board.positions}
 		on:appSelected={(event) => {
 			handleProceed(event.detail.channel);
 		}}
