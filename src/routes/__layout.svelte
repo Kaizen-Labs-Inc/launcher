@@ -137,10 +137,12 @@
 </script>
 
 <main
-	class="z-10 h-screen w-screen transition ease-in-out duration-300"
+	class="z-10 h-screen w-screen transition ease-in-out duration-300 {selectedBackdrop.darkMode
+		? 'text-white'
+		: 'text-black'}"
 	style={selectedBackdrop.colors.length === 1
 		? 'background-color: ' + selectedBackdrop.colors[0]
-		: `background-image: radial-gradient(at 0% 50%, ${selectedBackdrop.colors[0]} 0, transparent 100%),
+		: `background-color: #0b1431; background-image: radial-gradient(at 0% 50%, ${selectedBackdrop.colors[0]} 0, transparent 100%),
 radial-gradient(at 0% 100%, ${selectedBackdrop.colors[1]} 0, transparent 50%),
 radial-gradient(at 80% 100%, ${selectedBackdrop.colors[2]} 0, transparent 50%),
 radial-gradient(at 0% 0%, ${selectedBackdrop.colors[3]} 0, transparent 50%);`}

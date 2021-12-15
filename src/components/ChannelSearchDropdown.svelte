@@ -67,11 +67,7 @@
 						class="icon sm:rounded-2xl rounded-lg flex-shrink-0 w-10 h-10 sm:w-14 sm:h-14 flex items-center justify-center mr-2 sm:mr-4"
 					>
 						{#if channel.image}
-							<img
-								class="sm:w-8 sm:h-8 w-5 h-5"
-								src={channel.image}
-								alt={channel.name}
-							/>
+							<img class="sm:w-8 sm:h-8 w-5 h-5" src={channel.image} alt={channel.name} />
 						{:else if channel.emoji}
 							<div class="text-lg sm:text-2xl">
 								{channel.emoji}

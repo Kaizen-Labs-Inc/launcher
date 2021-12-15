@@ -167,6 +167,10 @@
 		analytics.track('Edit mode button clicked');
 	};
 
+	backdropStore.subscribe((value) => {
+		selectedBackdropId = value.id;
+	});
+
 	const handleSelectedBackdrop = (id: number) => {
 		backdropStore.set(backdropOptions.find((b) => b.id === id));
 	};
@@ -252,7 +256,11 @@
 		);
 
 		document.addEventListener('mousedown', function (e) {
-			if (editModeEnabled && e.target.parentElement.id !== 'editToggle') {
+			if (
+				editModeEnabled &&
+				e.target.parentElement.id !== 'editToggle' &&
+				e.target.parentElement.id !== 'backdropSelector'
+			) {
 				var node = e.target;
 				var inside = false;
 				while (node) {
@@ -295,7 +303,8 @@
 				on:focus={handleFocus}
 				on:blur={handleBlur}
 				on:input={handleInput}
-				disabled={addFormIsFocused}
+				on:click
+				disabled={addFormIsFocused || editModeEnabled}
 				autocomplete="false"
 				id="searchInput"
 				placeholder="Search"
@@ -337,37 +346,44 @@
 	</div>
 </section>
 {#if !searchIsFocused}
-	<ul
-		transition:scale={{ duration: 200, opacity: 0, start: 0.9 }}
-		class="flex items center justify-center"
-	>
-		{#each backdropOptions as backdropOption}
-			{#if backdropOption.colors.length === 1}
-				<li
-					on:click={() => {
-						handleSelectedBackdrop(backdropOption.id);
-					}}
-					style="background-color: {backdropOption.colors[0]}"
-					class="mx-2 rounded-full w-10 h-10 border-4 border-white shadow-lg cursor-pointer bg-opacity-75 hover:bg-opacity-100 hover:shadow-xl transition duration-200 ease-in-out hover:scale-110"
-				/>
-			{:else}
-				<li
-					on:click={() => {
-						handleSelectedBackdrop(backdropOption.id);
-					}}
-					style="background-image: radial-gradient(at 0% 50%, {backdropOption
-						.colors[0]} 0, transparent 100%),
+	{#if editModeEnabled && !editModeInitializedByDrag}
+		<ul
+			id="backdropSelector"
+			transition:scale={{ duration: 200, opacity: 0, start: 0.9 }}
+			class="flex flex-wrap items center justify-center"
+		>
+			{#each backdropOptions as backdropOption}
+				{#if backdropOption.colors.length === 1}
+					<li
+						on:click={() => {
+							handleSelectedBackdrop(backdropOption.id);
+						}}
+						style="background-color: {backdropOption.colors[0]}"
+						class="m-2 rounded-full w-10 h-10 {selectedBackdropId === backdropOption.id
+							? 'border-4 border-white'
+							: ''} shadow-lg cursor-pointer bg-opacity-75 hover:bg-opacity-100 hover:shadow-xl transition duration-200 ease-in-out hover:scale-110"
+					/>
+				{:else}
+					<li
+						on:click={() => {
+							handleSelectedBackdrop(backdropOption.id);
+						}}
+						style="background-image: radial-gradient(at 0% 50%, {backdropOption
+							.colors[0]} 0, transparent 100%),
 				radial-gradient(at 0% 100%, {backdropOption.colors[1]} 0, transparent 50%),
 				radial-gradient(at 80% 100%, {backdropOption.colors[2]} 0, transparent 50%),
 				radial-gradient(at 0% 0%, {backdropOption.colors[3]} 0, transparent 50%);"
-					class="mx-2 rounded-full w-10 h-10 border-4 border-white shadow-lg cursor-pointer bg-opacity-75 hover:bg-opacity-100 hover:shadow-xl transition duration-200 ease-in-out hover:scale-110"
-				/>
-			{/if}
-		{/each}
-	</ul>
+						class="m-2 rounded-full w-10 h-10 {selectedBackdropId === backdropOption.id
+							? 'border-4 border-white'
+							: ''} shadow-lg cursor-pointer bg-opacity-75 hover:bg-opacity-100 hover:shadow-xl transition duration-200 ease-in-out hover:scale-110"
+					/>
+				{/if}
+			{/each}
+		</ul>
+	{/if}
 	<section
 		class="grid lg:grid-cols-6 md:grid-cols-4 grid-cols-2 gap-8 md:gap-12 lg:gap-16 transition duration-200 ease-in-out mt-16 {editModeEnabled
-			? '-translate-y-10'
+			? '-translate-y-2'
 			: ''}"
 		use:dndzone={{
 			items: board?.positions || [],

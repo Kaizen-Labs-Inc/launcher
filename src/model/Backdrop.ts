@@ -14,7 +14,7 @@ export const backdropOptions: Backdrop[] = [
 	{ id: 7, animated: false, darkMode: false, colors: ['#C3E0E9'] },
 	{ id: 8, animated: false, darkMode: false, colors: ['#FFCFBB'] },
 	{ id: 6, animated: false, darkMode: false, colors: ['#D4E9'] },
-	{ id: 12, animated: false, darkMode: true, colors: ['#28698E'] },
+	{ id: 15, animated: false, darkMode: true, colors: ['#28698E'] },
 	{ id: 13, animated: false, darkMode: true, colors: ['#283E8E'] },
 	{ id: 3, animated: false, darkMode: true, colors: ['#121640'] },
 	{ id: 4, animated: false, darkMode: true, colors: ['#18320F'] },
@@ -27,7 +27,7 @@ export const backdropOptions: Backdrop[] = [
 		colors: ['#283273', '#00FD59', '#6C67FF', '#1034FF']
 	},
 	{
-		id: 13,
+		id: 16,
 		animated: false,
 		darkMode: false,
 		colors: ['#B7DBF9', '#AA4CD9', '#FFF9BF', '#F8A097']
