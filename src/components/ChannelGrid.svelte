@@ -381,9 +381,7 @@
 		</ul>
 	{/if}
 	<section
-		class="grid lg:grid-cols-6 md:grid-cols-4 grid-cols-2 gap-8 md:gap-12 lg:gap-16 transition duration-200 ease-in-out {editModeEnabled
-			? 'translate-y-16'
-			: 'translate-y-10'}"
+		class="grid lg:grid-cols-6 md:grid-cols-4 grid-cols-2 gap-8 md:gap-12 lg:gap-16 mt-12 transition duration-200 ease-in-out"
 		use:dndzone={{
 			items: board?.positions || [],
 			flipDurationMs,
