@@ -311,7 +311,7 @@
 				placeholder="Search"
 				class="ml-4 text-2xl sm:text-5xl w-2/3 border-0 outline-none bg-transparent font-light transition duration-200 ease-in-out placeholder-opacity-50 {selectedBackdrop.darkMode
 					? 'placeholder-white'
-					: 'placeholder-blac'} {addFormIsFocused ? 'opacity-5 scale-95' : ''}"
+					: 'placeholder-black'} {addFormIsFocused ? 'opacity-5 scale-95' : ''}"
 			/>
 			{#if !searchIsFocused}
 				<span
