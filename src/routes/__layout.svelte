@@ -10,6 +10,7 @@
 	import AuthenticatedNav from '../components/nav/AuthenticatedNav.svelte';
 	import PublicNav from '../components/nav/PublicNav.svelte';
 	import { OrganizationStatus, organizationStore } from '../stores/organizationStore';
+	import { Gradient } from '$lib/gradient';
 
 	let userStatus: UserStatus;
 
@@ -21,9 +22,12 @@
 	organizationStore.subscribe((value) => {
 		organizationStatus = value;
 	});
+	const gradient = new Gradient();
 
 	onMount(async () => {
 		const analytics = (window.analytics = window.analytics || []);
+		gradient.initGradient('#gradient-canvas');
+		gradient.amp = 200;
 
 		if (!analytics.initialize)
 			if (analytics.invoked)
@@ -124,7 +128,7 @@
 	});
 </script>
 
-<main>
+<main class="z-10">
 	<div class="container">
 		<Toasts />
 		{#if userStatus.loading || organizationStatus.loading}
@@ -146,6 +150,7 @@
 		{/if}
 	</div>
 </main>
+<canvas id="gradient-canvas" style="width: 100vw; height: 100vh; position: absolute; z-index: 0" />
 
 <!-- <footer class="z-0">
 	<p class="mx-3">Kaizen Labs Inc 2021</p>
@@ -169,6 +174,13 @@
 		justify-content: center;
 		align-items: center;
 		margin-top: 180px;
+	}
+
+	#gradient-canvas {
+		--gradient-color-1: #000;
+		--gradient-color-2: #243aff;
+		--gradient-color-3: #9fffa1;
+		--gradient-color-4: #e63946;
 	}
 
 	@media (min-width: 480px) {

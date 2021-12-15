@@ -5,7 +5,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { flip } from 'svelte/animate';
-
+	import { scale } from 'svelte/transition';
 	import { dndzone } from 'svelte-dnd-action';
 	import AddChannelPopover from '../components/AddChannelPopover.svelte';
 	import ChannelSearchDropdown from '../components/ChannelSearchDropdown.svelte';
@@ -21,6 +21,7 @@
 	import { isMobileDevice } from '../utils/DetectDevice';
 	import { trimUrl } from '../utils/TrimUrl';
 	import filterChannelsByQuery from '../lib/filterChannelsByQuery';
+	import { backdropOptions } from '../model/Backdrop';
 
 	export let isDemo = false;
 
@@ -331,6 +332,17 @@
 	</div>
 </section>
 {#if !searchIsFocused}
+	<ul
+		transition:scale={{ duration: 200, opacity: 0, start: 0.9 }}
+		class="flex items center justify-center"
+	>
+		{#each backdropOptions as backdropOption}
+			<li
+				style="background-color: {backdropOption.colors[0]}"
+				class="mx-2 rounded-full w-10 h-10 border-4 border-white shadow-lg cursor-pointer bg-opacity-75 hover:bg-opacity-100 hover:shadow-xl transition duration-200 ease-in-out hover:scale-110"
+			/>
+		{/each}
+	</ul>
 	<section
 		class="grid lg:grid-cols-6 md:grid-cols-4 grid-cols-2 gap-8 md:gap-12 lg:gap-16 transition duration-200 ease-in-out mt-16 {editModeEnabled
 			? '-translate-y-10'
