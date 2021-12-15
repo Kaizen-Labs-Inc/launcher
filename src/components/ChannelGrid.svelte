@@ -308,13 +308,13 @@
 				autocomplete="false"
 				id="searchInput"
 				placeholder="Search"
-				class="ml-4 text-2xl sm:text-5xl w-2/3 border-0 outline-none bg-transparent text-white font-light placeholder-white placeholder-opacity-30 transition duration-200 ease-in-out {addFormIsFocused
+				class="ml-4 text-2xl sm:text-5xl w-2/3 border-0 outline-none bg-transparent font-light transition duration-200 ease-in-out {addFormIsFocused
 					? 'opacity-5 scale-95'
 					: ''}"
 			/>
 			{#if !searchIsFocused}
 				<span
-					class="absolute ml-24 sm:ml-48 sm:text-base text-xs border-2 border-white border-opacity-50 sm:w-10 sm:h-10 h-8 w-8 opacity-50 flex items-center justify-center rounded-md transition duration-200 ease-in-out {addFormIsFocused
+					class="absolute ml-24 sm:ml-48 sm:text-base text-xs bg-white bg-opacity-25 sm:w-10 sm:h-10 h-8 w-8 opacity-50 flex items-center justify-center rounded-md transition duration-200 ease-in-out {addFormIsFocused
 						? 'opacity-5 scale-95'
 						: ''}">⌘G</span
 				>
