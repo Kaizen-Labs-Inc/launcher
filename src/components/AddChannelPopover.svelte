@@ -50,7 +50,6 @@
 		} else {
 			popOverIsFocused = true;
 		}
-		console.log(popOverIsFocused);
 		analytics.track('Toggle new channel button clicked');
 	};
 

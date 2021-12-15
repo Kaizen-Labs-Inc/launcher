@@ -120,6 +120,8 @@
 
 	const handleFocus = () => {
 		if (!editModeEnabled) {
+			let searchInput = document.getElementById('searchInput');
+			searchInput.focus();
 			searchIsFocused = true;
 			selectedChannelIndex = 0;
 		}
@@ -314,7 +316,8 @@
 			/>
 			{#if !searchIsFocused}
 				<span
-					class="absolute ml-24 sm:ml-48 sm:text-base text-xs bg-white bg-opacity-25 sm:w-10 sm:h-10 h-8 w-8 opacity-50 flex items-center justify-center rounded-md transition duration-200 ease-in-out {addFormIsFocused
+					on:click={handleFocus}
+					class="absolute cursor-pointer ml-24 sm:ml-48 sm:text-base text-xs bg-white bg-opacity-25 sm:w-10 sm:h-10 h-8 w-8 opacity-50 flex items-center justify-center rounded-md transition duration-200 ease-in-out {addFormIsFocused
 						? 'opacity-5 scale-95'
 						: ''}">⌘G</span
 				>
