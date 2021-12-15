@@ -5,7 +5,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { flip } from 'svelte/animate';
-	import { scale } from 'svelte/transition';
 	import { dndzone } from 'svelte-dnd-action';
 	import AddChannelPopover from '../components/AddChannelPopover.svelte';
 	import ChannelSearchDropdown from '../components/ChannelSearchDropdown.svelte';
@@ -25,6 +24,7 @@
 	import { backdropStore } from '../stores/backdropStore';
 
 	export let isDemo = false;
+	let editModeEnabled: boolean = false;
 	let selectedBackdrop: Backdrop;
 	let tippyInstance: Instance;
 	let query: string = '';
@@ -36,7 +36,6 @@
 	let channelsToSearch: Channel[];
 	const flipDurationMs: number = 200;
 	let isConsidering: boolean = false;
-	let editModeEnabled: boolean = false;
 	let editModeInitializedByDrag: boolean = false;
 
 	// For edit mode jiggles
