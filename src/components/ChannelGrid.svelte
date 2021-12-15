@@ -493,7 +493,7 @@
 		<div class="flex flex-col items-center justify-center">
 			<div
 				on:click={handleEditModeToggle}
-				class="mx-auto cursor-pointer mt-12 rounded-xl bg-white bg-opacity-10 p-4 font-medium text-lg flex justify-center items-center hover:bg-opacity-20"
+				class="mx-auto cursor-pointer mt-24 rounded-xl bg-white bg-opacity-10 p-4 font-medium text-lg flex justify-center items-center hover:bg-opacity-20"
 			>
 				Done
 			</div>
