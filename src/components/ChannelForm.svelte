@@ -8,6 +8,7 @@
 	import { SmileIcon } from 'svelte-feather-icons';
 	import Tags from 'svelte-tags-input';
 	import type Channel from 'src/model/Channel';
+	import type { Backdrop } from 'src/model/Backdrop';
 	// import { scrape } from '../routes/api/scrape';
 	const dispatch = createEventDispatcher();
 	export let channel: Channel = {
@@ -17,6 +18,7 @@
 		icon: '',
 		tags: []
 	};
+	export let selectedBackdrop: Backdrop;
 	let emoji;
 	let picker;
 
@@ -50,7 +52,7 @@
 			name="url"
 			type="url"
 			placeholder="Paste the link here"
-			class="bg-white bg-opacity-10 rounded p-2"
+			class="bg-white {selectedBackdrop.darkMode ? 'bg-opacity-10' : 'bg-opacity-90'} rounded p-2"
 		/>
 	</div>
 	<div
@@ -58,7 +60,9 @@
 		on:click={() => {
 			picker.togglePicker(document.querySelector('#emoji-trigger'));
 		}}
-		class="cursor-pointer rounded-lg w-14 h-14 bg-white flex items-center justify-center text-2xl bg-opacity-10 transition duration-200 ease-in-out hover:scale-105"
+		class="cursor-pointer rounded-lg w-14 h-14 bg-white flex items-center justify-center text-2xl {selectedBackdrop.darkMode
+			? 'bg-opacity-10'
+			: 'bg-opacity-90'}  transition duration-200 ease-in-out hover:scale-105"
 	>
 		{#if emoji}
 			{emoji}
@@ -74,7 +78,7 @@
 		name="name"
 		type="text"
 		placeholder="Type a name"
-		class="bg-white bg-opacity-10 rounded p-2"
+		class="bg-white {selectedBackdrop.darkMode ? 'bg-opacity-10' : 'bg-opacity-90'}  rounded p-2"
 	/>
 </div>
 
@@ -85,7 +89,7 @@
 		name="description"
 		type="text"
 		placeholder="Add an optional description"
-		class="bg-white bg-opacity-10  rounded p-2"
+		class="bg-white {selectedBackdrop.darkMode ? 'bg-opacity-10' : 'bg-opacity-90'} rounded p-2"
 	/>
 </div>
 <div class="my-4 flex flex-col">
@@ -107,10 +111,11 @@
 </div>
 <div
 	on:click={() => {
-		console.log('wtf');
 		handleSubmit(channel);
 	}}
-	class="flex mt-2 cursor-pointer justify-center items-center rounded bg-white bg-opacity-90 text-black font-medium py-2 text-lg"
+	class="flex mt-2 cursor-pointer justify-center items-center rounded font-medium py-2 text-lg {selectedBackdrop.darkMode
+		? 'bg-white text-black'
+		: 'bg-black text-white'} "
 >
 	Save
 </div>

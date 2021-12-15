@@ -21,11 +21,11 @@
 	import { isMobileDevice } from '../utils/DetectDevice';
 	import { trimUrl } from '../utils/TrimUrl';
 	import filterChannelsByQuery from '../lib/filterChannelsByQuery';
-	import { backdropOptions } from '../model/Backdrop';
+	import { Backdrop, backdropOptions } from '../model/Backdrop';
 	import { backdropStore } from '../stores/backdropStore';
 
 	export let isDemo = false;
-	export let selectedBackdropId: number;
+	let selectedBackdrop: Backdrop;
 	let tippyInstance: Instance;
 	let query: string = '';
 	let searchIsFocused: boolean = false;
@@ -168,7 +168,7 @@
 	};
 
 	backdropStore.subscribe((value) => {
-		selectedBackdropId = value.id;
+		selectedBackdrop = value;
 	});
 
 	const handleSelectedBackdrop = (id: number) => {
@@ -308,9 +308,9 @@
 				autocomplete="false"
 				id="searchInput"
 				placeholder="Search"
-				class="ml-4 text-2xl sm:text-5xl w-2/3 border-0 outline-none bg-transparent font-light transition duration-200 ease-in-out {addFormIsFocused
-					? 'opacity-5 scale-95'
-					: ''}"
+				class="ml-4 text-2xl sm:text-5xl w-2/3 border-0 outline-none bg-transparent font-light transition duration-200 ease-in-out placeholder-opacity-50 {selectedBackdrop.darkMode
+					? 'placeholder-white'
+					: 'placeholder-blac'} {addFormIsFocused ? 'opacity-5 scale-95' : ''}"
 			/>
 			{#if !searchIsFocused}
 				<span
@@ -336,6 +336,7 @@
 						{board}
 						bind:popOverIsFocused={addFormIsFocused}
 						bind:editModeEnabled
+						bind:selectedBackdrop
 						on:channelAdded={(e) => {
 							handleChannelAdded(e.detail.channel);
 						}}
@@ -359,7 +360,7 @@
 							handleSelectedBackdrop(backdropOption.id);
 						}}
 						style="background-color: {backdropOption.colors[0]}"
-						class="m-2 rounded-full w-10 h-10 {selectedBackdropId === backdropOption.id
+						class="m-2 rounded-full w-10 h-10 {selectedBackdrop.id === backdropOption.id
 							? 'border-4 border-white'
 							: ''} shadow-lg cursor-pointer bg-opacity-75 hover:bg-opacity-100 hover:shadow-xl transition duration-200 ease-in-out hover:scale-110"
 					/>
@@ -373,7 +374,7 @@
 				radial-gradient(at 0% 100%, {backdropOption.colors[1]} 0, transparent 50%),
 				radial-gradient(at 80% 100%, {backdropOption.colors[2]} 0, transparent 50%),
 				radial-gradient(at 0% 0%, {backdropOption.colors[3]} 0, transparent 50%);"
-						class="m-2 rounded-full w-10 h-10 {selectedBackdropId === backdropOption.id
+						class="m-2 rounded-full w-10 h-10 {selectedBackdrop.id === backdropOption.id
 							? 'border-4 border-white'
 							: ''} shadow-lg cursor-pointer bg-opacity-75 hover:bg-opacity-100 hover:shadow-xl transition duration-200 ease-in-out hover:scale-110"
 					/>
@@ -469,7 +470,7 @@
 							on:click={() => {
 								handleEdit(position.channel);
 							}}
-							class="cursor-pointer mx-2 rounded bg-white bg-opacity-5 p-2 hover:bg-opacity-10"
+							class="cursor-pointer mx-2 rounded bg-white bg-opacity-50 p-2 hover:bg-opacity-10"
 						>
 							<Edit2Icon strokeWidth="1" size="16" />
 						</div>
