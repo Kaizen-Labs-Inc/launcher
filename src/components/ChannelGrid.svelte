@@ -351,11 +351,7 @@
 </section>
 {#if !searchIsFocused}
 	{#if editModeEnabled && !editModeInitializedByDrag}
-		<ul
-			id="backdropSelector"
-			transition:scale={{ duration: 200, opacity: 0, start: 0.9 }}
-			class="flex flex-wrap items center justify-center"
-		>
+		<ul id="backdropSelector" class="flex flex-wrap items center justify-center">
 			{#each backdropOptions as backdropOption}
 				{#if backdropOption.colors.length === 1}
 					<li
@@ -386,9 +382,9 @@
 		</ul>
 	{/if}
 	<section
-		class="grid lg:grid-cols-6 md:grid-cols-4 grid-cols-2 gap-8 md:gap-12 lg:gap-16 transition duration-200 ease-in-out mt-16 {editModeEnabled
-			? '-translate-y-2'
-			: ''}"
+		class="grid lg:grid-cols-6 md:grid-cols-4 grid-cols-2 gap-8 md:gap-12 lg:gap-16 transition duration-200 ease-in-out {editModeEnabled
+			? 'translate-y-16'
+			: 'translate-y-10'}"
 		use:dndzone={{
 			items: board?.positions || [],
 			flipDurationMs,
