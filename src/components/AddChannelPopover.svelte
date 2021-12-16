@@ -113,8 +113,10 @@
 	const resetPopover = () => {
 		popOverIsFocused = false;
 		stepOneComplete = false;
+		stepTwoComplete = false;
 		selectedChannelIndex = null;
 		searchQuery = '';
+		channelUrl = '';
 	};
 
 	const clickOutsideFilter = (node: Node) => {
@@ -237,18 +239,22 @@
 				</div>
 			{/if}
 		{:else if !stepTwoComplete}
-			<div class="flex flex-col">
-				<label for="url" class="font-medium mb-1">URL</label>
-				<input
-					bind:value={channelUrl}
-					autofocus
-					name="url"
-					type="url"
-					placeholder="Paste the link here"
-					class="bg-white bg-opacity-10 rounded p-2"
-				/>
-			</div>
-			<Button label="Save" disabled={channelMetadataLoading} on:clicked={handleUrlSubmission} />
+			<form>
+				<div class="flex flex-col">
+					<label for="url" class="font-medium mb-1">URL</label>
+					<input
+						bind:value={channelUrl}
+						autofocus
+						name="url"
+						type="url"
+						placeholder="Paste the link here"
+						class="bg-white bg-opacity-10 rounded p-2"
+					/>
+				</div>
+				<!-- TODO get enter working -->
+				<button type="submit" on:submit|preventDefault={handleUrlSubmission} class="hidden" />
+				<Button label="Next" loading={channelMetadataLoading} on:clicked={handleUrlSubmission} />
+			</form>
 		{:else}
 			<ChannelForm
 				channel={{

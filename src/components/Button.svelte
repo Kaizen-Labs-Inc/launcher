@@ -2,9 +2,10 @@
 	import { createEventDispatcher } from 'svelte';
 	export let label: string;
 	export let disabled: boolean = false;
+	export let loading: boolean = false;
 	const dispatch = createEventDispatcher();
 	const handleOnClick = () => {
-		if (disabled) {
+		if (disabled || loading) {
 			return;
 		} else {
 			dispatch('clicked');
@@ -14,9 +15,14 @@
 
 <div
 	on:click={handleOnClick}
-	class="rounded px-4 py-2 text-lg bg-white flex items-center justify-center text-black mt-4 {disabled
+	class="rounded px-4 py-2 text-lg bg-white flex items-center justify-center text-black mt-4 {disabled ||
+	loading
 		? 'opacity-50'
 		: 'cursor-pointer'}"
 >
-	{label}
+	{#if loading}
+		Loading...
+	{:else}
+		{label}
+	{/if}
 </div>
