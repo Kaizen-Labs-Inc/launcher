@@ -28,7 +28,8 @@
 	let stepTwoComplete: boolean = false;
 	let channelUrl: string = '';
 	let channelMetadataLoading: boolean = false;
-
+	let channel: Channel;
+	let channelDescription: string = '';
 	const dispatch = createEventDispatcher();
 
 	$: {
@@ -47,6 +48,11 @@
 
 	$: boardChannelIds = board?.positions?.map((p) => p.channel.id) || [];
 
+	$: channel = {
+		name: searchQuery.charAt(0).toUpperCase() + searchQuery.substr(1).toLowerCase() || undefined,
+		description: channelDescription,
+		url: channelUrl
+	};
 	export let popOverIsFocused: boolean = false;
 
 	const togglePopover = () => {
@@ -130,10 +136,15 @@
 	const handleUrlSubmission = () => {
 		channelMetadataLoading = true;
 		const encodedUrl = encodeURIComponent(channelUrl);
-		return fetch(`/api/scrape?url=${encodedUrl}`).then((res) => {
-			console.log(res);
-			channelMetadataLoading = false;
-			stepTwoComplete = true;
+		return fetch(`/api/scrape?url=${encodedUrl}`).then(async (res) => {
+			res.json().then((data: any) => {
+				console.log(data);
+				channel.name = data.title;
+				channel.description = data.description;
+				channel.icon = data.icon;
+				channelMetadataLoading = false;
+				stepTwoComplete = true;
+			});
 		});
 	};
 </script>
@@ -259,11 +270,7 @@
 			</form>
 		{:else}
 			<ChannelForm
-				channel={{
-					name:
-						searchQuery.charAt(0).toUpperCase() + searchQuery.substr(1).toLowerCase() || undefined,
-					url: channelUrl
-				}}
+				channel={channel}
 				on:submit={(event) => {
 					handleAdd(event.detail.channel);
 				}}
