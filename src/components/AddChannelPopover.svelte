@@ -18,11 +18,14 @@
 	export let channels: Channel[] = [];
 	export let board;
 	export let editModeEnabled: boolean;
+
 	export let selectedBackdrop: Backdrop;
+
+	export let stepOneComplete: boolean = false;
+
 	let searchQuery: string = '';
 	let tippyInstance: Instance;
 	let selectedChannelIndex: number = 0;
-	let stepOneComplete: boolean = false;
 
 	const dispatch = createEventDispatcher();
 

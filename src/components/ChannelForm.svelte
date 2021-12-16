@@ -44,7 +44,7 @@
 </script>
 
 <div class="flex flex-row items-end justify-between mb-4 mt-2 z-50">
-	<div class="flex flex-col">
+	<div class="flex flex-col flex-grow mr-6">
 		<label for="url" class="font-medium ">URL</label>
 		<input
 			bind:value={channel.url}

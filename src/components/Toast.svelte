@@ -10,9 +10,7 @@
 </script>
 
 <article class={type + ' shadow-lg'} role="alert" transition:fade>
-	<div class="text">
-		<slot />
-	</div>
+	<slot />
 
 	{#if dismissible}
 		<button class="close" on:click={() => dispatch('dismiss')}>
@@ -24,12 +22,12 @@
 <style lang="postcss">
 	article {
 		color: white;
-		padding: 0.75rem;
+		padding: 0.7rem;
 		border-radius: 0.4rem;
 		display: flex;
 		align-items: center;
 		margin: 0 auto 0.5rem auto;
-		width: 20rem;
+		width: auto;
 	}
 	.error {
 		background: IndianRed;
@@ -38,11 +36,10 @@
 		background: MediumSeaGreen;
 	}
 	.info {
-		background: SkyBlue;
+		background: white;
+		color: black;
 	}
-	.text {
-		margin-left: 1rem;
-	}
+
 	button {
 		color: white;
 		background: transparent;
