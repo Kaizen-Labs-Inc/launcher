@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import type { EndpointOutput } from '@sveltejs/kit';
 import type { ServerRequest } from '@sveltejs/kit/types/hooks';
-const getMetaData = require('metadata-scraper');
-
+import scraper from 'metadata-scraper';
 const BAD_REQUEST = { status: 400 };
 const NOT_FOUND = { status: 404 };
 
@@ -35,7 +34,7 @@ export async function get(request: ServerRequest): Promise<void | EndpointOutput
 		return BAD_REQUEST;
 	} else {
 		console.log(url);
-		getMetaData(url).then((data) => {
+		return await scraper(url).then((data) => {
 			console.log(data);
 			return {
 				body: data
