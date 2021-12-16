@@ -319,7 +319,7 @@
 					{/if}
 					<AddChannelPopover
 						channels={channelsToSearch || []}
-						{board}
+						board={board}
 						bind:popOverIsFocused={addFormIsFocused}
 						bind:editModeEnabled
 						on:channelAdded={(e) => {

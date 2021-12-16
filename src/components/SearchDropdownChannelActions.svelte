@@ -18,16 +18,15 @@
 	};
 </script>
 
-<div class="w-full flex justify-end">
+<div class="flex justify-end">
 	<div
-		on:click|preventDefault={(channel) => {
+		on:mousedown={() => {
 			handleAdd(channel);
 		}}
 		class="addChannelButton w-12 h-12 mr-3 {channelIds.includes(channel.id)
 			? 'cursor-default opacity-70'
 			: 'hover:bg-white hover:bg-opacity-10 rounded-md cursor-pointer'} flex justify-center items-center"
 	>
-		<!-- TODO if already added to homescreen, show a checkmark with no-op -->
 		{#if channelIds.includes(channel.id)}
 			<CheckIcon size="20" strokeWidth="1" />
 		{:else}
@@ -35,10 +34,10 @@
 		{/if}
 	</div>
 	<div
-		on:click|preventDefault={(channel) => {
+		on:mousedown|preventDefault={() => {
 			handleEdit(channel);
 		}}
-		class="w-12 h-12 hover:bg-white hover:bg-opacity-10 rounded-md flex justify-center items-center"
+		class="w-12 h-12 cursor-pointer hover:bg-white hover:bg-opacity-10 rounded-md flex justify-center items-center"
 	>
 		<Edit2Icon size="20" strokeWidth="1" />
 	</div>

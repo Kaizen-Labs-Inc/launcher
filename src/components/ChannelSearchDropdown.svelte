@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { onMount, createEventDispatcher } from 'svelte';
+	import { createEventDispatcher } from 'svelte';
 	import SearchDropdownChannelActions from './SearchDropdownChannelActions.svelte';
 	export let selectedChannelIndex;
 	export let filteredChannels;
@@ -8,6 +8,7 @@
 	channelIds = positions.map((p) => p.channel.id);
 
 	const dispatch = createEventDispatcher();
+
 	const onSelect = (channel) => {
 		dispatch('appSelected', {
 			channel: channel
@@ -50,19 +51,7 @@
 	{:else}
 		{#each filteredChannels.sort((a, b) => a.name.localeCompare(b.name)) as channel, i}
 			<div
-				on:mousedown|preventDefault={(e) => {
-					console.log(e.target.parentElement);
-					if (e.target.parentElement.id === 'addChannelButton') {
-						onAdd(channel);
-					} else {
-						onSelect(channel);
-					}
-				}}
-				on:mouseover={() => {
-					selectedChannelIndex = i;
-				}}
-				on:focus
-				class="flex flex-row items-center sm:grid sm:grid-cols-4 sm:gap-16 text-left cursor-pointer p-6 transition duration-200 ease-in-out {filteredChannels.length ===
+				class="flex justify-between p-6 transition duration-200 ease-in-out {filteredChannels.length ===
 				1
 					? 'rounded-b-lg'
 					: ''}  {selectedChannelIndex === i
@@ -70,61 +59,74 @@
 					: 'bg-transparent'}
             "
 			>
-				<div class="flex flex-row items-center">
-					<div
-						class="icon sm:rounded-2xl rounded-lg flex-shrink-0 w-10 h-10 sm:w-14 sm:h-14 flex items-center justify-center mr-2 sm:mr-4"
-					>
-						{#if channel.image}
-							<img class="sm:w-8 sm:h-8 w-5 h-5" src={channel.image} alt={channel.name} />
-						{:else if channel.emoji}
-							<div class="text-lg sm:text-2xl">
-								{channel.emoji}
+				<div
+					class="w-full grid grid-cols-4 gap-16 items-center text-left cursor-pointer"
+					on:mousedown|preventDefault={(e) => {
+						if (e.target.parentElement.id !== 'addChannelButton') {
+							onSelect(channel);
+						}
+					}}
+					on:mouseover={() => {
+						selectedChannelIndex = i;
+					}}
+					on:focus
+				>
+					<div class="flex flex-row items-center">
+						<div
+							class="icon sm:rounded-2xl rounded-lg flex-shrink-0 w-10 h-10 sm:w-14 sm:h-14 flex items-center justify-center mr-2 sm:mr-4"
+						>
+							{#if channel.image}
+								<img class="sm:w-8 sm:h-8 w-5 h-5" src={channel.image} alt={channel.name} />
+							{:else if channel.emoji}
+								<div class="text-lg sm:text-2xl">
+									{channel.emoji}
+								</div>
+							{:else}
+								<div class="text-black text-lg sm:text-2xl">
+									{channel.name.charAt(0)}
+								</div>
+							{/if}
+						</div>
+						<div class="sm:text-2xl ">
+							{channel.name}
+							<div class="block text-sm {selectedChannelIndex === i ? 'opacity-50' : 'opacity-25'}">
+								{channel.url}
 							</div>
-						{:else}
-							<div class="text-black text-lg sm:text-2xl">
-								{channel.name.charAt(0)}
-							</div>
-						{/if}
-					</div>
-					<div class="sm:text-2xl ">
-						{channel.name}
-						<div class="block text-sm {selectedChannelIndex === i ? 'opacity-50' : 'opacity-25'}">
-							{channel.url}
 						</div>
 					</div>
+					{#if channel.description}
+						<div
+							class="text-sm sm:text-base {selectedChannelIndex === i
+								? 'opacity-60'
+								: 'opacity-30'}"
+						>
+							{channel.description}
+						</div>
+					{:else}
+						<div />
+					{/if}
+					{#if channel.tags}
+						<div class="sm:flex flex-wrap flex-row">
+							{#each channel.tags as tag}
+								<div
+									class="flex justify-center items-center h-8 m-1 p-2 text-xs sm:text-sm font-medium  rounded bg-white bg-opacity-5"
+								>
+									#{tag.name}
+								</div>
+							{/each}
+						</div>
+					{:else}
+						<div />
+					{/if}
 				</div>
-				{#if channel.description}
-					<div
-						class="hidden text-sm lg:text-lg sm:block {selectedChannelIndex === i
-							? 'opacity-60'
-							: 'opacity-30'}"
-					>
-						{channel.description}
-					</div>
-				{:else}
-					<div />
-				{/if}
-				{#if channel.tags}
-					<div class="hidden sm:flex flex-wrap flex-row">
-						{#each channel.tags as tag}
-							<div
-								class="flex justify-center items-center h-8 m-1 p-2 text-xs sm:text-sm font-medium  rounded bg-white bg-opacity-5"
-							>
-								#{tag.name}
-							</div>
-						{/each}
-					</div>
-				{:else}
-					<div />
-				{/if}
 				<SearchDropdownChannelActions
 					channel={channel}
 					channelIds={channelIds}
-					on:editClicked={(channel) => {
-						console.log('edited ', channel);
+					on:editClicked={(event) => {
+						onEdit(event.detail.channel);
 					}}
-					on:addClicked={(channel) => {
-						console.log('added ', channel);
+					on:addClicked={(event) => {
+						onAdd(event.detail.channel);
 					}}
 				/>
 			</div>
