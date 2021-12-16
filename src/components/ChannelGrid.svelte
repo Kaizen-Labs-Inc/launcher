@@ -146,6 +146,7 @@
 		board.positions.unshift(newPosition);
 		await orderAndSyncBoardPositions();
 		addToast({ dismissible: false, message: 'Added', type: 'success', timeout: 3000 });
+		handleBlur();
 		analytics.track('Channel added', {
 			channel: channel
 		});
@@ -461,6 +462,7 @@
 			handleProceed(event.detail.channel);
 		}}
 		on:addClicked={(event) => {
+			// event is a mouse down event, not a Svelte event
 			handleChannelAdded(event.detail.channel);
 		}}
 		on:editClicked={(event) => {

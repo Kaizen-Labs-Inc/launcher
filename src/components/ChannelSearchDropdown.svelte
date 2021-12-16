@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { createEventDispatcher } from 'svelte';
-	import { CheckIcon, Edit2Icon, PlusIcon } from 'svelte-feather-icons';
+	import { onMount, createEventDispatcher } from 'svelte';
+	import SearchDropdownChannelActions from './SearchDropdownChannelActions.svelte';
 	export let selectedChannelIndex;
 	export let filteredChannels;
 	export let positions;
@@ -50,8 +50,13 @@
 	{:else}
 		{#each filteredChannels.sort((a, b) => a.name.localeCompare(b.name)) as channel, i}
 			<div
-				on:mousedown|preventDefault={() => {
-					onSelect(channel);
+				on:mousedown|preventDefault={(e) => {
+					console.log(e.target.parentElement);
+					if (e.target.parentElement.id === 'addChannelButton') {
+						onAdd(channel);
+					} else {
+						onSelect(channel);
+					}
 				}}
 				on:mouseover={() => {
 					selectedChannelIndex = i;
@@ -112,33 +117,16 @@
 				{:else}
 					<div />
 				{/if}
-				<div class="w-full flex justify-end">
-					<div
-						on:mousedown|preventDefault={(channel) => {
-							if (channelIds.includes(channel.id)) {
-								onAdd(channel);
-							}
-						}}
-						class="w-12 h-12 mr-3 {channelIds.includes(channel.id)
-							? 'cursor-default opacity-70'
-							: 'hover:bg-white hover:bg-opacity-10 rounded-md cursor-pointer'} flex justify-center items-center"
-					>
-						<!-- TODO if already added to homescreen, show a checkmark with no-op -->
-						{#if channelIds.includes(channel.id)}
-							<CheckIcon size="20" strokeWidth="1" />
-						{:else}
-							<PlusIcon size="20" strokeWidth="1" />
-						{/if}
-					</div>
-					<div
-						on:mousedown|preventDefault={(channel) => {
-							onEdit(channel);
-						}}
-						class="w-12 h-12 hover:bg-white hover:bg-opacity-10 rounded-md flex justify-center items-center"
-					>
-						<Edit2Icon size="20" strokeWidth="1" />
-					</div>
-				</div>
+				<SearchDropdownChannelActions
+					channel={channel}
+					channelIds={channelIds}
+					on:editClicked={(channel) => {
+						console.log('edited ', channel);
+					}}
+					on:addClicked={(channel) => {
+						console.log('added ', channel);
+					}}
+				/>
 			</div>
 		{/each}
 	{/if}
