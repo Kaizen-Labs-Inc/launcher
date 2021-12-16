@@ -36,7 +36,7 @@
 	let isConsidering: boolean = false;
 	let editModeEnabled: boolean = false;
 	let editModeInitializedByDrag: boolean = false;
-
+	let addChannelPopoverStepOneComplete: boolean = false;
 	// For edit mode jiggles
 	const jiggleAnimDelayMin: number = -0.75;
 	const jiggleAnimDelayMax: number = -0.05;
@@ -146,6 +146,7 @@
 		board.positions.unshift(newPosition);
 		await orderAndSyncBoardPositions();
 		addToast({ dismissible: false, message: 'Added', type: 'success', timeout: 3000 });
+		handleBlur();
 		analytics.track('Channel added', {
 			channel: channel
 		});
@@ -318,7 +319,8 @@
 					{/if}
 					<AddChannelPopover
 						channels={channelsToSearch || []}
-						{board}
+						board={board}
+						bind:stepOneComplete={addChannelPopoverStepOneComplete}
 						bind:popOverIsFocused={addFormIsFocused}
 						bind:editModeEnabled
 						on:channelAdded={(e) => {
@@ -456,6 +458,7 @@
 	<ChannelSearchDropdown
 		bind:selectedChannelIndex
 		bind:filteredChannels
+		bind:positions={board.positions}
 		on:appSelected={(event) => {
 			handleProceed(event.detail.channel);
 		}}
@@ -465,7 +468,10 @@
 		on:editClicked={(event) => {
 			handleEdit(event.detail.channel);
 		}}
-		on:newChannelClicked={toggleAddForm}
+		on:newChannelClicked={() => {
+			addChannelPopoverStepOneComplete = true;
+			toggleAddForm();
+		}}
 	/>
 {/if}
 
