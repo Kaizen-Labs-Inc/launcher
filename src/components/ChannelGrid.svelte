@@ -462,7 +462,6 @@
 			handleProceed(event.detail.channel);
 		}}
 		on:addClicked={(event) => {
-			// event is a mouse down event, not a Svelte event
 			handleChannelAdded(event.detail.channel);
 		}}
 		on:editClicked={(event) => {
