@@ -5,7 +5,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { flip } from 'svelte/animate';
-
 	import { dndzone } from 'svelte-dnd-action';
 	import AddChannelPopover from '../components/AddChannelPopover.svelte';
 	import ChannelSearchDropdown from '../components/ChannelSearchDropdown.svelte';
@@ -21,9 +20,12 @@
 	import { isMobileDevice } from '../utils/DetectDevice';
 	import { trimUrl } from '../utils/TrimUrl';
 	import filterChannelsByQuery from '../lib/filterChannelsByQuery';
+	import { Backdrop, backdropOptions } from '../model/Backdrop';
+	import { backdropStore } from '../stores/backdropStore';
 
 	export let isDemo = false;
-
+	let editModeEnabled: boolean = false;
+	let selectedBackdrop: Backdrop;
 	let tippyInstance: Instance;
 	let query: string = '';
 	let searchIsFocused: boolean = false;
@@ -34,9 +36,8 @@
 	let channelsToSearch: Channel[];
 	const flipDurationMs: number = 200;
 	let isConsidering: boolean = false;
-	let editModeEnabled: boolean = false;
 	let editModeInitializedByDrag: boolean = false;
-
+	let addChannelPopoverStepOneComplete: boolean = false;
 	// For edit mode jiggles
 	const jiggleAnimDelayMin: number = -0.75;
 	const jiggleAnimDelayMax: number = -0.05;
@@ -118,6 +119,8 @@
 
 	const handleFocus = () => {
 		if (!editModeEnabled) {
+			let searchInput = document.getElementById('searchInput');
+			searchInput.focus();
 			searchIsFocused = true;
 			selectedChannelIndex = 0;
 		}
@@ -146,6 +149,7 @@
 		board.positions.unshift(newPosition);
 		await orderAndSyncBoardPositions();
 		addToast({ dismissible: false, message: 'Added', type: 'success', timeout: 3000 });
+		handleBlur();
 		analytics.track('Channel added', {
 			channel: channel
 		});
@@ -163,6 +167,14 @@
 		editModeEnabled = true;
 		tippyInstance.disable();
 		analytics.track('Edit mode button clicked');
+	};
+
+	backdropStore.subscribe((value) => {
+		selectedBackdrop = value;
+	});
+
+	const handleSelectedBackdrop = (id: number) => {
+		backdropStore.set(backdropOptions.find((b) => b.id === id));
 	};
 
 	async function assignBoard(res) {
@@ -246,7 +258,11 @@
 		);
 
 		document.addEventListener('mousedown', function (e) {
-			if (editModeEnabled && e.target.parentElement.id !== 'editToggle') {
+			if (
+				editModeEnabled &&
+				e.target.parentElement.id !== 'editToggle' &&
+				e.target.parentElement.id !== 'backdropSelector'
+			) {
 				var node = e.target;
 				var inside = false;
 				while (node) {
@@ -289,17 +305,19 @@
 				on:focus={handleFocus}
 				on:blur={handleBlur}
 				on:input={handleInput}
-				disabled={addFormIsFocused}
+				on:click
+				disabled={addFormIsFocused || editModeEnabled}
 				autocomplete="false"
 				id="searchInput"
 				placeholder="Search"
-				class="ml-4 text-2xl sm:text-5xl w-2/3 border-0 outline-none bg-transparent text-white font-light placeholder-white placeholder-opacity-30 transition duration-200 ease-in-out {addFormIsFocused
-					? 'opacity-5 scale-95'
-					: ''}"
+				class="ml-4 text-2xl sm:text-5xl w-2/3 border-0 outline-none bg-transparent font-light transition duration-200 ease-in-out placeholder-opacity-50 {selectedBackdrop.darkMode
+					? 'placeholder-white'
+					: 'placeholder-black'} {addFormIsFocused ? 'opacity-5 scale-95' : ''}"
 			/>
 			{#if !searchIsFocused}
 				<span
-					class="absolute ml-24 sm:ml-48 sm:text-base text-xs border-2 border-white border-opacity-50 sm:w-10 sm:h-10 h-8 w-8 opacity-50 flex items-center justify-center rounded-md transition duration-200 ease-in-out {addFormIsFocused
+					on:click={handleFocus}
+					class="absolute cursor-pointer ml-24 sm:ml-48 sm:text-base text-xs bg-white bg-opacity-25 sm:w-10 sm:h-10 h-8 w-8 opacity-50 flex items-center justify-center rounded-md transition duration-200 ease-in-out {addFormIsFocused
 						? 'opacity-5 scale-95'
 						: ''}">⌘G</span
 				>
@@ -318,9 +336,11 @@
 					{/if}
 					<AddChannelPopover
 						channels={channelsToSearch || []}
-						{board}
+						board={board}
+						bind:stepOneComplete={addChannelPopoverStepOneComplete}
 						bind:popOverIsFocused={addFormIsFocused}
 						bind:editModeEnabled
+						bind:selectedBackdrop
 						on:channelAdded={(e) => {
 							handleChannelAdded(e.detail.channel);
 						}}
@@ -331,10 +351,39 @@
 	</div>
 </section>
 {#if !searchIsFocused}
+	{#if editModeEnabled && !editModeInitializedByDrag}
+		<ul id="backdropSelector" class="flex flex-wrap items center justify-center">
+			{#each backdropOptions as backdropOption}
+				{#if backdropOption.colors.length === 1}
+					<li
+						on:click={() => {
+							handleSelectedBackdrop(backdropOption.id);
+						}}
+						style="background-color: {backdropOption.colors[0]}"
+						class="m-2 rounded-full w-10 h-10 {selectedBackdrop.id === backdropOption.id
+							? 'border-4 border-white'
+							: ''} shadow-lg cursor-pointer bg-opacity-75 hover:bg-opacity-100 hover:shadow-xl transition duration-200 ease-in-out hover:scale-110"
+					/>
+				{:else}
+					<li
+						on:click={() => {
+							handleSelectedBackdrop(backdropOption.id);
+						}}
+						style="background-image: radial-gradient(at 0% 50%, {backdropOption
+							.colors[0]} 0, transparent 100%),
+				radial-gradient(at 0% 100%, {backdropOption.colors[1]} 0, transparent 50%),
+				radial-gradient(at 80% 100%, {backdropOption.colors[2]} 0, transparent 50%),
+				radial-gradient(at 0% 0%, {backdropOption.colors[3]} 0, transparent 50%);"
+						class="m-2 rounded-full w-10 h-10 {selectedBackdrop.id === backdropOption.id
+							? 'border-4 border-white'
+							: ''} shadow-lg cursor-pointer bg-opacity-75 hover:bg-opacity-100 hover:shadow-xl transition duration-200 ease-in-out hover:scale-110"
+					/>
+				{/if}
+			{/each}
+		</ul>
+	{/if}
 	<section
-		class="grid lg:grid-cols-6 md:grid-cols-4 grid-cols-2 gap-8 md:gap-12 lg:gap-16 transition duration-200 ease-in-out mt-16 {editModeEnabled
-			? '-translate-y-10'
-			: ''}"
+		class="grid lg:grid-cols-6 md:grid-cols-4 grid-cols-2 gap-8 md:gap-12 lg:gap-16 mt-12 transition duration-200 ease-in-out"
 		use:dndzone={{
 			items: board?.positions || [],
 			flipDurationMs,
@@ -419,7 +468,7 @@
 							on:click={() => {
 								handleEdit(position.channel);
 							}}
-							class="cursor-pointer mx-2 rounded bg-white bg-opacity-5 p-2 hover:bg-opacity-10"
+							class="cursor-pointer mx-2 rounded bg-white bg-opacity-50 p-2 hover:bg-opacity-10"
 						>
 							<Edit2Icon strokeWidth="1" size="16" />
 						</div>
@@ -443,7 +492,7 @@
 		<div class="flex flex-col items-center justify-center">
 			<div
 				on:click={handleEditModeToggle}
-				class="mx-auto cursor-pointer mt-12 rounded-xl bg-white bg-opacity-10 p-4 font-medium text-lg flex justify-center items-center hover:bg-opacity-20"
+				class="mx-auto cursor-pointer mt-24 rounded-xl bg-white bg-opacity-10 p-4 font-medium text-lg flex justify-center items-center hover:bg-opacity-20"
 			>
 				Done
 			</div>
@@ -456,6 +505,7 @@
 	<ChannelSearchDropdown
 		bind:selectedChannelIndex
 		bind:filteredChannels
+		bind:positions={board.positions}
 		on:appSelected={(event) => {
 			handleProceed(event.detail.channel);
 		}}
@@ -465,7 +515,10 @@
 		on:editClicked={(event) => {
 			handleEdit(event.detail.channel);
 		}}
-		on:newChannelClicked={toggleAddForm}
+		on:newChannelClicked={() => {
+			addChannelPopoverStepOneComplete = true;
+			toggleAddForm();
+		}}
 	/>
 {/if}
 

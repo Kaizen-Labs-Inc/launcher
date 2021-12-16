@@ -10,7 +10,9 @@
 	import AuthenticatedNav from '../components/nav/AuthenticatedNav.svelte';
 	import PublicNav from '../components/nav/PublicNav.svelte';
 	import { OrganizationStatus, organizationStore } from '../stores/organizationStore';
-
+	import { Gradient } from '$lib/gradient';
+	import { backdropStore } from '../stores/backdropStore';
+	import type { Backdrop } from '../model/Backdrop';
 	let userStatus: UserStatus;
 
 	userStore.subscribe((value) => {
@@ -22,8 +24,18 @@
 		organizationStatus = value;
 	});
 
+	let selectedBackdrop: Backdrop;
+	backdropStore.subscribe((value) => {
+		selectedBackdrop = value;
+	});
+
+	const gradient = new Gradient();
 	onMount(async () => {
 		const analytics = (window.analytics = window.analytics || []);
+		if (selectedBackdrop.animated) {
+			gradient.initGradient('#gradient-canvas');
+			gradient.amp = 200;
+		}
 
 		if (!analytics.initialize)
 			if (analytics.invoked)
@@ -124,7 +136,17 @@
 	});
 </script>
 
-<main>
+<main
+	class="z-10 h-screen min-h-screen w-screen transition ease-in-out duration-200 {selectedBackdrop.darkMode
+		? 'text-white'
+		: 'text-black'}"
+	style={selectedBackdrop.colors.length === 1
+		? 'background-color: ' + selectedBackdrop.colors[0]
+		: `background-color: #0b1431; background-image: radial-gradient(at 0% 50%, ${selectedBackdrop.colors[0]} 0, transparent 100%),
+radial-gradient(at 0% 100%, ${selectedBackdrop.colors[1]} 0, transparent 50%),
+radial-gradient(at 80% 100%, ${selectedBackdrop.colors[2]} 0, transparent 50%),
+radial-gradient(at 0% 0%, ${selectedBackdrop.colors[3]} 0, transparent 50%);`}
+>
 	<div class="container">
 		<Toasts />
 		{#if userStatus.loading || organizationStatus.loading}
@@ -146,6 +168,12 @@
 		{/if}
 	</div>
 </main>
+{#if selectedBackdrop && selectedBackdrop.animated === true}
+	<canvas
+		id="gradient-canvas"
+		style="width: 100vw; height: 100vh; position: absolute; z-index: 0"
+	/>
+{/if}
 
 <!-- <footer class="z-0">
 	<p class="mx-3">Kaizen Labs Inc 2021</p>
@@ -169,6 +197,13 @@
 		justify-content: center;
 		align-items: center;
 		margin-top: 180px;
+	}
+
+	#gradient-canvas {
+		--gradient-color-1: #000;
+		--gradient-color-2: #243aff;
+		--gradient-color-3: #9fffa1;
+		--gradient-color-4: #e63946;
 	}
 
 	@media (min-width: 480px) {

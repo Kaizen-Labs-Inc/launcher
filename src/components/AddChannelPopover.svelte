@@ -13,18 +13,22 @@
 
 	import { clickOutside } from '../utils/DetectClickOutsideOfElement';
 	import ChannelForm from './ChannelForm.svelte';
+
 	import Button from './Button.svelte';
+	import type { Backdrop } from '../model/Backdrop';
 
 	export let channels: Channel[] = [];
 	export let board;
 	export let editModeEnabled: boolean;
+	export let selectedBackdrop: Backdrop;
+	export let stepOneComplete: boolean = false;
 	let searchQuery: string = '';
 	let tippyInstance: Instance;
 	let selectedChannelIndex: number = 0;
-	let stepOneComplete: boolean = false;
 	let stepTwoComplete: boolean = false;
 	let channelUrl: string = '';
 	let channelMetadataLoading: boolean = false;
+
 	const dispatch = createEventDispatcher();
 
 	$: {
@@ -100,7 +104,6 @@
 		dispatch('channelAdded', {
 			channel: channel
 		});
-		console.log('added');
 		resetPopover();
 	};
 
@@ -120,7 +123,6 @@
 	};
 
 	const clickOutsideFilter = (node: Node) => {
-		console.log(node);
 		const emojiPicker = document.getElementsByClassName('emoji-picker__wrapper');
 		if (emojiPicker.length > 0 && emojiPicker[0].contains(node)) return true;
 	};
@@ -138,7 +140,7 @@
 
 <button
 	on:click={togglePopover}
-	id={popOverIsFocused ? 'closeTarget' : 'addTarget'}
+	id="addTarget"
 	class="transition duration-200 ease-in-out sm:w-10 sm:h-10 w-6 h-6 {popOverIsFocused
 		? 'rotate-45'
 		: ''} {editModeEnabled ? 'cursor-default' : 'cursor-pointer hover:opacity-100 hover:scale-110'}"
@@ -185,7 +187,9 @@
 							class="my-1 rounded-lg p-2 flex items-center {boardChannelIds.includes(channel.id)
 								? 'opacity-60'
 								: selectedChannelIndex === i
-								? 'bg-opacity-10 bg-white selected cursor-pointer'
+								? `bg-opacity-10 ${
+										selectedBackdrop.darkMode ? 'bg-white' : 'bg-black'
+								  } selected cursor-pointer`
 								: 'cursor-pointer'}"
 						>
 							<div
@@ -203,9 +207,7 @@
 								<div>
 									{channel.name}
 								</div>
-								<!-- TODO We need a new store for the users individual channels -->
-								<!-- For now we're just using 'channels',
-							a prop passed from the parent that is keeping state -->
+
 								{#if boardChannelIds.includes(channel.id)}
 									<div class="opacity-70">✓ Added</div>
 								{/if}
@@ -227,7 +229,7 @@
 					}}
 					on:click={handleContinue}
 					class="my-1 {selectedChannelIndex === filteredChannels.length
-						? 'bg-opacity-10 bg-white selected'
+						? `bg-opacity-10 ${selectedBackdrop.darkMode ? 'bg-white' : 'bg-black'}  selected`
 						: ''} rounded-lg cursor-pointer p-2 flex items-center "
 				>
 					<div
@@ -265,6 +267,7 @@
 				on:submit={(event) => {
 					handleAdd(event.detail.channel);
 				}}
+				bind:selectedBackdrop
 			/>
 		{/if}
 	</div>
