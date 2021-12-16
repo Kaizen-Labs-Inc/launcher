@@ -64,7 +64,9 @@
 			? 'bg-opacity-10'
 			: 'bg-opacity-90'}  transition duration-200 ease-in-out hover:scale-105"
 	>
-		{#if emoji}
+		{#if channel.icon}
+			<img src={channel.icon} class="w-8 h-8" alt={channel.name} />
+		{:else if emoji}
 			{emoji}
 		{:else}
 			<SmileIcon size="26" strokeWidth="2" />

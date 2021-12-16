@@ -436,6 +436,7 @@
 					class="text-6xl mb-4 icon flex items-center justify-center"
 				>
 					{#if position.channel.image}
+						<!-- TODO change this to channel.icon -->
 						<img
 							alt={position.channel.name}
 							style="z-index: 0;"
