@@ -8,7 +8,6 @@
 	import { SmileIcon } from 'svelte-feather-icons';
 	import Tags from 'svelte-tags-input';
 	import type Channel from 'src/model/Channel';
-	// import { scrape } from '../routes/api/scrape';
 	const dispatch = createEventDispatcher();
 	export let channel: Channel = {
 		name: '',
@@ -46,7 +45,6 @@
 		<label for="url" class="font-medium ">URL</label>
 		<input
 			bind:value={channel.url}
-			autofocus
 			name="url"
 			type="url"
 			placeholder="Paste the link here"
@@ -107,7 +105,6 @@
 </div>
 <div
 	on:click={() => {
-		console.log('wtf');
 		handleSubmit(channel);
 	}}
 	class="flex mt-2 cursor-pointer justify-center items-center rounded bg-white bg-opacity-90 text-black font-medium py-2 text-lg"

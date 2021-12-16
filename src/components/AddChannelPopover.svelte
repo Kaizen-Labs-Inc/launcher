@@ -13,6 +13,7 @@
 
 	import { clickOutside } from '../utils/DetectClickOutsideOfElement';
 	import ChannelForm from './ChannelForm.svelte';
+	import Button from './Button.svelte';
 
 	export let channels: Channel[] = [];
 	export let board;
@@ -21,7 +22,9 @@
 	let tippyInstance: Instance;
 	let selectedChannelIndex: number = 0;
 	let stepOneComplete: boolean = false;
-
+	let stepTwoComplete: boolean = false;
+	let channelUrl: string = '';
+	let channelMetadataLoading: boolean = false;
 	const dispatch = createEventDispatcher();
 
 	$: {
@@ -118,6 +121,16 @@
 		console.log(node);
 		const emojiPicker = document.getElementsByClassName('emoji-picker__wrapper');
 		if (emojiPicker.length > 0 && emojiPicker[0].contains(node)) return true;
+	};
+
+	const handleUrlSubmission = () => {
+		channelMetadataLoading = true;
+		const encodedUrl = encodeURIComponent(channelUrl);
+		return fetch(`/api/scrape?url=${encodedUrl}`).then((res) => {
+			console.log(res);
+			channelMetadataLoading = false;
+			stepTwoComplete = true;
+		});
 	};
 </script>
 
@@ -223,11 +236,25 @@
 					<div>Add a new app</div>
 				</div>
 			{/if}
+		{:else if !stepTwoComplete}
+			<div class="flex flex-col">
+				<label for="url" class="font-medium mb-1">URL</label>
+				<input
+					bind:value={channelUrl}
+					autofocus
+					name="url"
+					type="url"
+					placeholder="Paste the link here"
+					class="bg-white bg-opacity-10 rounded p-2"
+				/>
+			</div>
+			<Button label="Save" disabled={channelMetadataLoading} on:clicked={handleUrlSubmission} />
 		{:else}
 			<ChannelForm
 				channel={{
 					name:
-						searchQuery.charAt(0).toUpperCase() + searchQuery.substr(1).toLowerCase() || undefined
+						searchQuery.charAt(0).toUpperCase() + searchQuery.substr(1).toLowerCase() || undefined,
+					url: channelUrl
 				}}
 				on:submit={(event) => {
 					handleAdd(event.detail.channel);
