@@ -36,7 +36,7 @@
 	let isConsidering: boolean = false;
 	let editModeEnabled: boolean = false;
 	let editModeInitializedByDrag: boolean = false;
-
+	let addChannelPopoverStepOneComplete: boolean = false;
 	// For edit mode jiggles
 	const jiggleAnimDelayMin: number = -0.75;
 	const jiggleAnimDelayMax: number = -0.05;
@@ -320,6 +320,7 @@
 					<AddChannelPopover
 						channels={channelsToSearch || []}
 						board={board}
+						bind:stepOneComplete={addChannelPopoverStepOneComplete}
 						bind:popOverIsFocused={addFormIsFocused}
 						bind:editModeEnabled
 						on:channelAdded={(e) => {
@@ -467,7 +468,10 @@
 		on:editClicked={(event) => {
 			handleEdit(event.detail.channel);
 		}}
-		on:newChannelClicked={toggleAddForm}
+		on:newChannelClicked={() => {
+			addChannelPopoverStepOneComplete = true;
+			toggleAddForm();
+		}}
 	/>
 {/if}
 
