@@ -137,11 +137,11 @@
 		channelMetadataLoading = true;
 		const encodedUrl = encodeURIComponent(channelUrl);
 		return fetch(`/api/scrape?url=${encodedUrl}`).then(async (res) => {
+			// TODO check to make sure that data.icon resolves
 			res.json().then((data: any) => {
-				console.log(data);
 				channel.name = data.title;
 				channel.description = data.description;
-				channel.icon = data.icon;
+				channel.image = data.icon;
 				channelMetadataLoading = false;
 				stepTwoComplete = true;
 			});

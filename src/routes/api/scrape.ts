@@ -9,9 +9,10 @@ export async function get(request: ServerRequest): Promise<void | EndpointOutput
 	if (!url) {
 		return BAD_REQUEST;
 	} else {
-		return await scraper(url).then((data) => {
+		return await scraper(url).then((res) => {
+			// TODO handle 500s and timeouts
 			return {
-				body: JSON.stringify(data)
+				body: JSON.stringify(res)
 			};
 		});
 	}

@@ -383,7 +383,7 @@
 		</ul>
 	{/if}
 	<section
-		class="grid lg:grid-cols-6 md:grid-cols-4 grid-cols-2 gap-8 md:gap-12 lg:gap-16 mt-12 transition duration-200 ease-in-out"
+		class="grid lg:grid-cols-6 md:grid-cols-4 grid-cols-2 gap-8 md:gap-12 lg:gap-16 items-start mt-12 transition duration-200 ease-in-out"
 		use:dndzone={{
 			items: board?.positions || [],
 			flipDurationMs,
@@ -436,7 +436,6 @@
 					class="text-6xl mb-4 icon flex items-center justify-center"
 				>
 					{#if position.channel.image}
-						<!-- TODO change this to channel.icon -->
 						<img
 							alt={position.channel.name}
 							style="z-index: 0;"

@@ -16,7 +16,7 @@
 		name: '',
 		description: '',
 		url: '',
-		icon: '',
+		image: '',
 		tags: []
 	};
 	export let selectedBackdrop: Backdrop;
@@ -49,6 +49,7 @@
 		<label for="url" class="font-medium ">URL</label>
 		<input
 			bind:value={channel.url}
+			required
 			name="url"
 			type="url"
 			placeholder="Paste the link here"
@@ -64,8 +65,8 @@
 			? 'bg-opacity-10'
 			: 'bg-opacity-90'}  transition duration-200 ease-in-out hover:scale-105"
 	>
-		{#if channel.icon}
-			<img src={channel.icon} class="w-8 h-8" alt={channel.name} />
+		{#if channel.image}
+			<img src={channel.image} class="w-8 h-8" alt={channel.name} />
 		{:else if emoji}
 			{emoji}
 		{:else}
@@ -77,8 +78,10 @@
 	<label for="name" class="font-medium ">Name it</label>
 	<input
 		bind:value={channel.name}
+		required
 		name="name"
 		type="text"
+		maxlength="30"
 		placeholder="Type a name"
 		class="bg-white {selectedBackdrop.darkMode ? 'bg-opacity-10' : 'bg-opacity-90'}  rounded p-2"
 	/>
