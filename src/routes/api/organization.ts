@@ -5,9 +5,7 @@ import type { Organization } from '@prisma/client';
 import validateUser from '$lib/validateUser';
 import { RoleType } from '../../model/RoleType';
 
-
 export async function get(request: ServerRequest): Promise<void | EndpointOutput> {
-
 	const user = await validateUser(request, prisma);
 
 	if (!user) {
@@ -27,7 +25,7 @@ export async function get(request: ServerRequest): Promise<void | EndpointOutput
 				}
 			}
 		}
-	})
+	});
 
 	if (role) {
 		return {
@@ -41,7 +39,6 @@ export async function get(request: ServerRequest): Promise<void | EndpointOutput
 }
 
 export async function post(request: ServerRequest): Promise<void | EndpointOutput> {
-
 	const user = await validateUser(request, prisma);
 
 	if (!user) {
@@ -68,21 +65,25 @@ export async function post(request: ServerRequest): Promise<void | EndpointOutpu
 				lastModified: dateCreated,
 				domainRestricted: domainRestricted,
 				emailDomains: {
-					create: emailDomains.map(it => Object.assign(it, { dateCreated: dateCreated, lastModified: dateCreated }))
+					create: emailDomains.map((it) =>
+						Object.assign(it, { dateCreated: dateCreated, lastModified: dateCreated })
+					)
 				},
 				members: {
-					create: [{
-						user: { connect: { id: user.id } },
-						roleType: RoleType.OWNER.valueOf(),
-						dateCreated: dateCreated,
-						lastModified: dateCreated
-					}]
+					create: [
+						{
+							user: { connect: { id: user.id } },
+							roleType: RoleType.OWNER.valueOf(),
+							dateCreated: dateCreated,
+							lastModified: dateCreated
+						}
+					]
 				},
 				subscription: {
 					connect: {
 						id: 1
 					}
-				},
+				}
 			}),
 			include: {
 				emailDomains: true
@@ -106,4 +107,3 @@ export async function post(request: ServerRequest): Promise<void | EndpointOutpu
 		};
 	}
 }
-

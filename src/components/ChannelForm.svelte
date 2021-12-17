@@ -8,14 +8,15 @@
 	import { SmileIcon } from 'svelte-feather-icons';
 	import Tags from 'svelte-tags-input';
 	import type Channel from 'src/model/Channel';
+
 	import type { Backdrop } from 'src/model/Backdrop';
-	// import { scrape } from '../routes/api/scrape';
+
 	const dispatch = createEventDispatcher();
 	export let channel: Channel = {
 		name: '',
 		description: '',
 		url: '',
-		icon: '',
+		image: '',
 		tags: []
 	};
 	export let selectedBackdrop: Backdrop;
@@ -48,7 +49,7 @@
 		<label for="url" class="font-medium ">URL</label>
 		<input
 			bind:value={channel.url}
-			autofocus
+			required
 			name="url"
 			type="url"
 			placeholder="Paste the link here"
@@ -64,7 +65,9 @@
 			? 'bg-opacity-10'
 			: 'bg-opacity-90'}  transition duration-200 ease-in-out hover:scale-105"
 	>
-		{#if emoji}
+		{#if channel.image}
+			<img src={channel.image} class="w-8 h-8" alt={channel.name} />
+		{:else if emoji}
 			{emoji}
 		{:else}
 			<SmileIcon size="26" strokeWidth="2" />
@@ -75,8 +78,10 @@
 	<label for="name" class="font-medium ">Name it</label>
 	<input
 		bind:value={channel.name}
+		required
 		name="name"
 		type="text"
+		maxlength="30"
 		placeholder="Type a name"
 		class="bg-white {selectedBackdrop.darkMode ? 'bg-opacity-10' : 'bg-opacity-90'}  rounded p-2"
 	/>
@@ -88,6 +93,7 @@
 		bind:value={channel.description}
 		name="description"
 		type="text"
+		rows="4"
 		placeholder="Add an optional description"
 		class="bg-white {selectedBackdrop.darkMode ? 'bg-opacity-10' : 'bg-opacity-90'} rounded p-2"
 	/>

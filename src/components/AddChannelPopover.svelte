@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { onMount, createEventDispatcher } from 'svelte';
 	import { scale } from 'svelte/transition';
-
 	import tippy, { Instance } from 'tippy.js';
 	import 'tippy.js/dist/tippy.css';
 	import 'tippy.js/themes/translucent.css';
@@ -10,23 +9,23 @@
 	import type Channel from '../model/Channel';
 	import filterChannelsByQuery from '../lib/filterChannelsByQuery';
 	import { isEmptyOrSpaces } from '../utils/isEmptyOrSpaces';
-
 	import { clickOutside } from '../utils/DetectClickOutsideOfElement';
 	import ChannelForm from './ChannelForm.svelte';
+	import Button from './Button.svelte';
 	import type { Backdrop } from '../model/Backdrop';
-
 	export let channels: Channel[] = [];
 	export let board;
 	export let editModeEnabled: boolean;
-
 	export let selectedBackdrop: Backdrop;
-
 	export let stepOneComplete: boolean = false;
-
 	let searchQuery: string = '';
 	let tippyInstance: Instance;
 	let selectedChannelIndex: number = 0;
-
+	let stepTwoComplete: boolean = false;
+	let channelUrl: string = '';
+	let channelMetadataLoading: boolean = false;
+	let channel: Channel;
+	let channelDescription: string = '';
 	const dispatch = createEventDispatcher();
 
 	$: {
@@ -45,6 +44,10 @@
 
 	$: boardChannelIds = board?.positions?.map((p) => p.channel.id) || [];
 
+	$: channel = {
+		description: channelDescription,
+		url: channelUrl
+	};
 	export let popOverIsFocused: boolean = false;
 
 	const togglePopover = () => {
@@ -106,21 +109,74 @@
 	};
 
 	const handleContinue = () => {
-		stepOneComplete = true;
-		selectedChannelIndex = null;
-		analytics.track('Channel added step one completed');
+		if (!stepOneComplete && !stepTwoComplete) {
+			stepOneComplete = true;
+			selectedChannelIndex = null;
+			analytics.track('Channel added step one completed');
+		} else if (stepOneComplete && !stepTwoComplete) {
+			handleUrlSubmission();
+
+			analytics.track('Channel added step two completed');
+		}
 	};
 
 	const resetPopover = () => {
 		popOverIsFocused = false;
 		stepOneComplete = false;
+		stepTwoComplete = false;
 		selectedChannelIndex = null;
 		searchQuery = '';
+		channelUrl = '';
 	};
 
 	const clickOutsideFilter = (node: Node) => {
 		const emojiPicker = document.getElementsByClassName('emoji-picker__wrapper');
 		if (emojiPicker.length > 0 && emojiPicker[0].contains(node)) return true;
+	};
+
+	const handleUrlSubmission = () => {
+		channelMetadataLoading = true;
+		let metaData;
+		const encodedUrl = encodeURIComponent(channelUrl);
+		return fetch(`/api/scrape?url=${encodedUrl}`)
+			.then(async (res: Response) => {
+				// TO DO store image on our side?
+				// TO DO check for and prevent duplicates
+				// Probably from URL or some fragment of the URL
+				res
+					.json()
+					.then((data: any) => {
+						metaData = data;
+						channel.description = metaData.description ?? '';
+						analytics.track('URL scraped', { url: channelUrl });
+					})
+					.then(() => {
+						const encodedImageUrl = encodeURIComponent(metaData.icon);
+						fetch(`/api/checkImage?url=${encodedImageUrl}`)
+							.then(async (res: Response) => {
+								res.json().then((res) => {
+									if (res.status === 200) {
+										channel.image = metaData.icon;
+									} else {
+										channel.image = undefined;
+									}
+								});
+								channelMetadataLoading = false;
+								stepTwoComplete = true;
+								handleContinue();
+							})
+							.catch((e) => console.error(e));
+					});
+			})
+			.catch((e: Error) => {
+				channel.name = '';
+				channel.description = '';
+				channel.image = undefined;
+				channelMetadataLoading = false;
+				stepTwoComplete = true;
+				handleContinue();
+				analytics.track('URL scraping failed', { url: channelUrl, error: e.message });
+			});
 	};
 </script>
 
@@ -226,12 +282,25 @@
 					<div>Add a new app</div>
 				</div>
 			{/if}
+		{:else if !stepTwoComplete}
+			<form>
+				<div class="flex flex-col">
+					<label for="url" class="font-medium mb-1">URL</label>
+					<input
+						bind:value={channelUrl}
+						autofocus
+						name="url"
+						type="url"
+						placeholder="Paste the link here"
+						class="bg-white bg-opacity-10 rounded p-2"
+					/>
+				</div>
+
+				<Button label="Next" loading={channelMetadataLoading} on:clicked={handleContinue} />
+			</form>
 		{:else}
 			<ChannelForm
-				channel={{
-					name:
-						searchQuery.charAt(0).toUpperCase() + searchQuery.substr(1).toLowerCase() || undefined
-				}}
+				channel={channel}
 				on:submit={(event) => {
 					handleAdd(event.detail.channel);
 				}}
