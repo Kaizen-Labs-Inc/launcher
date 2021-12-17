@@ -3,6 +3,7 @@ import type { EndpointOutput } from '@sveltejs/kit';
 import type { ServerRequest } from '@sveltejs/kit/types/hooks';
 import scraper from 'metadata-scraper';
 const BAD_REQUEST = { status: 400 };
+
 export async function get(request: ServerRequest): Promise<void | EndpointOutput> {
 	const url = request.query?.get('url');
 	if (!url) {

@@ -93,6 +93,7 @@
 					if (selectedChannelIndex < filteredChannels.length) {
 						handleAdd(filteredChannels[selectedChannelIndex]);
 					} else {
+						// TODO add more logic in here depending on step
 						handleContinue();
 					}
 				}
@@ -110,9 +111,14 @@
 	};
 
 	const handleContinue = () => {
-		stepOneComplete = true;
-		selectedChannelIndex = null;
-		analytics.track('Channel added step one completed');
+		if (!stepOneComplete && !stepTwoComplete) {
+			stepOneComplete = true;
+			selectedChannelIndex = null;
+			analytics.track('Channel added step one completed');
+		} else if (stepOneComplete && !stepTwoComplete) {
+			stepTwoComplete = true;
+			analytics.track('Channel added step two completed');
+		}
 	};
 
 	const resetPopover = () => {
@@ -131,29 +137,40 @@
 
 	const handleUrlSubmission = () => {
 		channelMetadataLoading = true;
+		let metaData;
 		const encodedUrl = encodeURIComponent(channelUrl);
 		return fetch(`/api/scrape?url=${encodedUrl}`)
 			.then(async (res: Response) => {
-				// TODO check to make sure that data.icon resolves
-				// Create a new endpoint with a simple fetch call
-				// https://stackoverflow.com/a/56196999
-
+				// TODO store image on our side?
 				// TODO check for and prevent duplicates
 				// Probably from URL or some fragment of the URL
-				res.json().then((data: any) => {
-					channel.description = data.description ?? '';
-					channel.image = data.icon ?? undefined;
-					channelMetadataLoading = false;
-					stepTwoComplete = true;
-					analytics.track('URL scraped', { url: channelUrl });
-				});
+				res
+					.json()
+					.then((data: any) => {
+						metaData = data;
+						channel.description = metaData.description ?? '';
+						channelMetadataLoading = false;
+						handleContinue();
+						analytics.track('URL scraped', { url: channelUrl });
+					})
+					.then(() => {
+						fetch(`/api/checkImage?url=${metaData.icon}`).then(async (res: Response) => {
+							res.json().then((res) => {
+								if (res.status === 200) {
+									channel.image = metaData.icon;
+								} else {
+									channel.image = undefined;
+								}
+							});
+						});
+					});
 			})
 			.catch((e: Error) => {
 				channel.name = '';
 				channel.description = '';
 				channel.image = undefined;
 				channelMetadataLoading = false;
-				stepTwoComplete = true;
+				handleContinue();
 				analytics.track('URL scraping failed', { url: channelUrl, error: e.message });
 			});
 	};
