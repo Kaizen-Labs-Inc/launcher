@@ -13,7 +13,6 @@ export async function get(request: ServerRequest): Promise<void | EndpointOutput
 		return await scraper(options)
 			.then((res) => {
 				const data = JSON.stringify(res);
-				console.log(data);
 				return {
 					body: data
 				};

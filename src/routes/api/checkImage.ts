@@ -10,12 +10,10 @@ export async function get(request: ServerRequest): Promise<void | EndpointOutput
 		return fetch(imageUrl, { method: 'HEAD' })
 			.then((res) => {
 				if (res.ok) {
-					console.log('Image exists.');
 					return {
 						body: { status: 200 }
 					};
 				} else {
-					console.error('Image does not exist.');
 					return {
 						body: { status: 404 }
 					};
