@@ -45,7 +45,6 @@
 	$: boardChannelIds = board?.positions?.map((p) => p.channel.id) || [];
 
 	$: channel = {
-		name: searchQuery.charAt(0).toUpperCase() + searchQuery.substr(1).toLowerCase() || undefined,
 		description: channelDescription,
 		url: channelUrl
 	};
@@ -93,7 +92,6 @@
 					if (selectedChannelIndex < filteredChannels.length) {
 						handleAdd(filteredChannels[selectedChannelIndex]);
 					} else {
-						// TODO add more logic in here depending on step
 						handleContinue();
 					}
 				}
