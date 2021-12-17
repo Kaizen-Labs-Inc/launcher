@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { onMount, createEventDispatcher } from 'svelte';
 	import { scale } from 'svelte/transition';
-
 	import tippy, { Instance } from 'tippy.js';
 	import 'tippy.js/dist/tippy.css';
 	import 'tippy.js/themes/translucent.css';
@@ -10,13 +9,10 @@
 	import type Channel from '../model/Channel';
 	import filterChannelsByQuery from '../lib/filterChannelsByQuery';
 	import { isEmptyOrSpaces } from '../utils/isEmptyOrSpaces';
-
 	import { clickOutside } from '../utils/DetectClickOutsideOfElement';
 	import ChannelForm from './ChannelForm.svelte';
-
 	import Button from './Button.svelte';
 	import type { Backdrop } from '../model/Backdrop';
-
 	export let channels: Channel[] = [];
 	export let board;
 	export let editModeEnabled: boolean;
@@ -136,16 +132,30 @@
 	const handleUrlSubmission = () => {
 		channelMetadataLoading = true;
 		const encodedUrl = encodeURIComponent(channelUrl);
-		return fetch(`/api/scrape?url=${encodedUrl}`).then(async (res) => {
-			// TODO check to make sure that data.icon resolves
-			res.json().then((data: any) => {
-				channel.name = data.title;
-				channel.description = data.description;
-				channel.image = data.icon;
+		return fetch(`/api/scrape?url=${encodedUrl}`)
+			.then(async (res: Response) => {
+				// TODO check to make sure that data.icon resolves
+				// Create a new endpoint with a simple fetch call
+				// https://stackoverflow.com/a/56196999
+
+				// TODO check for and prevent duplicates
+				// Probably from URL or some fragment of the URL
+				res.json().then((data: any) => {
+					channel.description = data.description ?? '';
+					channel.image = data.icon ?? undefined;
+					channelMetadataLoading = false;
+					stepTwoComplete = true;
+					analytics.track('URL scraped', { url: channelUrl });
+				});
+			})
+			.catch((e: Error) => {
+				channel.name = '';
+				channel.description = '';
+				channel.image = undefined;
 				channelMetadataLoading = false;
 				stepTwoComplete = true;
+				analytics.track('URL scraping failed', { url: channelUrl, error: e.message });
 			});
-		});
 	};
 </script>
 

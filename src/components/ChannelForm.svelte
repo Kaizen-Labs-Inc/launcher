@@ -93,6 +93,7 @@
 		bind:value={channel.description}
 		name="description"
 		type="text"
+		rows="4"
 		placeholder="Add an optional description"
 		class="bg-white {selectedBackdrop.darkMode ? 'bg-opacity-10' : 'bg-opacity-90'} rounded p-2"
 	/>
