@@ -435,7 +435,6 @@
 						: ''}
 					class="text-6xl mb-4 icon flex items-center justify-center"
 				>
-					<!-- TODO check if image is an .ico file and if so, treat it differently -->
 					{#if position.channel.image}
 						{#if position.channel.image.split('.').pop() === 'ico'}
 							<div class="flex items-center justify-center bg-white rounded-full w-14 h-14">
