@@ -116,7 +116,8 @@
 			selectedChannelIndex = null;
 			analytics.track('Channel added step one completed');
 		} else if (stepOneComplete && !stepTwoComplete) {
-			stepTwoComplete = true;
+			handleUrlSubmission();
+
 			analytics.track('Channel added step two completed');
 		}
 	};
@@ -141,28 +142,32 @@
 		const encodedUrl = encodeURIComponent(channelUrl);
 		return fetch(`/api/scrape?url=${encodedUrl}`)
 			.then(async (res: Response) => {
-				// TODO store image on our side?
-				// TODO check for and prevent duplicates
+				// TO DO store image on our side?
+				// TO DO check for and prevent duplicates
 				// Probably from URL or some fragment of the URL
 				res
 					.json()
 					.then((data: any) => {
 						metaData = data;
 						channel.description = metaData.description ?? '';
-						channelMetadataLoading = false;
-						handleContinue();
 						analytics.track('URL scraped', { url: channelUrl });
 					})
 					.then(() => {
-						fetch(`/api/checkImage?url=${metaData.icon}`).then(async (res: Response) => {
-							res.json().then((res) => {
-								if (res.status === 200) {
-									channel.image = metaData.icon;
-								} else {
-									channel.image = undefined;
-								}
-							});
-						});
+						const encodedImageUrl = encodeURIComponent(metaData.icon);
+						fetch(`/api/checkImage?url=${encodedImageUrl}`)
+							.then(async (res: Response) => {
+								res.json().then((res) => {
+									if (res.status === 200) {
+										channel.image = metaData.icon;
+									} else {
+										channel.image = undefined;
+									}
+								});
+								channelMetadataLoading = false;
+								stepTwoComplete = true;
+								handleContinue();
+							})
+							.catch((e) => console.error(e));
 					});
 			})
 			.catch((e: Error) => {
@@ -170,6 +175,7 @@
 				channel.description = '';
 				channel.image = undefined;
 				channelMetadataLoading = false;
+				stepTwoComplete = true;
 				handleContinue();
 				analytics.track('URL scraping failed', { url: channelUrl, error: e.message });
 			});
@@ -291,9 +297,8 @@
 						class="bg-white bg-opacity-10 rounded p-2"
 					/>
 				</div>
-				<!-- TODO get enter working -->
-				<button type="submit" on:submit|preventDefault={handleUrlSubmission} class="hidden" />
-				<Button label="Next" loading={channelMetadataLoading} on:clicked={handleUrlSubmission} />
+
+				<Button label="Next" loading={channelMetadataLoading} on:clicked={handleContinue} />
 			</form>
 		{:else}
 			<ChannelForm

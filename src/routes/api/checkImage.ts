@@ -7,7 +7,7 @@ export async function get(request: ServerRequest): Promise<void | EndpointOutput
 	if (!imageUrl) {
 		return BAD_REQUEST;
 	} else {
-		fetch(imageUrl, { method: 'HEAD' })
+		return fetch(imageUrl, { method: 'HEAD' })
 			.then((res) => {
 				if (res.ok) {
 					console.log('Image exists.');
