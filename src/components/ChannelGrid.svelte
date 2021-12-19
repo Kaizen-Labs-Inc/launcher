@@ -9,10 +9,14 @@
 	import AddChannelPopover from '../components/AddChannelPopover.svelte';
 	import ChannelSearchDropdown from '../components/ChannelSearchDropdown.svelte';
 	import Channel from '../model/Channel';
-	import tippy, { Instance } from 'tippy.js';
-	import 'tippy.js/dist/tippy.css';
-	import 'tippy.js/themes/translucent.css';
-	import { SearchIcon, Edit2Icon, XIcon, ArrowUpRightIcon } from 'svelte-feather-icons';
+
+	import {
+		SearchIcon,
+		Edit2Icon,
+		XIcon,
+		ArrowUpRightIcon,
+		FeatherIcon
+	} from 'svelte-feather-icons';
 	import { goto } from '$app/navigation';
 	import { addToast } from '../stores/toaststore';
 	import Board from '../model/Board';
@@ -21,11 +25,11 @@
 	import filterChannelsByQuery from '../lib/filterChannelsByQuery';
 	import { Backdrop, backdropOptions } from '../model/Backdrop';
 	import { backdropStore } from '../stores/backdropStore';
+	import StatusBar from './StatusBar.svelte';
 
 	export let isDemo = false;
 	let editModeEnabled: boolean = false;
 	let selectedBackdrop: Backdrop;
-	let tippyInstance: Instance;
 	let query: string = '';
 	let searchIsFocused: boolean = false;
 	let addFormIsFocused: boolean = false;
@@ -33,7 +37,9 @@
 	let isMobile: boolean = false;
 	let board: Board;
 	let channelsToSearch: Channel[];
-	let hoveredChannel: Channel;
+	let statusBarVisible: boolean = false;
+	let statusBarLabel: string;
+	// let statusBarIcon: FeatherIcon;
 	const flipDurationMs: number = 200;
 	let isConsidering: boolean = false;
 	let editModeInitializedByDrag: boolean = false;
@@ -131,6 +137,16 @@
 		selectedChannelIndex = 0;
 	};
 
+	const resetStatusBar = () => {
+		statusBarVisible = false;
+		statusBarLabel = null;
+	};
+
+	const setStatusBar = (label: string) => {
+		statusBarVisible = true;
+		statusBarLabel = label;
+	};
+
 	async function handleChannelAdded(channel) {
 		let newPosition = { position: 0, channel: channel };
 		if (!isDemo) {
@@ -166,7 +182,6 @@
 
 	const handleEditModeToggle = () => {
 		editModeEnabled = true;
-		tippyInstance.disable();
 		analytics.track('Edit mode button clicked');
 	};
 
@@ -184,14 +199,6 @@
 			return a.position - b.position;
 		});
 		board = b;
-		// Toggle Tippy off if there are no channels on the board
-		if (board.positions.length > 0) {
-			tippyInstance = tippy(document.getElementById('editToggle'), {
-				content: 'Edit launcher',
-				arrow: false,
-				theme: 'translucent'
-			});
-		}
 	}
 	onMount(() => {
 		fetch('api/board', {
@@ -276,24 +283,21 @@
 				if (!inside) {
 					editModeEnabled = false;
 					editModeInitializedByDrag = false;
-					tippyInstance.enable();
 				}
 			}
 		});
 	});
 </script>
 
-{#if hoveredChannel && !editModeEnabled && !searchIsFocused}
-	<div
-		style="left: 50%;
-		transform: translateX(-50%);"
-		class=" z-40 px-4 mx-4 md:mx-auto text-center items-center justify-center font-mono text-lg bg-black bg-opacity-40  text-white p-2 rounded-2xl fixed bottom-6 flex items-center justify-center"
-	>
-		<div class="mr-2">
-			{hoveredChannel.url}
-		</div>
-		<ArrowUpRightIcon size="22" strokeWidth="1" />
-	</div>
+{#if !searchIsFocused && !editModeInitializedByDrag}
+	<StatusBar bind:visible={statusBarVisible}>
+		<div slot="label">{statusBarLabel}</div>
+		<!-- TODO revisit this when/if Svelte supports wrapping slots in conditionals -->
+		<!-- https://github.com/sveltejs/svelte/issues/5604 -->
+		<!-- {#if statusBarIcon}
+			<div slot="optionalIcon">{statusBarIcon}</div>
+		{/if} -->
+	</StatusBar>
 {/if}
 
 <section
@@ -340,6 +344,10 @@
 					{#if board?.positions.length > 0}
 						<div
 							on:click={handleEditModeToggle}
+							on:mouseover={() => {
+								setStatusBar('Edit board');
+							}}
+							on:mouseout={resetStatusBar}
 							id="editToggle"
 							class="mr-8 sm:w-8 sm:h-8 w-6 h-6 {editModeEnabled
 								? ''
@@ -358,6 +366,15 @@
 						on:channelAdded={(e) => {
 							handleChannelAdded(e.detail.channel);
 						}}
+						on:hoverOverEditIcon={() => {
+							setStatusBar('Add a new app');
+						}}
+						on:hoverOverCloseIcon={() => {
+							setStatusBar('Close');
+						}}
+						on:hoverOut={() => {
+							resetStatusBar();
+						}}
 					/>
 				</div>
 			{/if}
@@ -373,6 +390,10 @@
 						on:click={() => {
 							handleSelectedBackdrop(backdropOption.id);
 						}}
+						on:mouseover={() => {
+							setStatusBar('Change the background color of your board');
+						}}
+						on:mouseout={resetStatusBar}
 						style="background-color: {backdropOption.colors[0]}"
 						class="m-2 rounded-full w-10 h-10 {selectedBackdrop.id === backdropOption.id
 							? 'border-4 border-white'
@@ -383,6 +404,10 @@
 						on:click={() => {
 							handleSelectedBackdrop(backdropOption.id);
 						}}
+						on:mouseover={() => {
+							setStatusBar('Change the background color of your board');
+						}}
+						on:mouseout={resetStatusBar}
 						style="background-image: radial-gradient(at 0% 50%, {backdropOption
 							.colors[0]} 0, transparent 100%),
 				radial-gradient(at 0% 100%, {backdropOption.colors[1]} 0, transparent 50%),
@@ -421,16 +446,20 @@
 				on:mouseover={() => {
 					if (!editModeEnabled && !addFormIsFocused) {
 						selectedChannelIndex = i;
-						hoveredChannel = position.channel;
+						setStatusBar(position.channel.url);
+					} else {
+						setStatusBar('Drag to rearrange');
 					}
 				}}
 				on:mouseout={() => {
+					resetStatusBar();
 					if (!editModeEnabled) {
 						selectedChannelIndex = null;
 						hoveredChannel = null;
 					}
 				}}
 				on:click={() => {
+					resetStatusBar();
 					if (!editModeEnabled && !addFormIsFocused) {
 						handleProceed(position.channel);
 					}
@@ -492,6 +521,10 @@
 							on:click={() => {
 								handleEdit(position.channel);
 							}}
+							on:mouseover={() => {
+								setStatusBar('Edit app');
+							}}
+							on:mouseout={resetStatusBar}
 							class="cursor-pointer mx-2 rounded bg-white bg-opacity-50 p-2 hover:bg-opacity-10"
 						>
 							<Edit2Icon strokeWidth="1" size="16" />
@@ -503,6 +536,10 @@
 									channel: channel
 								});
 							}}
+							on:mouseover={() => {
+								setStatusBar('Remove app from your board');
+							}}
+							on:mouseout={resetStatusBar}
 							class="cursor-pointer mx-2 rounded p-2  text-white bg-red-500 hover:bg-red-600"
 						>
 							<XIcon strokeWidth="2" size="16" />

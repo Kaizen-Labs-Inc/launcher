@@ -1,9 +1,7 @@
 <script lang="ts">
 	import { onMount, createEventDispatcher } from 'svelte';
 	import { scale } from 'svelte/transition';
-	import tippy, { Instance } from 'tippy.js';
-	import 'tippy.js/dist/tippy.css';
-	import 'tippy.js/themes/translucent.css';
+
 	import { PlusIcon } from 'svelte-feather-icons';
 	import type MockChannel from 'src/model/MockChannel';
 	import type Channel from '../model/Channel';
@@ -19,7 +17,6 @@
 	export let selectedBackdrop: Backdrop;
 	export let stepOneComplete: boolean = false;
 	let searchQuery: string = '';
-	let tippyInstance: Instance;
 	let selectedChannelIndex: number = 0;
 	let stepTwoComplete: boolean = false;
 	let channelUrl: string = '';
@@ -27,16 +24,6 @@
 	let channel: Channel;
 	let channelDescription: string = '';
 	const dispatch = createEventDispatcher();
-
-	$: {
-		if (tippyInstance) {
-			if (editModeEnabled || popOverIsFocused) {
-				tippyInstance.disable();
-			} else {
-				tippyInstance.enable();
-			}
-		}
-	}
 
 	$: filteredChannels = channels.filter((channel) =>
 		filterChannelsByQuery(channel, searchQuery.toLowerCase())
@@ -60,12 +47,6 @@
 	};
 
 	onMount(() => {
-		tippyInstance = tippy(document.getElementById('addTarget'), {
-			content: 'Add an app',
-			arrow: false,
-			theme: 'translucent'
-		});
-
 		document.addEventListener(
 			'keydown',
 			(event) => {
@@ -181,7 +162,20 @@
 </script>
 
 <button
-	on:click={togglePopover}
+	on:click={() => {
+		togglePopover();
+		dispatch('hoverOut');
+	}}
+	on:mouseover={() => {
+		if (!popOverIsFocused) {
+			dispatch('hoverOverEditIcon');
+		} else {
+			dispatch('hoverOverCloseIcon');
+		}
+	}}
+	on:mouseout={() => {
+		dispatch('hoverOut');
+	}}
 	id="addTarget"
 	class="transition duration-200 ease-in-out sm:w-10 sm:h-10 w-6 h-6 {popOverIsFocused
 		? 'rotate-45'
