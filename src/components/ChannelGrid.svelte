@@ -12,13 +12,12 @@
 	import tippy, { Instance } from 'tippy.js';
 	import 'tippy.js/dist/tippy.css';
 	import 'tippy.js/themes/translucent.css';
-	import { SearchIcon, Edit2Icon, XIcon } from 'svelte-feather-icons';
+	import { SearchIcon, Edit2Icon, XIcon, ArrowUpRightIcon } from 'svelte-feather-icons';
 	import { goto } from '$app/navigation';
 	import { addToast } from '../stores/toaststore';
 	import Board from '../model/Board';
 	import { BoardType } from '../model/api/BoardType';
 	import { isMobileDevice } from '../utils/DetectDevice';
-	import { trimUrl } from '../utils/TrimUrl';
 	import filterChannelsByQuery from '../lib/filterChannelsByQuery';
 	import { Backdrop, backdropOptions } from '../model/Backdrop';
 	import { backdropStore } from '../stores/backdropStore';
@@ -34,6 +33,7 @@
 	let isMobile: boolean = false;
 	let board: Board;
 	let channelsToSearch: Channel[];
+	let hoveredChannel: Channel;
 	const flipDurationMs: number = 200;
 	let isConsidering: boolean = false;
 	let editModeInitializedByDrag: boolean = false;
@@ -93,6 +93,7 @@
 
 	const handleProceed = (channel: Channel) => {
 		selectedChannelIndex = null;
+		hoveredChannel = null;
 		window.open('https://' + channel.url, '_blank').focus();
 		analytics.track('Channel clicked', {
 			channel: channel
@@ -282,6 +283,19 @@
 	});
 </script>
 
+{#if hoveredChannel && !editModeEnabled && !searchIsFocused}
+	<div
+		style="left: 50%;
+		transform: translateX(-50%);"
+		class=" z-40 px-4 mx-4 md:mx-auto text-center items-center justify-center font-mono text-lg bg-black bg-opacity-40  text-white p-2 rounded-2xl fixed bottom-6 flex items-center justify-center"
+	>
+		<div class="mr-2">
+			{hoveredChannel.url}
+		</div>
+		<ArrowUpRightIcon size="22" strokeWidth="1" />
+	</div>
+{/if}
+
 <section
 	class="mt-16 flex justify-between items-center w-full transition duration-200 ease-in-out {editModeEnabled
 		? 'opacity-10 scale-95'
@@ -407,11 +421,13 @@
 				on:mouseover={() => {
 					if (!editModeEnabled && !addFormIsFocused) {
 						selectedChannelIndex = i;
+						hoveredChannel = position.channel;
 					}
 				}}
 				on:mouseout={() => {
 					if (!editModeEnabled) {
 						selectedChannelIndex = null;
+						hoveredChannel = null;
 					}
 				}}
 				on:click={() => {
@@ -465,9 +481,6 @@
 				</div>
 				<div>
 					<div class="text-2xl">{position.channel.name}</div>
-					<div class="text-md opacity-30">
-						{trimUrl('https://' + position.channel.url)}
-					</div>
 				</div>
 				{#if editModeEnabled && !editModeInitializedByDrag}
 					<div
