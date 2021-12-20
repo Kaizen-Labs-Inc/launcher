@@ -32,11 +32,11 @@
 		</li>
 		{#if organization}
 			<li
-				class="cursor-pointer mr-6 hover:opacity-100 {$page.path === '/workspace'
+				class="cursor-pointer mr-6 hover:opacity-100 {$page.path === `/workspace/${organization.id}`
 					? 'opacity-100'
 					: 'opacity-60'}"
 			>
-				<a href="/workspace">{organization.name}</a>
+				<a href="/workspace/${organization.id}">{organization.name}</a>
 			</li>
 		{/if}
 		<li

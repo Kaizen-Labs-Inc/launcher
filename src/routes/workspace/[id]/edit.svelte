@@ -6,6 +6,7 @@
 	import { scale } from 'svelte/transition';
 	import { clickOutside } from '../../../utils/DetectClickOutsideOfElement';
 	import Button from '../../../components/Button.svelte';
+	import { goto } from '$app/navigation';
 
 	let organization: Organization;
 	let memberListVisible: boolean = false;
@@ -165,7 +166,7 @@
 			<div>Billing contact</div>
 			<div class="flex flex-col items-end">
 				<div>
-					<input class="text-black rounded px-2 py-1" type="text" value="jordan@kaizenlabs.dev" />
+					<input class="text-black rounded px-2 py-1" type="email" value="jordan@kaizenlabs.dev" />
 				</div>
 				<div class="text-sm opacity-60 mt-1">Invoices will be sent here</div>
 			</div>
@@ -174,6 +175,7 @@
 			label="Save"
 			on:clicked={() => {
 				alert('Saved!');
+				goto(`/workspace/${organization.id}`);
 			}}
 		/>
 	</div>

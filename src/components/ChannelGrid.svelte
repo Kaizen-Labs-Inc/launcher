@@ -100,7 +100,6 @@
 
 	const handleProceed = (channel: Channel) => {
 		selectedChannelIndex = null;
-		hoveredChannel = null;
 		window.open('https://' + channel.url, '_blank').focus();
 		analytics.track('Channel clicked', {
 			channel: channel
@@ -448,15 +447,12 @@
 					if (!editModeEnabled && !addFormIsFocused) {
 						selectedChannelIndex = i;
 						setStatusBar(position.channel.url);
-					} else {
-						setStatusBar('Drag to rearrange');
 					}
 				}}
 				on:mouseout={() => {
 					resetStatusBar();
 					if (!editModeEnabled) {
 						selectedChannelIndex = null;
-						hoveredChannel = null;
 					}
 				}}
 				on:click={() => {

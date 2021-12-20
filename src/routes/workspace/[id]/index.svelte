@@ -107,6 +107,14 @@
 			<div>Your team</div>
 			<div>{organization.name}</div>
 		</div>
+		<div class="flex flex-row justify-between items-center my-6">
+			<div>Your team's URL</div>
+			<a
+				href="https://{organization.slug}.launcher.team"
+				target="_blank"
+				class="text-sm font-mono text-right no-underline">{organization.slug}.launcher.team</a
+			>
+		</div>
 		{#if organization.domainRestricted}
 			<div class="flex flex-row justify-between items-center my-6">
 				<div>{organization.emailDomains.length > 1 ? 'Your domains' : 'Your domain'}</div>
