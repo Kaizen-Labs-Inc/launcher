@@ -96,7 +96,7 @@
 					</div>
 					{#if channel.description}
 						<div
-							class="text-sm sm:text-base col-span-3 {selectedChannelIndex === i
+							class="text-sm sm:text-base col-span-2 {selectedChannelIndex === i
 								? 'opacity-60'
 								: 'opacity-30'}"
 						>
