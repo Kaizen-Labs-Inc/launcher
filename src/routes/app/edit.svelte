@@ -27,7 +27,7 @@
 	<h1 class="mt-16">Edit {channel.title}</h1>
 	<ChannelForm
 		channel={channel}
-		on:submit={(event) => {
+		on:submit={() => {
 			goto('/');
 		}}
 	/>
