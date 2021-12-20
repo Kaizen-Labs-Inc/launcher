@@ -1,9 +1,11 @@
+<!-- TODO update this route to [id].svelte -->
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { organizationStore } from '../stores/organizationStore';
-	import Organization from '../model/Organization';
+	import { organizationStore } from '../../../stores/organizationStore';
+	import Organization from '../../../model/Organization';
 	import { scale } from 'svelte/transition';
-	import { clickOutside } from '../utils/DetectClickOutsideOfElement';
+	import { clickOutside } from '../../../utils/DetectClickOutsideOfElement';
+	import Button from '../../../components/Button.svelte';
 
 	let organization: Organization;
 	let memberListVisible: boolean = false;
@@ -33,7 +35,7 @@
 </script>
 
 <svelte:head>
-	<title>Launcher - Your team</title>
+	<title>Launcher - Edit team</title>
 </svelte:head>
 {#if organization}
 	{#if billingModalVisible}
@@ -49,7 +51,13 @@
 		transform: translateX(-50%);"
 			class="p-4 mt-16 max-h-screen overflow-scroll scroll-smooth bg-white bg-opacity-10 backdrop-blur-2xl shadow-2xl rounded-xl absolute w-full sm:w-2/3 md:w-1/3 z-50"
 		>
-			<h2>Billing</h2>
+			<h2 class="font-medium text-xl">Update payment details</h2>
+			<Button
+				label="Save"
+				on:clicked={() => {
+					billingModalVisible = false;
+				}}
+			/>
 		</div>
 	{/if}
 	{#if memberListVisible}
@@ -96,25 +104,33 @@
 	<div class="w-full sm:w-2/3 md:w-1/2 mt-12 mx-auto text-lg">
 		<div class="flex flex-row justify-between items-center my-6">
 			<div>Your team</div>
-			<div class="opacity-60">{organization.name}</div>
+			<div>
+				<input class="text-black rounded px-2 py-1" type="text" bind:value={organization.name} />
+			</div>
 		</div>
 		{#if organization.domainRestricted}
 			<div class="flex flex-row justify-between items-center my-6">
-				<div>{organization.emailDomains.length > 1 ? 'Your domains' : 'Your domain'}</div>
+				<div>{organization.emailDomains.length > 1 ? 'Primary domains' : 'Primary domain'}</div>
 				<div>
 					{#each organization.emailDomains as domain, i}
-						<div class=" ml-2 text-base font-mono">
-							{domain.domain}
-							{i > organization.emailDomains.length ? ', ' : ''}
-						</div>
+						<input class="text-black rounded px-2 py-1" type="text" bind:value={domain.domain} />
 					{/each}
 				</div>
+			</div>
+
+			<div class="flex flex-row justify-between items-center my-6">
+				<div class="text-base">
+					Restrict sign-ups to those with a <span class="font-medium"
+						>{organization.emailDomains[0].domain}</span
+					> email
+				</div>
+				<input type="checkbox" checked={organization.domainRestricted} />
 			</div>
 		{/if}
 		<div class="flex flex-row justify-between items-center my-6">
 			<div>Your plan</div>
 			<!-- TODO update this to show the plan details -->
-			<div class="opacity-60">{organization.subscriptionId}</div>
+			<div>{organization.subscriptionId}</div>
 		</div>
 		<div class="flex flex-row justify-between items-center my-6">
 			<div>Team members</div>
@@ -133,7 +149,7 @@
 			<div>Billing</div>
 			<!-- TODO update this to only show to admins -->
 			<div class="flex items-center">
-				<div class="opacity-60">Visa ending in 1234</div>
+				<div>Visa ending in 1234</div>
 				<div
 					on:click={() => {
 						billingModalVisible = true;
@@ -144,5 +160,21 @@
 				</div>
 			</div>
 		</div>
+
+		<div class="flex flex-row justify-between items-center my-6">
+			<div>Billing contact</div>
+			<div class="flex flex-col items-end">
+				<div>
+					<input class="text-black rounded px-2 py-1" type="text" value="jordan@kaizenlabs.dev" />
+				</div>
+				<div class="text-sm opacity-60 mt-1">Invoices will be sent here</div>
+			</div>
+		</div>
+		<Button
+			label="Save"
+			on:clicked={() => {
+				alert('Saved!');
+			}}
+		/>
 	</div>
 {/if}
