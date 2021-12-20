@@ -20,10 +20,13 @@
 	});
 </script>
 
+<svelte:head>
+	<title>Launcher - Edit app</title>
+</svelte:head>
 {#if user}
 	<h1 class="mt-16">Edit {channel.title}</h1>
 	<ChannelForm
-		{channel}
+		channel={channel}
 		on:submit={(event) => {
 			goto('/');
 		}}

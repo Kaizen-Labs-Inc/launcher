@@ -14,7 +14,7 @@
 </script>
 
 <svelte:head>
-	<title>Launcher</title>
+	<title>Launcher - demo</title>
 </svelte:head>
 <div in:fade class="container mx-auto pb-12">
 	<div

@@ -55,6 +55,10 @@
 	});
 </script>
 
+<svelte:head>
+	<title>Launcher - Get started</title>
+</svelte:head>
+
 {#if user}
 	<div class="flex flex-col justify-center items-center mt-24 z-50 relative">
 		<img src={user.picture} alt={user.name} class="rounded-full" />

@@ -7,6 +7,10 @@
 	});
 </script>
 
+<svelte:head>
+	<title>Launcher - Sign in</title>
+</svelte:head>
+
 <div class="flex flex-col items-center mt-12">
 	<h1 class="mb-10">👋 Hello there</h1>
 	<SignInWithGoogleButton />

@@ -9,6 +9,10 @@
 	});
 </script>
 
+<svelte:head>
+	<title>Launcher - Pricing</title>
+</svelte:head>
+
 <h1 class="font-bold text-5xl md:text-8xl mt-24 text-center">Get started for free</h1>
 <h2 class=" mt-12  text-center">
 	<span class="opacity-80 text-3xl">Simple, no-fuss per-seat pricing.</span><span

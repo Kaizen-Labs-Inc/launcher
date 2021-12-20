@@ -23,6 +23,9 @@
 	});
 </script>
 
+<svelte:head>
+	<title>Launcher - a home screen for your growing team</title>
+</svelte:head>
 <ScrollingChannelIconBackground />
 <div class="container mx-auto">
 	<div class="text-center mt-24 flex flex-col">

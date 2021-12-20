@@ -5,6 +5,7 @@
 		window.analytics.page();
 	});
 	const source = `
+
 Terms and Conditions  
 ==============================
 Last updated: December 7, 2021
@@ -477,5 +478,7 @@ us:
 </script>
 
 <h1 class="mt-24 mb-10">Terms of service</h1>
-
-<SvelteMarkdown {source} />
+<svelte:head>
+	<title>Launcher - Terms</title>
+</svelte:head>
+<SvelteMarkdown source={source} />

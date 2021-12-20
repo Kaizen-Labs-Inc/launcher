@@ -16,18 +16,22 @@
 
 	let organization;
 	organizationStore.subscribe((value) => {
-		organization = value.organization
+		organization = value.organization;
 	});
 
 	const handleSuccess = () => {
 		addToast({ dismissible: false, message: '👍 Invites sent', type: 'success', timeout: 2000 });
 		goto('/home');
-	}
+	};
 
 	onMount(() => {
 		window.analytics.page();
 	});
 </script>
+
+<svelte:head>
+	<title>Launcher - Invite your team</title>
+</svelte:head>
 
 {#if user}
 	<div
@@ -39,5 +43,5 @@
 	<h2 class="mt-8 opacity-75 text-2xl text-center">
 		Enter your team's email addresses and we'll invite them.
 	</h2>
-	<InviteForm organization={organization} on:success={handleSuccess}  />
+	<InviteForm organization={organization} on:success={handleSuccess} />
 {/if}

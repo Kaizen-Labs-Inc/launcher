@@ -19,6 +19,9 @@
 	});
 </script>
 
+<svelte:head>
+	<title>Launcher - Payment</title>
+</svelte:head>
 {#if user}
 	<div class="w-2/3 text-center mx-auto mt-24">
 		💳 Payment form goes here. Ideally use Stripe Payment Elements

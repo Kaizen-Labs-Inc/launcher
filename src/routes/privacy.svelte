@@ -738,5 +738,8 @@ If you have any questions about this Privacy Policy, You can contact us:
   `;
 </script>
 
+<svelte:head>
+	<title>Launcher - Privacy policy</title>
+</svelte:head>
 <h1 class="mt-24 mb-10">Privacy policy</h1>
-<SvelteMarkdown {source} />
+<SvelteMarkdown source={source} />

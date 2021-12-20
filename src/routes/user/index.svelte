@@ -15,6 +15,10 @@
 	});
 </script>
 
+<svelte:head>
+	<title>Launcher - You</title>
+</svelte:head>
+
 {#if user}
 	<div class="flex flex-col justify-center items-center mt-16">
 		<img src={user.picture} alt="Profile pic" class="rounded-full" />

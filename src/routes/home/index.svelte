@@ -19,7 +19,7 @@
 </script>
 
 <svelte:head>
-	<title>Launcher.team</title>
+	<title>Launcher</title>
 </svelte:head>
 
 {#if user}
