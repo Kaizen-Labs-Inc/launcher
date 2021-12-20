@@ -9,7 +9,7 @@
 	export let organization: Organization;
 </script>
 
-<nav class="p-2 flex w-full backdrop-blur-lg bg-white bg-opacity-5 h-12 items-center justify-start">
+<nav class="p-2 flex w-full backdrop-blur-lg bg-white bg-opacity-5 h-14 items-center justify-start">
 	<ul class="flex flex-row items-center flex-wrap container mx-auto">
 		<li
 			class="cursor-pointer mr-6 hover:opacity-100 {$page.path === '/home'
@@ -20,6 +20,7 @@
 				><img src="favicon-32x32.png" class="w-4 h-4 mr-1" alt="Logo" />Apps</a
 			>
 		</li>
+		<li class="flex-grow" />
 		<li
 			on:click={() => {
 				goto('/invite');
@@ -46,10 +47,10 @@
 		>
 			<a href="/user">You</a>
 		</li>
-		<li class="flex-grow" />
+
 		<li
 			on:click={logout}
-			class="cursor-pointer ml-6 bg-white bg-opacity-5 hover:bg-opacity-10 shadow py-2 px-3 rounded-lg text-sm font-medium"
+			class="cursor-pointer bg-white bg-opacity-5 hover:bg-opacity-10 shadow py-2 px-3 rounded-lg text-sm font-medium"
 		>
 			Sign out
 		</li>
