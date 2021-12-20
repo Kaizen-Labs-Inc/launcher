@@ -137,7 +137,7 @@
 </script>
 
 <main
-	class="z-10 h-screen min-h-screen w-screen transition ease-in-out duration-200 {selectedBackdrop.darkMode
+	class="z-10 min-h-screen w-screen transition ease-in-out duration-200 {selectedBackdrop.darkMode
 		? 'text-white'
 		: 'text-black'}"
 	style={selectedBackdrop.colors.length === 1
