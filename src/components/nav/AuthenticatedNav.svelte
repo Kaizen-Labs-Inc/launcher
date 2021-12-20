@@ -9,8 +9,8 @@
 	export let organization: Organization;
 </script>
 
-<nav class="mt-4">
-	<ul class="flex flex-row justify-center items-center flex-wrap">
+<nav class="p-2 flex w-full backdrop-blur-lg bg-white bg-opacity-5 h-12 items-center justify-start">
+	<ul class="flex flex-row items-center flex-wrap container mx-auto">
 		<li
 			class="cursor-pointer mr-6 hover:opacity-100 {$page.path === '/home'
 				? 'opacity-100'
@@ -46,7 +46,13 @@
 		>
 			<a href="/user">You</a>
 		</li>
-		<li on:click={logout} class="cursor-pointer mr-6 hover:opacity-100 opacity-40">Sign out</li>
+		<li class="flex-grow" />
+		<li
+			on:click={logout}
+			class="cursor-pointer ml-6 bg-white bg-opacity-5 hover:bg-opacity-10 shadow py-2 px-3 rounded-lg text-sm font-medium"
+		>
+			Sign out
+		</li>
 	</ul>
 </nav>
 

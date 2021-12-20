@@ -62,6 +62,7 @@
 		editModeEnabled = true;
 		board.positions = e.detail.items;
 		selectedChannelIndex = null;
+		resetStatusBar();
 	};
 	const handleDndFinalize = (e) => {
 		if (editModeInitializedByDrag) {

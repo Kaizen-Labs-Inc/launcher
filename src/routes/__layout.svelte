@@ -147,6 +147,9 @@ radial-gradient(at 0% 100%, ${selectedBackdrop.colors[1]} 0, transparent 50%),
 radial-gradient(at 80% 100%, ${selectedBackdrop.colors[2]} 0, transparent 50%),
 radial-gradient(at 0% 0%, ${selectedBackdrop.colors[3]} 0, transparent 50%);`}
 >
+	{#if userStatus.user}
+		<AuthenticatedNav user={userStatus.user} organization={organizationStatus.organization} />
+	{/if}
 	<div class="container">
 		<Toasts />
 		{#if userStatus.loading || organizationStatus.loading}
@@ -158,9 +161,7 @@ radial-gradient(at 0% 0%, ${selectedBackdrop.colors[3]} 0, transparent 50%);`}
 			</div>
 		{:else}
 			<div in:fade>
-				{#if userStatus.user}
-					<AuthenticatedNav user={userStatus.user} organization={organizationStatus.organization} />
-				{:else}
+				{#if !userStatus.user}
 					<PublicNav />
 				{/if}
 				<slot />
