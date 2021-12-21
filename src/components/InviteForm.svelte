@@ -48,7 +48,6 @@
 					bind:value={invite.inviteeEmail}
 					name="workspaceName"
 					type="text"
-					autofocus={i === 0}
 					required
 					placeholder="name@{domain || 'example.com'}"
 					class="bg-white bg-opacity-10 rounded p-2 outline-none text-xl"
