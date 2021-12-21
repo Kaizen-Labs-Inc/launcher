@@ -33,7 +33,7 @@
 					? 'opacity-100'
 					: 'opacity-60'}"
 			>
-				<a href="/workspace/${organization.id}">{organization.name}</a>
+				<a href="/workspace/{organization.id}">{organization.name}</a>
 			</li>
 		{/if}
 		<li
