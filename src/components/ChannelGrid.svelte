@@ -27,7 +27,7 @@
 	let query: string = '';
 	let searchIsFocused: boolean = false;
 	let addFormIsFocused: boolean = false;
-	let selectedChannelIndex: number;
+	let focusedChannelIndex: number;
 	let isMobile: boolean = false;
 	let board: Board;
 	let channelsToSearch: Channel[];
@@ -57,7 +57,7 @@
 		isConsidering = true;
 		editModeEnabled = true;
 		board.positions = e.detail.items;
-		selectedChannelIndex = null;
+		focusedChannelIndex = null;
 		resetStatusBar();
 	};
 	const handleDndFinalize = (e) => {
@@ -95,7 +95,7 @@
 	}
 
 	const handleProceed = (channel: Channel) => {
-		selectedChannelIndex = null;
+		focusedChannelIndex = null;
 		window.open('https://' + channel.url, '_blank').focus();
 		analytics.track('Channel clicked', {
 			channel: channel
@@ -116,7 +116,7 @@
 		let searchInput = document.getElementById('searchInput');
 		searchIsFocused = false;
 		searchInput.blur();
-		selectedChannelIndex = null;
+		focusedChannelIndex = null;
 		query = '';
 	};
 
@@ -125,24 +125,26 @@
 			let searchInput = document.getElementById('searchInput');
 			searchInput.focus();
 			searchIsFocused = true;
-			selectedChannelIndex = 0;
+			focusedChannelIndex = 0;
 		}
 	};
 
 	const handleChannelFocus = (index: number, channel: Channel) => {
 		if (!editModeEnabled && !addFormIsFocused) {
-			selectedChannelIndex = index;
+			focusedChannelIndex = index;
 			setStatusBar(channel.url);
+			console.log(focusedChannelIndex);
+			// TODO add .focus to the element
 		}
 	};
 
 	const handleChannelBlur = () => {
-		selectedChannelIndex = null;
+		focusedChannelIndex = null;
 		resetStatusBar();
 	};
 
 	const handleInput = () => {
-		selectedChannelIndex = 0;
+		focusedChannelIndex = 0;
 	};
 
 	const resetStatusBar = () => {
@@ -239,19 +241,19 @@
 				if (
 					searchIsFocused &&
 					event.key === 'ArrowDown' &&
-					selectedChannelIndex <= filteredChannels.length - 2
+					focusedChannelIndex <= filteredChannels.length - 2
 				) {
 					selectedHtmlEl.scrollIntoView({
 						behavior: 'smooth'
 					});
-					selectedChannelIndex = selectedChannelIndex + 1;
+					focusedChannelIndex = focusedChannelIndex + 1;
 				}
-				if (searchIsFocused && event.key === 'ArrowUp' && selectedChannelIndex > 0) {
+				if (searchIsFocused && event.key === 'ArrowUp' && focusedChannelIndex > 0) {
 					selectedHtmlEl.scrollIntoView({
 						behavior: 'smooth'
 					});
 
-					selectedChannelIndex = selectedChannelIndex - 1;
+					focusedChannelIndex = focusedChannelIndex - 1;
 				}
 				if (searchIsFocused && event.key === 'Escape') {
 					handleSearchBlur();
@@ -262,7 +264,7 @@
 				}
 
 				if (searchIsFocused && event.key === 'Enter') {
-					handleProceed(filteredChannels[selectedChannelIndex]);
+					handleProceed(filteredChannels[focusedChannelIndex]);
 				}
 				if (
 					event.metaKey &&
@@ -277,7 +279,7 @@
 				if ((editModeEnabled || !searchIsFocused) && event.key === 'ArrowDown') {
 					getGridNewFocusPosition(
 						window.innerWidth,
-						selectedChannelIndex,
+						focusedChannelIndex,
 						'ArrowDown',
 						board.positions.length
 					);
@@ -285,7 +287,7 @@
 				if ((editModeEnabled || !searchIsFocused) && event.key === 'ArrowUp') {
 					getGridNewFocusPosition(
 						window.innerWidth,
-						selectedChannelIndex,
+						focusedChannelIndex,
 						'ArrowUp',
 						board.positions.length
 					);
@@ -293,7 +295,7 @@
 				if ((editModeEnabled || !searchIsFocused) && event.key === 'ArrowLeft') {
 					getGridNewFocusPosition(
 						window.innerWidth,
-						selectedChannelIndex,
+						focusedChannelIndex,
 						'ArrowLeft',
 						board.positions.length
 					);
@@ -301,7 +303,7 @@
 				if ((editModeEnabled || !searchIsFocused) && event.key === 'ArrowRight') {
 					getGridNewFocusPosition(
 						window.innerWidth,
-						selectedChannelIndex,
+						focusedChannelIndex,
 						'ArrowRight',
 						board.positions.length
 					);
@@ -611,7 +613,7 @@
 	{/if}
 {:else}
 	<ChannelSearchDropdown
-		bind:selectedChannelIndex
+		bind:focusedChannelIndex
 		bind:filteredChannels
 		bind:positions={board.positions}
 		on:appSelected={(event) => {

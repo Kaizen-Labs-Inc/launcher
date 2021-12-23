@@ -55,7 +55,7 @@ export const getGridNewFocusPosition = (
 
 	// Now get the new index based on the current index
 	// First figure out where in the grid the current index is
-	const currentRowPosition: number = Math.floor(currentIndex / numCols);
+	const currentRowPosition: number = Math.floor(currentIndex + 1 / numCols);
 	const currentColPosition: number = remainder * numCols;
 	console.log('The current row is ', currentRowPosition);
 	console.log('The current col is ', currentColPosition);
