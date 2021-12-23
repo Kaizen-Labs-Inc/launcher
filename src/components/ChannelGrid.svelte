@@ -135,6 +135,8 @@
 			setStatusBar(channel.url);
 			console.log(focusedChannelIndex);
 			// TODO add .focus to the element
+			// Pass the element here and do it
+			// Or do it just before this is called inline
 		}
 	};
 
@@ -494,16 +496,20 @@
 		{#each board?.positions || [] as position, i (position.id)}
 			<li
 				aria-labelledby="app-grid"
-				on:focus={() => {
+				on:focus={(e) => {
+					e.target.focus();
 					handleChannelFocus(i, position.channel);
 				}}
-				on:blur={() => {
+				on:blur={(e) => {
+					e.target.blur();
 					handleChannelBlur();
 				}}
-				on:mouseenter={() => {
+				on:mouseenter={(e) => {
+					e.target.focus();
 					handleChannelFocus(i, position.channel);
 				}}
-				on:mouseleave={() => {
+				on:mouseleave={(e) => {
+					e.target.blur();
 					handleChannelBlur();
 				}}
 				animate:flip={{ duration: flipDurationMs }}
@@ -515,7 +521,7 @@
 				}}
 				class="channel flex items-center justify-center flex-col text-center transition duration-200 ease-in-out {addFormIsFocused
 					? 'opacity-5 scale-95 pointer-events-none'
-					: 'opacity-100 focus:scale-105 hover:scale-105 cursor-pointer'}"
+					: 'opacity-100 focus:scale-105 cursor-pointer'}"
 			>
 				<div
 					style={editModeEnabled
@@ -636,12 +642,8 @@
 	/* This will remove the blue outline on drag */
 	/* TODO update this to fix a11y issues */
 	:focus {
-		/* outline: 0 !important; */
-		/* box-shadow: 0 0 0 0 rgba(0, 0, 0, 0) !important; */
-	}
-
-	#app-icon:focus {
-		transform: scale(1.5);
+		outline: 0 !important;
+		box-shadow: 0 0 0 0 rgba(0, 0, 0, 0) !important;
 	}
 
 	.icon {
