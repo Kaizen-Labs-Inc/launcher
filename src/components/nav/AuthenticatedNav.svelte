@@ -9,7 +9,10 @@
 	export let organization: Organization;
 </script>
 
-<nav class="p-2 flex w-full backdrop-blur-lg bg-white bg-opacity-5 h-14 items-center justify-start">
+<nav
+	role="navigation"
+	class="p-2 flex w-full backdrop-blur-lg bg-white bg-opacity-5 h-14 items-center justify-start"
+>
 	<ul class="flex flex-row items-center flex-wrap container mx-auto">
 		<li class="cursor-pointer mr-8 opacity-100">
 			<a href="/home" class="flex items-center"
