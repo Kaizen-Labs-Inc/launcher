@@ -19,7 +19,7 @@
 	import { Backdrop, backdropOptions } from '../model/Backdrop';
 	import { backdropStore } from '../stores/backdropStore';
 	import StatusBar from './StatusBar.svelte';
-	import { getGridNewFocusPosition } from '../utils/getGridNewFocusPosition';
+	import { getFocusedIndexOnGrid } from '../utils/getFocusedIndexOnGrid';
 
 	export let isDemo = false;
 	let editModeEnabled: boolean = false;
@@ -129,14 +129,11 @@
 		}
 	};
 
-	const handleChannelFocus = (index: number, channel: Channel) => {
+	const handleChannelFocus = (index: number) => {
 		if (!editModeEnabled && !addFormIsFocused) {
 			focusedChannelIndex = index;
-			setStatusBar(channel.url);
-			console.log(focusedChannelIndex);
-			// TODO add .focus to the element
-			// Pass the element here and do it
-			// Or do it just before this is called inline
+			setStatusBar(board.positions[index].channel.url);
+			document.getElementById('app-grid').children[index].focus();
 		}
 	};
 
@@ -213,11 +210,6 @@
 		board = b;
 	}
 	onMount(() => {
-		// Could import tailwind config
-		// console.log(getBreakPointObject());
-		// Could get the browser window
-		console.log(window.innerWidth);
-
 		fetch('api/board', {
 			credentials: 'include'
 		})
@@ -279,15 +271,20 @@
 					searchInput.focus();
 				}
 				if ((editModeEnabled || !searchIsFocused) && event.key === 'ArrowDown') {
-					getGridNewFocusPosition(
-						window.innerWidth,
-						focusedChannelIndex,
-						'ArrowDown',
-						board.positions.length
-					);
+					if (focusedChannelIndex === null || undefined) {
+						focusedChannelIndex = 0;
+					} else {
+						// focusedChannelIndex += focusedChannelIndex;
+					}
+					// focusedChannelIndex = getFocusedIndexOnGrid(
+					// 	window.innerWidth,
+					// 	focusedChannelIndex,
+					// 	'ArrowDown',
+					// 	board.positions.length
+					// );
 				}
 				if ((editModeEnabled || !searchIsFocused) && event.key === 'ArrowUp') {
-					getGridNewFocusPosition(
+					focusedChannelIndex = getFocusedIndexOnGrid(
 						window.innerWidth,
 						focusedChannelIndex,
 						'ArrowUp',
@@ -295,21 +292,29 @@
 					);
 				}
 				if ((editModeEnabled || !searchIsFocused) && event.key === 'ArrowLeft') {
-					getGridNewFocusPosition(
-						window.innerWidth,
-						focusedChannelIndex,
-						'ArrowLeft',
-						board.positions.length
-					);
+					focusedChannelIndex -= focusedChannelIndex;
+					// focusedChannelIndex = getFocusedIndexOnGrid(
+					// 	window.innerWidth,
+					// 	focusedChannelIndex,
+					// 	'ArrowLeft',
+					// 	board.positions.length
+					// );
 				}
 				if ((editModeEnabled || !searchIsFocused) && event.key === 'ArrowRight') {
-					getGridNewFocusPosition(
-						window.innerWidth,
-						focusedChannelIndex,
-						'ArrowRight',
-						board.positions.length
-					);
+					if (!focusedChannelIndex) {
+						handleChannelFocus(0);
+					} else {
+						handleChannelFocus(focusedChannelIndex + 1);
+					}
+
+					// focusedChannelIndex = getFocusedIndexOnGrid(
+					// 	window.innerWidth,
+					// 	focusedChannelIndex,
+					// 	'ArrowRight',
+					// 	board.positions.length
+					// );
 				}
+				console.log(document.activeElement);
 			},
 			false
 		);
@@ -496,22 +501,14 @@
 		{#each board?.positions || [] as position, i (position.id)}
 			<li
 				aria-labelledby="app-grid"
-				on:focus={(e) => {
-					e.target.focus();
-					handleChannelFocus(i, position.channel);
+				on:focus={() => {
+					handleChannelFocus(i);
 				}}
-				on:blur={(e) => {
-					e.target.blur();
-					handleChannelBlur();
-				}}
+				on:blur={handleChannelBlur}
 				on:mouseenter={(e) => {
-					e.target.focus();
-					handleChannelFocus(i, position.channel);
+					handleChannelFocus(i);
 				}}
-				on:mouseleave={(e) => {
-					e.target.blur();
-					handleChannelBlur();
-				}}
+				on:mouseleave={handleChannelBlur}
 				animate:flip={{ duration: flipDurationMs }}
 				on:click={() => {
 					resetStatusBar();
@@ -642,7 +639,7 @@
 	/* This will remove the blue outline on drag */
 	/* TODO update this to fix a11y issues */
 	:focus {
-		outline: 0 !important;
+		/* outline: 0 !important; */
 		box-shadow: 0 0 0 0 rgba(0, 0, 0, 0) !important;
 	}
 
