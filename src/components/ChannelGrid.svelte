@@ -132,7 +132,6 @@
 	const handleChannelFocus = (index: number) => {
 		if (!editModeEnabled && !addFormIsFocused) {
 			focusedChannelIndex = index;
-			console.log(focusedChannelIndex);
 			setStatusBar(board.positions[index].channel.url);
 			document.getElementById('app-grid').children[index].focus();
 		}
@@ -292,7 +291,7 @@
 					const newIndex = getFocusedIndexOnGrid(
 						window.innerWidth,
 						focusedChannelIndex,
-						'ArrowDown',
+						'ArrowUp',
 						board.positions.length
 					);
 					handleChannelFocus(newIndex);

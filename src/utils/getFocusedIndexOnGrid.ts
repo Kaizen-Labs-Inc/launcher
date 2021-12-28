@@ -23,7 +23,6 @@ export const getFocusedIndexOnGrid = (
 	let numCols: number;
 	let numRows: number;
 	let newRowPosition: number;
-	let newColPosition: number;
 	if (windowSize <= 768) {
 		if (numChannels <= maxColsSm) {
 			numCols = numChannels;
@@ -52,32 +51,23 @@ export const getFocusedIndexOnGrid = (
 	}
 
 	const currentRowPosition: number = Math.ceil(index / numCols);
-	const currentColPosition: number = index % numCols === 0 ? numCols : index % numCols;
 
 	if (pressedKey === 'ArrowUp') {
 		if (currentRowPosition > 1) {
 			newRowPosition = currentRowPosition - 1;
-			newColPosition = currentColPosition; // TODO we may be able to remove the concept of columns completely
+		} else {
+			newRowPosition = 1;
 		}
 	} else if (pressedKey === 'ArrowDown') {
 		if (currentRowPosition < numRows) {
 			newRowPosition = currentRowPosition + 1;
-			newColPosition = currentColPosition;
+		} else {
+			newRowPosition = numRows;
 		}
 	}
-	console.log(
-		'FROM ' +
-			currentRowPosition +
-			' and ' +
-			currentColPosition +
-			' to ' +
-			newRowPosition +
-			' and ' +
-			newColPosition
-	);
+	console.log('From row ' + currentRowPosition + ' to row ' + newRowPosition);
 
-	// Now figure out the new index on the grid based on the new row and column positions
-	// Multiply rows * columns
+	// Now figure out the new index on the grid based the existing column # and new row #
 	//
 	return 0; // TODO update this to newIndex
 };
