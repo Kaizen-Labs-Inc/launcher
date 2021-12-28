@@ -272,25 +272,30 @@
 					searchInput.focus();
 				}
 				if ((editModeEnabled || !searchIsFocused) && event.key === 'ArrowDown') {
-					if (focusedChannelIndex === null || undefined) {
-						focusedChannelIndex = 0;
-					} else {
-						// focusedChannelIndex += focusedChannelIndex;
+					if (focusedChannelIndex) {
+						// Prevent scrolling the page
+						// TODO smooth scroll if out of bounds of window height
+						event.preventDefault();
+						const newIndex = getFocusedIndexOnGrid(
+							window.innerWidth,
+							focusedChannelIndex,
+							'ArrowDown',
+							board.positions.length
+						);
+						handleChannelFocus(newIndex);
 					}
-					// focusedChannelIndex = getFocusedIndexOnGrid(
-					// 	window.innerWidth,
-					// 	focusedChannelIndex,
-					// 	'ArrowDown',
-					// 	board.positions.length
-					// );
 				}
 				if ((editModeEnabled || !searchIsFocused) && event.key === 'ArrowUp') {
-					focusedChannelIndex = getFocusedIndexOnGrid(
+					// Prevent scrolling the page
+					// TODO smooth scroll if out of bounds of window height
+					event.preventDefault();
+					const newIndex = getFocusedIndexOnGrid(
 						window.innerWidth,
 						focusedChannelIndex,
-						'ArrowUp',
+						'ArrowDown',
 						board.positions.length
 					);
+					handleChannelFocus(newIndex);
 				}
 				if ((editModeEnabled || !searchIsFocused) && event.key === 'ArrowLeft') {
 					if (focusedChannelIndex > 0) {
@@ -298,12 +303,6 @@
 					} else {
 						focusedChannelIndex = 0;
 					}
-					// focusedChannelIndex = getFocusedIndexOnGrid(
-					// 	window.innerWidth,
-					// 	focusedChannelIndex,
-					// 	'ArrowLeft',
-					// 	board.positions.length
-					// );
 				}
 				if ((editModeEnabled || !searchIsFocused) && event.key === 'ArrowRight') {
 					if (!focusedChannelIndex) {

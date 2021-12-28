@@ -54,43 +54,30 @@ export const getFocusedIndexOnGrid = (
 	const currentRowPosition: number = Math.ceil(index / numCols);
 	const currentColPosition: number = index % numCols === 0 ? numCols : index % numCols;
 
-	// console.log('The current row is ', currentRowPosition);
-	// console.log('The current col is ', currentColPosition);
-
-	if (pressedKey === 'ArrowRight' && index <= numChannels && index > 0) {
-		newIndex = index + 1;
-	} else if (pressedKey === 'ArrowLeft' && index >= 0) {
-		newIndex = index - 1;
+	if (pressedKey === 'ArrowUp') {
+		if (currentRowPosition > 1) {
+			newRowPosition = currentRowPosition - 1;
+			newColPosition = currentColPosition; // TODO we may be able to remove the concept of columns completely
+		}
+	} else if (pressedKey === 'ArrowDown') {
+		if (currentRowPosition < numRows) {
+			newRowPosition = currentRowPosition + 1;
+			newColPosition = currentColPosition;
+		}
 	}
-	console.log('The new index is ', newIndex);
-	// if (pressedKey === 'ArrowUp') {
-	// 	if (currentRowPosition <= numRows) {
-	// 		newRowPosition = currentRowPosition - 1;
-	// 		newColPosition = currentColPosition;
-	// 	}
-	// } else if (pressedKey === 'ArrowRight') {
-	// 	if (currentColPosition < numCols) {
-	// 		newRowPosition = currentRowPosition;
-	// 		newColPosition = currentColPosition + 1;
-	// 		// TODO jump between rows if on last column
-	// 		// TODO test this on the remainder row
-	// 	}
-	// } else if (pressedKey === 'ArrowDown') {
-	// 	if (currentRowPosition < numRows) {
-	// 		newRowPosition = currentRowPosition - 1;
-	// 		newColPosition = currentColPosition;
-	// 	}
-	// } else if (pressedKey === 'ArrowLeft') {
-	// 	if (currentColPosition > numCols) {
-	// 		newRowPosition = currentRowPosition;
-	// 		newColPosition = currentColPosition - 1;
-	// 		// TODO jump between rows if on last column
-	// 	}
-	// }
-	// console.log('The new row # is ', newRowPosition);
-	// console.log('The new col # is ', newColPosition);
+	console.log(
+		'FROM ' +
+			currentRowPosition +
+			' and ' +
+			currentColPosition +
+			' to ' +
+			newRowPosition +
+			' and ' +
+			newColPosition
+	);
+
 	// Now figure out the new index on the grid based on the new row and column positions
 	// Multiply rows * columns
 	//
-	return newIndex;
+	return 0; // TODO update this to newIndex
 };
