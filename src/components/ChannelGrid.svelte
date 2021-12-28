@@ -132,6 +132,7 @@
 	const handleChannelFocus = (index: number) => {
 		if (!editModeEnabled && !addFormIsFocused) {
 			focusedChannelIndex = index;
+			console.log(focusedChannelIndex);
 			setStatusBar(board.positions[index].channel.url);
 			document.getElementById('app-grid').children[index].focus();
 		}
@@ -292,7 +293,11 @@
 					);
 				}
 				if ((editModeEnabled || !searchIsFocused) && event.key === 'ArrowLeft') {
-					focusedChannelIndex -= focusedChannelIndex;
+					if (focusedChannelIndex > 0) {
+						handleChannelFocus(focusedChannelIndex - 1);
+					} else {
+						focusedChannelIndex = 0;
+					}
 					// focusedChannelIndex = getFocusedIndexOnGrid(
 					// 	window.innerWidth,
 					// 	focusedChannelIndex,
@@ -302,8 +307,8 @@
 				}
 				if ((editModeEnabled || !searchIsFocused) && event.key === 'ArrowRight') {
 					if (!focusedChannelIndex) {
-						handleChannelFocus(0);
-					} else {
+						handleChannelFocus(1);
+					} else if (focusedChannelIndex <= board.positions.length - 2) {
 						handleChannelFocus(focusedChannelIndex + 1);
 					}
 
@@ -314,7 +319,6 @@
 					// 	board.positions.length
 					// );
 				}
-				console.log(document.activeElement);
 			},
 			false
 		);
@@ -385,7 +389,6 @@
 				autocomplete="false"
 				id="searchInput"
 				placeholder="Search"
-				tabindex="0"
 				class="ml-4 text-2xl sm:text-5xl w-2/3 border-0 outline-none bg-transparent font-light transition duration-200 ease-in-out placeholder-opacity-50 {selectedBackdrop.darkMode
 					? 'placeholder-white'
 					: 'placeholder-black'} {addFormIsFocused ? 'opacity-5 scale-95' : ''}"
@@ -482,6 +485,7 @@
 	<ul
 		role="grid"
 		id="app-grid"
+		tabindex="-1"
 		class="grid lg:grid-cols-6 md:grid-cols-4 grid-cols-2 gap-8 md:gap-12 lg:gap-16 items-start mt-12 transition duration-200 ease-in-out"
 		use:dndzone={{
 			items: board?.positions || [],
@@ -501,6 +505,7 @@
 		{#each board?.positions || [] as position, i (position.id)}
 			<li
 				aria-labelledby="app-grid"
+				tabindex="0"
 				on:focus={() => {
 					handleChannelFocus(i);
 				}}
@@ -577,6 +582,7 @@
 								setStatusBar('Edit app');
 							}}
 							on:mouseout={resetStatusBar}
+							tabindex="0"
 							class="cursor-pointer mx-2 rounded bg-white bg-opacity-50 p-2 hover:bg-opacity-10"
 						>
 							<Edit2Icon strokeWidth="1" size="16" />

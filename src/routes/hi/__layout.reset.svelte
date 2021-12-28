@@ -9,6 +9,7 @@
 	import { backdropStore } from '../../stores/backdropStore';
 
 	import { OrganizationStatus, organizationStore } from '../../stores/organizationStore';
+	import { goto } from '$app/navigation';
 	let userStatus: UserStatus;
 
 	userStore.subscribe((value) => {
@@ -91,6 +92,7 @@
 									loading: false,
 									user: s?.session?.user?.connections?.google as GoogleUser
 								});
+								// goto('/home'); TODO this redirect is firing even when signed out
 							});
 						} else {
 							userStore.set({ loading: false, user: undefined });
