@@ -6,6 +6,7 @@ import { NOT_FOUND } from '$lib/responseConstants';
 export async function get(request: ServerRequest): Promise<void | EndpointOutput> {
 
 	const parts = request.path.split('/')
+	console.log(parts)
 
 	let slug: string;
 
