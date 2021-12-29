@@ -19,7 +19,6 @@ export const getFocusedIndexOnGrid = (
 	const maxColsLg = 6;
 	const minRows = 1;
 	const index = currentIndex + 1; // adjust for zero-based index
-	let newIndex: number;
 	let numCols: number;
 	let numRows: number;
 	let newRowPosition: number;
@@ -51,7 +50,7 @@ export const getFocusedIndexOnGrid = (
 	}
 
 	const currentRowPosition: number = Math.ceil(index / numCols);
-
+	const currentColPosition: number = index % numCols === 0 ? numCols : index % numCols;
 	if (pressedKey === 'ArrowUp') {
 		if (currentRowPosition > 1) {
 			newRowPosition = currentRowPosition - 1;
@@ -68,6 +67,11 @@ export const getFocusedIndexOnGrid = (
 	console.log('From row ' + currentRowPosition + ' to row ' + newRowPosition);
 
 	// Now figure out the new index on the grid based the existing column # and new row #
-	//
-	return 0; // TODO update this to newIndex
+	// We have the current index, the column number, the old row number, the new row number, and the # of channels
+	// (currentrow * totalCols) + currentcol
+	const newIndex = (newRowPosition - 1) * numCols + (currentColPosition - 1);
+	// 0,0
+	// 1 * 4 + 0 = 4
+	console.log(newIndex + ' = ' + newRowPosition + ' * ' + numCols + ' + ' + currentColPosition);
+	return newIndex;
 };

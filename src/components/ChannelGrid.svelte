@@ -508,7 +508,7 @@
 					handleChannelFocus(i);
 				}}
 				on:blur={handleChannelBlur}
-				on:mouseenter={(e) => {
+				on:mouseenter={() => {
 					handleChannelFocus(i);
 				}}
 				on:mouseleave={handleChannelBlur}
