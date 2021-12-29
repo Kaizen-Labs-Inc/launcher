@@ -282,6 +282,8 @@
 							board.positions.length
 						);
 						handleChannelFocus(newIndex);
+					} else {
+						handleChannelFocus(0);
 					}
 				}
 				if ((editModeEnabled || !searchIsFocused) && event.key === 'ArrowUp') {
@@ -305,17 +307,10 @@
 				}
 				if ((editModeEnabled || !searchIsFocused) && event.key === 'ArrowRight') {
 					if (!focusedChannelIndex) {
-						handleChannelFocus(1);
+						handleChannelFocus(0);
 					} else if (focusedChannelIndex <= board.positions.length - 2) {
 						handleChannelFocus(focusedChannelIndex + 1);
 					}
-
-					// focusedChannelIndex = getFocusedIndexOnGrid(
-					// 	window.innerWidth,
-					// 	focusedChannelIndex,
-					// 	'ArrowRight',
-					// 	board.positions.length
-					// );
 				}
 			},
 			false

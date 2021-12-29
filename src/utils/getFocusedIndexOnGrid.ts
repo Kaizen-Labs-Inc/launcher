@@ -64,14 +64,6 @@ export const getFocusedIndexOnGrid = (
 			newRowPosition = numRows;
 		}
 	}
-	console.log('From row ' + currentRowPosition + ' to row ' + newRowPosition);
-
-	// Now figure out the new index on the grid based the existing column # and new row #
-	// We have the current index, the column number, the old row number, the new row number, and the # of channels
-	// (currentrow * totalCols) + currentcol
-	const newIndex = (newRowPosition - 1) * numCols + (currentColPosition - 1);
-	// 0,0
-	// 1 * 4 + 0 = 4
-	console.log(newIndex + ' = ' + newRowPosition + ' * ' + numCols + ' + ' + currentColPosition);
+	const newIndex = (newRowPosition - 1) * numCols + (currentColPosition - 1); // adjust for one-based index
 	return newIndex;
 };
