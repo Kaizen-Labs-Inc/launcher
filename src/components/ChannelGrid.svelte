@@ -635,11 +635,9 @@
 {/if}
 
 <style>
-	/* This will remove the blue outline on drag */
-	/* TODO update this to fix a11y issues */
 	:focus {
 		/* outline: 0 !important; */
-		box-shadow: 0 0 0 0 rgba(0, 0, 0, 0) !important;
+		/* box-shadow: 0 0 0 0 rgba(0, 0, 0, 0) !important; */
 	}
 
 	.icon {
