@@ -3,9 +3,9 @@ import type { EndpointOutput } from '@sveltejs/kit/types/endpoint';
 import getAuth from '$lib/getAuth';
 import { prisma } from '$lib/prismaClient';
 import isEmail from '$lib/isEmail';
+import { postmarkClient } from '$lib/postmarkClient';
+import { BAD_REQUEST, NOT_FOUND } from '$lib/responseConstants';
 
-const BAD_REQUEST = { status: 400 }
-const NOT_FOUND = { status: 404 }
 const slugChars = 'bcdefghjklmnopqrstvwxyz1234567890';
 const sourceArray = [1,2,3,4,5,6,7,8,9,10,11,12];
 
@@ -51,6 +51,9 @@ export async function post(request: ServerRequest): Promise<void | EndpointOutpu
 			googleProfile: {
 				sub: googleId
 			}
+		},
+		include: {
+			googleProfile: true
 		}
 	});
 
@@ -104,6 +107,18 @@ export async function post(request: ServerRequest): Promise<void | EndpointOutpu
 							}
 						}
 					}))
+					await postmarkClient.sendEmailWithTemplate({
+						From: process.env['POSTMARK_SENDER_EMAIL'],
+						To: i.inviteeEmail,
+						TemplateId: 26490766,
+						templateModel: {
+							recipient_name: i.inviteeEmail,
+							invite_sender_name: user.googleProfile.givenName,
+							invitation_url: process.env['BASE_URL'] + "/invitation/" + slug,
+							support_email: process.env['SUPPORT_EMAIL'],
+							help_url: process.env['BASE_URL'] + "/help",
+						}
+					});
 				} catch (e: unknown) {
 					console.error(e)
 				}
@@ -112,7 +127,6 @@ export async function post(request: ServerRequest): Promise<void | EndpointOutpu
 	})
 
 	if (created.length) {
-		// todo: send postmark invitations
 		return {
 			status: 201,
 			body: created
