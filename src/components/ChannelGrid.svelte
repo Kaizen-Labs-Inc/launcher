@@ -271,9 +271,9 @@
 					searchInput.focus();
 				}
 				if ((editModeEnabled || !searchIsFocused) && event.key === 'ArrowDown') {
-					if (focusedChannelIndex) {
-						// Prevent scrolling the page
-						// TODO smooth scroll if out of bounds of window height
+					if (!focusedChannelIndex && focusedChannelIndex !== 0) {
+						handleChannelFocus(0);
+					} else {
 						event.preventDefault();
 						const newIndex = getFocusedIndexOnGrid(
 							window.innerWidth,
@@ -282,13 +282,9 @@
 							board.positions.length
 						);
 						handleChannelFocus(newIndex);
-					} else {
-						handleChannelFocus(0);
 					}
 				}
 				if ((editModeEnabled || !searchIsFocused) && event.key === 'ArrowUp') {
-					// Prevent scrolling the page
-					// TODO smooth scroll if out of bounds of window height
 					event.preventDefault();
 					const newIndex = getFocusedIndexOnGrid(
 						window.innerWidth,
@@ -306,7 +302,7 @@
 					}
 				}
 				if ((editModeEnabled || !searchIsFocused) && event.key === 'ArrowRight') {
-					if (!focusedChannelIndex) {
+					if (!focusedChannelIndex && focusedChannelIndex !== 0) {
 						handleChannelFocus(0);
 					} else if (focusedChannelIndex <= board.positions.length - 2) {
 						handleChannelFocus(focusedChannelIndex + 1);
