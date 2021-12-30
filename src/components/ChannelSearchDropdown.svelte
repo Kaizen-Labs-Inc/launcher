@@ -59,7 +59,6 @@
 					: 'bg-transparent'}
             "
 			>
-
 				<div
 					class="w-full grid grid-cols-4 gap-16 items-center text-left cursor-pointer"
 					on:mousedown|preventDefault={(e) => {
@@ -87,7 +86,6 @@
 									{channel.name.charAt(0)}
 								</div>
 							{/if}
-
 						</div>
 						<div class="sm:text-2xl ">
 							{channel.name}
@@ -98,7 +96,7 @@
 					</div>
 					{#if channel.description}
 						<div
-							class="text-sm sm:text-base {selectedChannelIndex === i
+							class="text-sm sm:text-base col-span-2 {selectedChannelIndex === i
 								? 'opacity-60'
 								: 'opacity-30'}"
 						>

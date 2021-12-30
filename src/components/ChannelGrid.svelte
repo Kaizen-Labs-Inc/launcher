@@ -9,14 +9,7 @@
 	import AddChannelPopover from '../components/AddChannelPopover.svelte';
 	import ChannelSearchDropdown from '../components/ChannelSearchDropdown.svelte';
 	import Channel from '../model/Channel';
-
-	import {
-		SearchIcon,
-		Edit2Icon,
-		XIcon,
-		ArrowUpRightIcon,
-		FeatherIcon
-	} from 'svelte-feather-icons';
+	import { SearchIcon, Edit2Icon, XIcon } from 'svelte-feather-icons';
 	import { goto } from '$app/navigation';
 	import { addToast } from '../stores/toaststore';
 	import Board from '../model/Board';
@@ -26,6 +19,7 @@
 	import { Backdrop, backdropOptions } from '../model/Backdrop';
 	import { backdropStore } from '../stores/backdropStore';
 	import StatusBar from './StatusBar.svelte';
+	import { getFocusedIndexOnGrid } from '../utils/getFocusedIndexOnGrid';
 
 	export let isDemo = false;
 	let editModeEnabled: boolean = false;
@@ -33,17 +27,17 @@
 	let query: string = '';
 	let searchIsFocused: boolean = false;
 	let addFormIsFocused: boolean = false;
-	let selectedChannelIndex: number;
+	let focusedChannelIndex: number;
 	let isMobile: boolean = false;
 	let board: Board;
 	let channelsToSearch: Channel[];
 	let statusBarVisible: boolean = false;
 	let statusBarLabel: string;
-	// let statusBarIcon: FeatherIcon;
 	const flipDurationMs: number = 200;
 	let isConsidering: boolean = false;
 	let editModeInitializedByDrag: boolean = false;
 	let addChannelPopoverStepOneComplete: boolean = false;
+
 	// For edit mode jiggles
 	const jiggleAnimDelayMin: number = -0.75;
 	const jiggleAnimDelayMax: number = -0.05;
@@ -55,13 +49,20 @@
 	);
 
 	const handleDndConsider = (e) => {
-		if (!editModeEnabled) {
-			editModeInitializedByDrag = true;
+		if (e.detail.info.source === 'keyboard') {
+			// TODO fix this 5UP34H4CK that resets the drag and drop library
+			// need to find a way to 'exit' consider mode
+			handleProceed(filteredChannels[focusedChannelIndex]);
+			window.location.reload();
+		} else {
+			if (!editModeEnabled) {
+				editModeInitializedByDrag = true;
+			}
+			isConsidering = true;
+			editModeEnabled = true;
+			board.positions = e.detail.items;
+			focusedChannelIndex = null;
 		}
-		isConsidering = true;
-		editModeEnabled = true;
-		board.positions = e.detail.items;
-		selectedChannelIndex = null;
 		resetStatusBar();
 	};
 	const handleDndFinalize = (e) => {
@@ -99,9 +100,9 @@
 	}
 
 	const handleProceed = (channel: Channel) => {
-		selectedChannelIndex = null;
+		focusedChannelIndex = null;
 		window.open('https://' + channel.url, '_blank').focus();
-		analytics.track('Channel clicked', {
+		analytics.track('Channel opened', {
 			channel: channel
 		});
 	};
@@ -116,25 +117,39 @@
 		orderAndSyncBoardPositions();
 	};
 
-	const handleBlur = () => {
+	const handleSearchBlur = () => {
 		let searchInput = document.getElementById('searchInput');
 		searchIsFocused = false;
 		searchInput.blur();
-		selectedChannelIndex = null;
+		focusedChannelIndex = null;
 		query = '';
 	};
 
-	const handleFocus = () => {
+	const handleSearchFocus = () => {
 		if (!editModeEnabled) {
 			let searchInput = document.getElementById('searchInput');
 			searchInput.focus();
 			searchIsFocused = true;
-			selectedChannelIndex = 0;
+			focusedChannelIndex = 0;
 		}
 	};
 
+	const handleChannelFocus = (index: number) => {
+		if (!editModeEnabled && !addFormIsFocused) {
+			focusedChannelIndex = index;
+			setStatusBar(board.positions[index].channel.url);
+			document.getElementById('app-grid').children[index].focus();
+		}
+	};
+
+	const handleChannelBlur = () => {
+		document.activeElement.blur();
+		focusedChannelIndex = null;
+		resetStatusBar();
+	};
+
 	const handleInput = () => {
-		selectedChannelIndex = 0;
+		focusedChannelIndex = 0;
 	};
 
 	const resetStatusBar = () => {
@@ -166,7 +181,7 @@
 		board.positions.unshift(newPosition);
 		await orderAndSyncBoardPositions();
 		addToast({ dismissible: false, message: 'Added', type: 'success', timeout: 3000 });
-		handleBlur();
+		handleSearchBlur();
 		analytics.track('Channel added', {
 			channel: channel
 		});
@@ -226,31 +241,41 @@
 				if (
 					searchIsFocused &&
 					event.key === 'ArrowDown' &&
-					selectedChannelIndex <= filteredChannels.length - 2
+					focusedChannelIndex <= filteredChannels.length - 2
 				) {
 					selectedHtmlEl.scrollIntoView({
 						behavior: 'smooth'
 					});
-					selectedChannelIndex = selectedChannelIndex + 1;
+					focusedChannelIndex = focusedChannelIndex + 1;
 				}
-				if (searchIsFocused && event.key === 'ArrowUp' && selectedChannelIndex > 0) {
+				if (searchIsFocused && event.key === 'ArrowUp' && focusedChannelIndex > 0) {
 					selectedHtmlEl.scrollIntoView({
 						behavior: 'smooth'
 					});
 
-					selectedChannelIndex = selectedChannelIndex - 1;
+					focusedChannelIndex = focusedChannelIndex - 1;
 				}
 				if (searchIsFocused && event.key === 'Escape') {
-					handleBlur();
+					handleSearchBlur();
 				}
 
 				if (editModeEnabled && event.key === 'Escape') {
 					editModeEnabled = false;
 				}
 
-				if (searchIsFocused && event.key === 'Enter') {
-					handleProceed(filteredChannels[selectedChannelIndex]);
+				if (!editModeEnabled && !searchIsFocused && event.key === 'Escape') {
+					handleChannelBlur();
 				}
+
+				if (searchIsFocused && event.key === 'Enter') {
+					handleProceed(filteredChannels[focusedChannelIndex]);
+				}
+
+				if (!searchIsFocused && !editModeEnabled && event.key === 'Enter') {
+					handleProceed(filteredChannels[focusedChannelIndex]);
+					alert('why');
+				}
+
 				if (
 					event.metaKey &&
 					event.key === 'g' &&
@@ -260,6 +285,44 @@
 				) {
 					searchIsFocused = true;
 					searchInput.focus();
+				}
+				if ((editModeEnabled || !searchIsFocused) && event.key === 'ArrowDown') {
+					if (!focusedChannelIndex && focusedChannelIndex !== 0) {
+						handleChannelFocus(0);
+					} else {
+						event.preventDefault();
+						const newIndex = getFocusedIndexOnGrid(
+							window.innerWidth,
+							focusedChannelIndex,
+							'ArrowDown',
+							board.positions.length
+						);
+						handleChannelFocus(newIndex);
+					}
+				}
+				if ((editModeEnabled || !searchIsFocused) && event.key === 'ArrowUp') {
+					event.preventDefault();
+					const newIndex = getFocusedIndexOnGrid(
+						window.innerWidth,
+						focusedChannelIndex,
+						'ArrowUp',
+						board.positions.length
+					);
+					handleChannelFocus(newIndex);
+				}
+				if ((editModeEnabled || !searchIsFocused) && event.key === 'ArrowLeft') {
+					if (focusedChannelIndex > 0) {
+						handleChannelFocus(focusedChannelIndex - 1);
+					} else {
+						focusedChannelIndex = 0;
+					}
+				}
+				if ((editModeEnabled || !searchIsFocused) && event.key === 'ArrowRight') {
+					if (!focusedChannelIndex && focusedChannelIndex !== 0) {
+						handleChannelFocus(0);
+					} else if (focusedChannelIndex <= board.positions.length - 2) {
+						handleChannelFocus(focusedChannelIndex + 1);
+					}
 				}
 			},
 			false
@@ -320,10 +383,13 @@
 		<div class="flex flex-row items-center justify-between w-full">
 			<input
 				bind:value={query}
-				on:focus={handleFocus}
-				on:blur={handleBlur}
+				on:focus={handleSearchFocus}
+				on:blur={handleSearchBlur}
 				on:input={handleInput}
 				on:click
+				role="searchbox"
+				aria-label="Search apps"
+				aria-keyshortcuts="Meta+G"
 				disabled={addFormIsFocused || editModeEnabled}
 				autocomplete="false"
 				id="searchInput"
@@ -334,7 +400,7 @@
 			/>
 			{#if !searchIsFocused}
 				<span
-					on:click={handleFocus}
+					on:click={handleSearchFocus}
 					class="absolute cursor-pointer ml-24 sm:ml-48 sm:text-base text-xs bg-white bg-opacity-25 sm:w-10 sm:h-10 h-8 w-8 opacity-50 flex items-center justify-center rounded-md transition duration-200 ease-in-out {addFormIsFocused
 						? 'opacity-5 scale-95'
 						: ''}">⌘G</span
@@ -421,7 +487,11 @@
 			{/each}
 		</ul>
 	{/if}
-	<section
+	<ul
+		role="grid"
+		id="app-grid"
+		tabindex="-1"
+		aria-label="App grid"
 		class="grid lg:grid-cols-6 md:grid-cols-4 grid-cols-2 gap-8 md:gap-12 lg:gap-16 items-start mt-12 transition duration-200 ease-in-out"
 		use:dndzone={{
 			items: board?.positions || [],
@@ -439,22 +509,19 @@
 		on:finalize={handleDndFinalize}
 	>
 		{#each board?.positions || [] as position, i (position.id)}
-			<div
+			<li
+				aria-labelledby="app-grid"
+				aria-label={position.channel.name}
+				tabindex="0"
+				on:focus={() => {
+					handleChannelFocus(i);
+				}}
+				on:blur={handleChannelBlur}
+				on:mouseenter={() => {
+					handleChannelFocus(i);
+				}}
+				on:mouseleave={handleChannelBlur}
 				animate:flip={{ duration: flipDurationMs }}
-				on:focus
-				on:blur
-				on:mouseover={() => {
-					if (!editModeEnabled && !addFormIsFocused) {
-						selectedChannelIndex = i;
-						setStatusBar(position.channel.url);
-					}
-				}}
-				on:mouseout={() => {
-					resetStatusBar();
-					if (!editModeEnabled) {
-						selectedChannelIndex = null;
-					}
-				}}
 				on:click={() => {
 					resetStatusBar();
 					if (!editModeEnabled && !addFormIsFocused) {
@@ -463,7 +530,7 @@
 				}}
 				class="channel flex items-center justify-center flex-col text-center transition duration-200 ease-in-out {addFormIsFocused
 					? 'opacity-5 scale-95 pointer-events-none'
-					: 'opacity-100 hover:scale-105 cursor-pointer'}"
+					: 'opacity-100 focus:scale-105 cursor-pointer'}"
 			>
 				<div
 					style={editModeEnabled
@@ -476,6 +543,7 @@
 						  ).toFixed(4)}s;`
 						: ''}
 					class="text-6xl mb-4 icon flex items-center justify-center"
+					id="app-icon"
 				>
 					{#if position.channel.image}
 						{#if position.channel.image.split('.').pop() === 'ico'}
@@ -505,9 +573,8 @@
 						</div>
 					{/if}
 				</div>
-				<div>
-					<div class="text-2xl">{position.channel.name}</div>
-				</div>
+				<div id="app-label" class="text-2xl">{position.channel.name}</div>
+
 				{#if editModeEnabled && !editModeInitializedByDrag}
 					<div
 						class="flex flex-row items-center mt-4 transition duration-250 ease-in-out {isConsidering
@@ -522,6 +589,7 @@
 								setStatusBar('Edit app');
 							}}
 							on:mouseout={resetStatusBar}
+							tabindex="0"
 							class="cursor-pointer mx-2 rounded bg-white bg-opacity-50 p-2 hover:bg-opacity-10"
 						>
 							<Edit2Icon strokeWidth="1" size="16" />
@@ -543,9 +611,9 @@
 						</div>
 					</div>
 				{/if}
-			</div>
+			</li>
 		{/each}
-	</section>
+	</ul>
 	{#if editModeEnabled && !editModeInitializedByDrag}
 		<div class="flex flex-col items-center justify-center">
 			<div
@@ -561,7 +629,7 @@
 	{/if}
 {:else}
 	<ChannelSearchDropdown
-		bind:selectedChannelIndex
+		bind:focusedChannelIndex
 		bind:filteredChannels
 		bind:positions={board.positions}
 		on:appSelected={(event) => {
@@ -581,7 +649,6 @@
 {/if}
 
 <style>
-	/* This will remove the blue outline on drag */
 	:focus {
 		outline: 0 !important;
 		box-shadow: 0 0 0 0 rgba(0, 0, 0, 0) !important;

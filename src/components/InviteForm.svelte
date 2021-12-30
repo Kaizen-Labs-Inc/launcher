@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
+	import { fly } from 'svelte/transition';
 	import { PlusCircleIcon, Trash2Icon } from 'svelte-feather-icons';
 	import Button from './Button.svelte';
 	import Organization from '../model/Organization';
@@ -7,47 +8,46 @@
 
 	let loading = false;
 	export let organization: Organization;
-	const domain = organization?.emailDomains?.find(_ => true)?.domain
+	const domain = organization?.emailDomains?.find((_) => true)?.domain;
 
-	let invites = [{inviteeEmail: ''}, {inviteeEmail: ''}, {inviteeEmail: ''}]
+	let invites = [{ inviteeEmail: '' }, { inviteeEmail: '' }, { inviteeEmail: '' }];
 
 	const addInvite = () => {
-		invites = [...invites, {inviteeEmail: ''}]
+		invites = [...invites, { inviteeEmail: '' }];
 	};
 	const destroyLastInvite = () => {
-		invites.pop()
-		invites = invites
-	}
+		invites.pop();
+		invites = invites;
+	};
 	const handleInvite = async () => {
 		loading = true;
-		let data = invites.filter(it => it.inviteeEmail.trim() !== '')
+		let data = invites.filter((it) => it.inviteeEmail.trim() !== '');
 		if (organization) {
-			data = data.map(it => Object.assign(it, { organizationId: organization.id }))
+			data = data.map((it) => Object.assign(it, { organizationId: organization.id }));
 		}
 		fetch(`/api/invitation`, {
 			method: 'POST',
 			body: JSON.stringify(data)
-		}).then(res => {
+		}).then((res) => {
 			if (res.status === 201) {
 				loading = false;
 				dispatch('success');
 			} else {
-				dispatch('failure')
+				dispatch('failure');
 			}
-		})
+		});
 	};
 </script>
 
 <div class="flex flex-col mt-12 mx-auto w-full sm:w-2/3">
 	{#each invites as invite, i}
-		<div class="flex items-center">
+		<div in:fly={{ duration: 200, y: 20, opacity: 0 }} class="flex items-center">
 			<div class="flex flex-col justify-start my-3 flex-grow">
 				<label class="mb-1" for="workspaceName">Invite someone by email</label>
 				<input
 					bind:value={invite.inviteeEmail}
 					name="workspaceName"
 					type="text"
-					autofocus={i === 0}
 					required
 					placeholder="name@{domain || 'example.com'}"
 					class="bg-white bg-opacity-10 rounded p-2 outline-none text-xl"
