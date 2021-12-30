@@ -138,6 +138,7 @@
 	};
 
 	const handleChannelBlur = () => {
+		document.activeElement.blur();
 		focusedChannelIndex = null;
 		resetStatusBar();
 	};
@@ -255,6 +256,10 @@
 
 				if (editModeEnabled && event.key === 'Escape') {
 					editModeEnabled = false;
+				}
+
+				if (!editModeEnabled && !searchIsFocused && event.key === 'Escape') {
+					handleChannelBlur();
 				}
 
 				if (searchIsFocused && event.key === 'Enter') {
@@ -632,8 +637,8 @@
 
 <style>
 	:focus {
-		/* outline: 0 !important; */
-		/* box-shadow: 0 0 0 0 rgba(0, 0, 0, 0) !important; */
+		outline: 0 !important;
+		box-shadow: 0 0 0 0 rgba(0, 0, 0, 0) !important;
 	}
 
 	.icon {

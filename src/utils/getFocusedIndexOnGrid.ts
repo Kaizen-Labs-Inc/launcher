@@ -58,6 +58,7 @@ export const getFocusedIndexOnGrid = (
 			newRowPosition = 1;
 		}
 	} else if (pressedKey === 'ArrowDown') {
+		// TODO handle remainder rows
 		if (currentRowPosition < numRows) {
 			newRowPosition = currentRowPosition + 1;
 		} else {
