@@ -37,8 +37,6 @@
 	let isConsidering: boolean = false;
 	let editModeInitializedByDrag: boolean = false;
 	let addChannelPopoverStepOneComplete: boolean = false;
-	let numRows: number;
-	let numCols: number;
 
 	// For edit mode jiggles
 	const jiggleAnimDelayMin: number = -0.75;
@@ -51,13 +49,20 @@
 	);
 
 	const handleDndConsider = (e) => {
-		if (!editModeEnabled) {
-			editModeInitializedByDrag = true;
+		if (e.detail.info.source === 'keyboard') {
+			// TODO fix this 5UP34H4CK that resets the drag and drop library
+			// need to find a way to 'exit' consider mode
+			handleProceed(filteredChannels[focusedChannelIndex]);
+			window.location.reload();
+		} else {
+			if (!editModeEnabled) {
+				editModeInitializedByDrag = true;
+			}
+			isConsidering = true;
+			editModeEnabled = true;
+			board.positions = e.detail.items;
+			focusedChannelIndex = null;
 		}
-		isConsidering = true;
-		editModeEnabled = true;
-		board.positions = e.detail.items;
-		focusedChannelIndex = null;
 		resetStatusBar();
 	};
 	const handleDndFinalize = (e) => {
@@ -97,7 +102,7 @@
 	const handleProceed = (channel: Channel) => {
 		focusedChannelIndex = null;
 		window.open('https://' + channel.url, '_blank').focus();
-		analytics.track('Channel clicked', {
+		analytics.track('Channel opened', {
 			channel: channel
 		});
 	};
@@ -265,6 +270,12 @@
 				if (searchIsFocused && event.key === 'Enter') {
 					handleProceed(filteredChannels[focusedChannelIndex]);
 				}
+
+				if (!searchIsFocused && !editModeEnabled && event.key === 'Enter') {
+					handleProceed(filteredChannels[focusedChannelIndex]);
+					alert('why');
+				}
+
 				if (
 					event.metaKey &&
 					event.key === 'g' &&
@@ -480,6 +491,7 @@
 		role="grid"
 		id="app-grid"
 		tabindex="-1"
+		aria-label="App grid"
 		class="grid lg:grid-cols-6 md:grid-cols-4 grid-cols-2 gap-8 md:gap-12 lg:gap-16 items-start mt-12 transition duration-200 ease-in-out"
 		use:dndzone={{
 			items: board?.positions || [],
@@ -499,6 +511,7 @@
 		{#each board?.positions || [] as position, i (position.id)}
 			<li
 				aria-labelledby="app-grid"
+				aria-label={position.channel.name}
 				tabindex="0"
 				on:focus={() => {
 					handleChannelFocus(i);
