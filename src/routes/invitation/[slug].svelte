@@ -7,9 +7,9 @@
 	let loading = true;
 	let invitation;
 
-	const signIn = () => {
-		goto('/api/auth/signin/google');
-		analytics.track('Sign-in button clicked', {
+	const signUpWithInvitation = () => {
+		goto('/api/auth/signin/google?redirect=' + encodeURIComponent(`/api/invitation/${invitation?.slug}/signup`));
+		analytics.track('Sign-up button clicked', {
 			provider: 'Google'
 		});
 	}
@@ -27,7 +27,7 @@
 </script>
 
 <svelte:head>
-	<title>Launcher - Invite your team</title>
+	<title>Join Launcher</title>
 </svelte:head>
 
 {#if loading}
@@ -48,7 +48,7 @@
 				<div class="mt-2 text-2xl">You've been invited to join Launcher</div>
 			{/if}
 			<div
-				on:click={signIn}
+				on:click={signUpWithInvitation}
 				class="rounded mt-8 px-3 py-2 text-xl bg-white flex items-center justify-center text-black cursor-pointer no-underline"
 			>
 				<IconGoogle size={24} />
