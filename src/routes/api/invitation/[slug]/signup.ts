@@ -2,16 +2,23 @@ import { prisma } from '$lib/prismaClient';
 import type { ServerRequest } from '@sveltejs/kit/types/hooks';
 import type { EndpointOutput } from '@sveltejs/kit/types/endpoint';
 import getAuth from '$lib/getAuth';
-import atobUnicode from '$lib/btoaUnicode';
-import { NOT_FOUND } from '$lib/responseConstants';
 import camelcaseKeys from 'camelcase-keys';
 import { RoleType } from '../../../../model/RoleType';
+import atobUnicode from '$lib/btoaUnicode';
 
 export async function get(request: ServerRequest): Promise<void | EndpointOutput> {
 	const auth = getAuth(request)
 
+	const errorPayload = {
+		headers: {
+			"Location": `/auth-error?s=true`,
+			"Set-Cookie": "svelteauthjwt=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT"
+		},
+		status: 302
+	}
+
 	if (!auth) {
-		return NOT_FOUND
+		return errorPayload
 	}
 
 	const parts = request.path.split('/')
@@ -22,7 +29,7 @@ export async function get(request: ServerRequest): Promise<void | EndpointOutput
 	try {
 		slug = parts[parts.length - 2]
 		if (!slug) {
-			return NOT_FOUND
+			return errorPayload
 		}
 		foundInvitation = await prisma.invitation.findUnique({
 			where: {
@@ -32,33 +39,31 @@ export async function get(request: ServerRequest): Promise<void | EndpointOutput
 				organization: true
 			}
 		})
-
 	} catch (e) {
-		return NOT_FOUND
+		return errorPayload
 	}
 
 	if (!foundInvitation) {
 		return {
 			headers: {
-				"Location": `/auth-error?i=${atobUnicode(auth?.user?.email)}`,
+				"Location": `/auth-error?i=${atobUnicode(slug)}`,
 				"Set-Cookie": "svelteauthjwt=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT"
 			},
 			status: 302
 		}
 	}
 
-	console.log(foundInvitation)
 	if (foundInvitation.organization) {
-		// check organization email domain
+		// TODO: check organization email domain
 	}
+
 	const dateCreated = new Date().toISOString()
 	const googleProfile = camelcaseKeys(Object.assign({}, auth.user, {
 		dateCreated: dateCreated,
 		lastModified: dateCreated,
 		provider: 'google'
 	}))
-	delete googleProfile.hd
-	console.log(googleProfile)
+
 	const data: any = {
 		dateCreated: dateCreated,
 		lastModified: dateCreated,
@@ -66,6 +71,7 @@ export async function get(request: ServerRequest): Promise<void | EndpointOutput
 			create: googleProfile
 		}
 	}
+
 	if (foundInvitation.organization) {
 		data.role = {
 			create: {
@@ -81,13 +87,17 @@ export async function get(request: ServerRequest): Promise<void | EndpointOutput
 		}
 	}
 
-	const created = await prisma.user.create({
-		data: data,
-		include: {
-			googleProfile: true
-		}
-	})
-	console.log(created)
+	try {
+		await prisma.user.create({
+			data: data,
+			include: {
+				googleProfile: true
+			}
+		})
+	} catch (e) {
+		console.error(e)
+		return errorPayload
+	}
 
 	return {
 		headers: { Location: '/' },
