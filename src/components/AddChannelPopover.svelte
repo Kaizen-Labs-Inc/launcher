@@ -177,6 +177,7 @@
 		dispatch('hoverOut');
 	}}
 	id="addTarget"
+	tabindex="0"
 	class="transition duration-200 ease-in-out sm:w-10 sm:h-10 w-6 h-6 {popOverIsFocused
 		? 'rotate-45'
 		: ''} {editModeEnabled ? 'cursor-default' : 'cursor-pointer hover:opacity-100 hover:scale-110'}"

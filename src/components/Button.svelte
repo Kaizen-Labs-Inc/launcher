@@ -15,6 +15,7 @@
 
 <div
 	on:click={handleOnClick}
+	role="button"
 	class="rounded px-4 py-2 text-lg bg-white flex items-center justify-center text-black mt-4 {disabled ||
 	loading
 		? 'opacity-50'
