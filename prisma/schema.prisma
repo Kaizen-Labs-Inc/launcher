@@ -87,7 +87,7 @@ model GoogleProfile {
   email         String   @unique
   emailVerified Boolean  @map("email_verified")
   locale        String
-  hd            String
+  hd            String?
   provider      String
   User          User?
   dateCreated   DateTime @map("date_created")

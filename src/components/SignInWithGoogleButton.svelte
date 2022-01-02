@@ -5,7 +5,7 @@
 
 <div
 	on:click={() => {
-		goto('/api/auth/signin/google');
+		goto('/api/auth/signin/google?redirect=' + encodeURIComponent("/api/user/signin"));
 		analytics.track('Sign-in button clicked', {
 			provider: 'Google'
 		});

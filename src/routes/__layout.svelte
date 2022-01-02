@@ -98,7 +98,7 @@
 							res.json().then((s: any) => {
 								userStore.set({
 									loading: false,
-									user: s?.session?.user?.connections?.google as GoogleUser
+									user: s?.session?.user as GoogleUser
 								});
 							});
 						} else {
