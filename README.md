@@ -2,18 +2,29 @@
 
 # Launcher
 
-## An open-source & accessible app launcher built on Sveltekit
+## An open-source & accessible app launcher built with Sveltekit, Prisma, and Tailwind.
 
 <br>
 
-# Setup
+# 👷‍♀️ Setup
 
 **Requirements**
 
 - node.js
+- [Prisma](https://prisma.io)
 - postgresql
 
-### Setting up node.js and the frontend environment
+**You'll also need:**
+
+- Your own Google app, including the app ID and key, for user authentication (Launcher only supports Google for now)
+- Your own [Segment](https://segment.com) API key for analytics
+- Your own [Postmark](https://postmark.com) account, for sending invitation emails, including a key and sender + support email addresses
+
+See `.env.example` for all of the required environment variables. Copy this file to a new `.env` file with your own values.
+
+<br>
+
+## Setting up node.js and the frontend environment
 
 **Install node.js** using Homebrew (if not already installed):
 
@@ -29,7 +40,9 @@ npm install
 npx prisma generate
 ```
 
-### Setting up a local PostgreSQL database
+<br>
+
+## Setting up a local PostgreSQL database
 
 If Postgresql is not installed:
 
@@ -114,7 +127,7 @@ The types of toasts are `'success'`, `'info`, and `'error'`.
 
 <br>
 
-# Building
+# ⚒️ Building
 
 Before creating a production version of your app, install an [adapter](https://kit.svelte.dev/docs#adapters) for your target environment. Then:
 
@@ -128,10 +141,12 @@ npm run build
 
 <br>
 
-# License
+# ⚖️ License
 
 Launcher is free and open-source, available under the [AGPL software license](https://www.gnu.org/licenses/agpl-3.0.txt).
 
-## Commercial availability
+<br>
 
-🙏🏻 Support the core Launcher team by signing up for our managed product at [launcher.team](https://launcher.team).
+# 🙏🏻 Support us
+
+Support the core Launcher team by signing up for our managed product at [launcher.team](https://launcher.team).
