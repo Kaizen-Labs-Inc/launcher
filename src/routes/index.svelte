@@ -116,7 +116,7 @@
 		Launcher wrangles the apps your company uses (like GitHub, Notion, and Asana) and makes them
 		beautiful and accessible. Perfect for new hires and growing teams.
 	</h4>
-	<ScrollingChannelIconBackground />
+	<!-- <ScrollingChannelIconBackground /> -->
 	<div class="mt-12 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 mb-24">
 		<div
 			class="rounded-2xl bg-black text-white bg-opacity-30 backdrop-blur-md p-8 flex flex-col items-center text-center"
