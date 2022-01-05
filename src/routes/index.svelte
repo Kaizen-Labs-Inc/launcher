@@ -27,57 +27,69 @@
 <svelte:head>
 	<title>Launcher - a home screen for your growing team</title>
 </svelte:head>
-<ScrollingChannelIconBackground />
 <div class="container mx-auto">
-	<div class="text-center mt-24 flex flex-col">
-		<h1 class="font-bold text-5xl md:text-8xl z-20" style="line-height: 115%">
-			A home screen for your growing team.
-		</h1>
-		<h2 class="text-3xl mt-12 opacity-80 z-20">Shared shortcuts to your team's daily apps.</h2>
-		<div class="flex sm:flex-row flex-col justify-center items-top mt-16 z-20">
-			<div class="flex flex-col sm:mx-4 my-4 sm:my-0">
-				<div
-					on:focus
-					on:blur
-					on:mouseover={() => {
-						demoCtaIsHovered = true;
-					}}
-					on:mouseout={() => {
-						demoCtaIsHovered = false;
-					}}
-					on:click={() => {
-						goto('/demo');
-					}}
-					class="cta mx-auto rounded-md cursor-pointer text-2xl font-medium py-3 px-6 flex items-center justify-center text-black"
-				>
-					Play with the demo
-				</div>
-				<div class="mt-3 {demoCtaIsHovered ? 'opacity-100' : 'opacity-60'}">
-					No sign-up required 🙂
+	<div class="mt-24">
+		<div class="flex md:flex-row flex-col justify-between md:items-start items-center">
+			<div class="flex flex-col md:mr-4 md:mx-0 mx-4 items-center md:items-start">
+				<h1 class="font-bold text-4xl md:text-6xl md:text-left" style="line-height: 115%">
+					A home screen for your growing team.
+				</h1>
+				<h2 class="text-3xl opacity-80 mt-6">Shared shortcuts to your team's daily apps.</h2>
+				<div class="flex flex-col items-center md:items-start mt-8">
+					<div class="flex flex-col my-4 items-start">
+						<div
+							on:focus
+							on:blur
+							on:mouseover={() => {
+								demoCtaIsHovered = true;
+							}}
+							on:mouseout={() => {
+								demoCtaIsHovered = false;
+							}}
+							on:click={() => {
+								goto('/demo');
+							}}
+							class="cta mx-auto rounded-md cursor-pointer text-2xl font-medium py-3 px-6 flex items-center justify-center text-black"
+						>
+							Play with the demo
+						</div>
+						<div class="mt-3 {demoCtaIsHovered ? 'opacity-100' : 'opacity-60'}">
+							No sign-up required 🙂
+						</div>
+					</div>
+					<div class="my-4 items-center flex flex-col">
+						<div
+							on:focus
+							on:blur
+							on:mouseover={() => {
+								pricingCtaIsHovered = true;
+							}}
+							on:mouseout={() => {
+								pricingCtaIsHovered = false;
+							}}
+							on:click={() => {
+								goto('/pricing');
+							}}
+							class="bg-white bg-opacity-10 hover:bg-opacity-20 rounded-md cursor-pointer text-2xl font-medium py-3 px-6 flex items-center justify-center"
+						>
+							See pricing
+						</div>
+						<div class="mt-3 {pricingCtaIsHovered ? 'opacity-100' : 'opacity-60'}">
+							Limited-time free trial
+						</div>
+					</div>
 				</div>
 			</div>
-			<div class="mx-4">
-				<div
-					on:focus
-					on:blur
-					on:mouseover={() => {
-						pricingCtaIsHovered = true;
-					}}
-					on:mouseout={() => {
-						pricingCtaIsHovered = false;
-					}}
-					on:click={() => {
-						goto('/pricing');
-					}}
-					class="bg-white bg-opacity-5 hover:bg-opacity-10 rounded-md cursor-pointer text-2xl font-medium py-3 px-6 flex items-center justify-center"
-				>
-					See pricing
-				</div>
-				<div class="mt-3 {pricingCtaIsHovered ? 'opacity-100' : 'opacity-60'}">
-					Limited-time free trial
-				</div>
-			</div>
+			<video
+				class="rounded-lg shadow-lg bg-white bg-opacity-75 backdrop-blur-lg"
+				autoplay
+				loop
+				muted
+				src="/demo.mp4"
+				width="500"
+			/>
 		</div>
+
 		<div class="mt-16 grid grid-cols-2 gap-4 mx-auto text-xl">
 			<div class="flex items-center justify-start mx-3">
 				<div class="text-green-300"><CheckIcon size="22" /></div>
@@ -97,14 +109,14 @@
 			</div>
 		</div>
 	</div>
-
-	<h3 class="text-5xl font-medium text-center mt-36 w-2/3 mx-auto">
+	<h3 class="text-5xl font-medium text-center mt-32 mx-auto">
 		The "new tab" page for your company.
 	</h3>
 	<h4 class="text-2xl mt-10 opacity-60 text-center mx-auto">
 		Launcher wrangles the apps your company uses (like GitHub, Notion, and Asana) and makes them
 		beautiful and accessible. Perfect for new hires and growing teams.
 	</h4>
+	<ScrollingChannelIconBackground />
 	<div class="mt-12 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 mb-24">
 		<div
 			class="rounded-2xl bg-black text-white bg-opacity-30 backdrop-blur-md p-8 flex flex-col items-center text-center"

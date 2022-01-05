@@ -230,7 +230,6 @@
 		});
 
 		isMobile = isMobileDevice();
-
 		document.addEventListener(
 			'keydown',
 			(event) => {

@@ -37,7 +37,6 @@
 	id="appDropdown"
 	class="flex flex-col w-full bg-white bg-opacity-10 backdrop-blur-2xl rounded-b-lg overflow-y-scroll shadow-2xl"
 >
-	<!-- TODO Have 2 states. A) by last used, when b) alpha  -->
 	{#if filteredChannels.length === 0}
 		<div class="mt-16 mb-16 flex flex-col justify-center items-center">
 			<p class="text-2xl ">🤷‍♂️ Nothing found.</p>
@@ -87,7 +86,7 @@
 								</div>
 							{/if}
 						</div>
-						<div class="sm:text-2xl ">
+						<div class="sm:text-2xl">
 							{channel.name}
 							<div class="block text-sm {selectedChannelIndex === i ? 'opacity-50' : 'opacity-25'}">
 								{channel.url}
@@ -96,7 +95,7 @@
 					</div>
 					{#if channel.description}
 						<div
-							class="text-sm sm:text-base col-span-2 {selectedChannelIndex === i
+							class="text-sm sm:text-base col-span-2 ml-12 {selectedChannelIndex === i
 								? 'opacity-60'
 								: 'opacity-30'}"
 						>

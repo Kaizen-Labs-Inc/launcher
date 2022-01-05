@@ -6,7 +6,7 @@
 	const channelsRow3 = mockChannels.slice(channelRowLength * 2, channelRowLength * 3);
 </script>
 
-<div class="z-0 absolute">
+<div class="z-0 absolute opacity-50">
 	<div class="flex flex-row flex-nowrap opacity-60 channels1 absolute">
 		{#each channelsRow1 as channel}
 			<div
