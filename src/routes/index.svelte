@@ -175,6 +175,11 @@
 			<span class="opacity-75">Use and browse our apps, or add your own.</span>
 		</div>
 	</div>
+	<footer class="z-0">
+		<p class="mx-3">Kaizen Labs Inc 2022</p>
+		<a href="/privacy" class="mx-3">Privacy policy</a>
+		<a href="/terms" class="mx-3">Terms of use</a>
+	</footer>
 </div>
 
 <style>
@@ -220,6 +225,14 @@
 		transform-origin: 30% 5%;
 	}
 
+	footer {
+		display: flex;
+		flex-direction: row;
+		justify-content: center;
+		align-items: center;
+		margin-top: 80px;
+		margin-bottom: 20px;
+	}
 	@keyframes keyframes1 {
 		0% {
 			transform: rotate(-1deg);

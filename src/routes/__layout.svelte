@@ -180,11 +180,6 @@ radial-gradient(at 0% 0%, ${selectedBackdrop.colors[3]} 0, transparent 50%);`}
 	/>
 {/if}
 
-<!-- <footer class="z-0">
-	<p class="mx-3">Kaizen Labs Inc 2021</p>
-	<a href="/privacy" class="mx-3">Privacy policy</a>
-	<a href="/terms" class="mx-3">Terms of use</a>
-</footer> -->
 <style>
 	.container {
 		flex: 1;
@@ -195,13 +190,6 @@ radial-gradient(at 0% 0%, ${selectedBackdrop.colors[3]} 0, transparent 50%);`}
 		max-width: 1024px;
 		margin: 0 auto;
 		box-sizing: border-box;
-	}
-	footer {
-		display: flex;
-		flex-direction: row;
-		justify-content: center;
-		align-items: center;
-		margin-top: 180px;
 	}
 
 	#gradient-canvas {
