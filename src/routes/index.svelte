@@ -3,6 +3,7 @@
 	import { userStore } from '../stores/userStore';
 	import { goto } from '$app/navigation';
 	import {
+		CheckIcon,
 		CodeIcon,
 		CommandIcon,
 		GridIcon,
@@ -75,6 +76,24 @@
 				<div class="mt-3 {pricingCtaIsHovered ? 'opacity-100' : 'opacity-60'}">
 					Limited-time free trial
 				</div>
+			</div>
+		</div>
+		<div class="mt-16 grid grid-cols-2 gap-4 mx-auto text-xl">
+			<div class="flex items-center justify-start mx-3">
+				<div class="text-green-300"><CheckIcon size="22" /></div>
+				<div class="ml-3">Create shortcuts to common apps</div>
+			</div>
+			<div class="flex items-center justify-start mx-3">
+				<div class="text-green-300"><CheckIcon size="22" /></div>
+				<div class="ml-3">Onboard new hires in a snap</div>
+			</div>
+			<div class="flex items-center justify-start mx-3">
+				<div class="text-green-300"><CheckIcon size="22" /></div>
+				<div class="ml-3">Sign in with Google</div>
+			</div>
+			<div class="flex items-center justify-start mx-3">
+				<div class="text-green-300"><CheckIcon size="22" /></div>
+				<div class="ml-3">Use by yourself or with your team</div>
 			</div>
 		</div>
 	</div>
