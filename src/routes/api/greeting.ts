@@ -12,10 +12,9 @@ const BOARD_SELECTIONS = {
 			channel: true
 		}
 	}
-}
+};
 
 export async function get(request: ServerRequest): Promise<void | EndpointOutput> {
-
 	let defaultBoard: any = await prisma.board.findFirst({
 		where: {
 			boardType: 0
@@ -24,9 +23,13 @@ export async function get(request: ServerRequest): Promise<void | EndpointOutput
 	});
 	const dateCreated = new Date().toISOString();
 	if (!defaultBoard) {
-		for (const it of [{name: "free", annualPrice: 0}, {name: "team", annualPrice: 48}, {name: "enterprise", annualPrice: 96}]) {
+		for (const it of [
+			{ name: 'free', annualPrice: 0 },
+			{ name: 'team', annualPrice: 48 },
+			{ name: 'enterprise', annualPrice: 96 }
+		]) {
 			await prisma.subscription.create({
-				data: Object.assign(it, {dateCreated: dateCreated, lastModified: dateCreated})
+				data: Object.assign(it, { dateCreated: dateCreated, lastModified: dateCreated })
 			});
 		}
 
@@ -47,8 +50,9 @@ export async function get(request: ServerRequest): Promise<void | EndpointOutput
 			select: BOARD_SELECTIONS
 		});
 
-		const tags = Array.from(new Set(mockChannels.map(it => it.tags).flat())).filter(it => it !== undefined)
-		console.log(tags)
+		const tags = Array.from(new Set(mockChannels.map((it) => it.tags).flat())).filter(
+			(it) => it !== undefined
+		);
 
 		for (const it of tags) {
 			await prisma.tag.create({
@@ -67,16 +71,16 @@ export async function get(request: ServerRequest): Promise<void | EndpointOutput
 				emoji: it.emoji,
 				description: it.description,
 				dateCreated: dateCreated,
-				lastModified: dateCreated,
-			}
+				lastModified: dateCreated
+			};
 			if (it.tags && false) {
 				d.tags = {
-					connect: it.tags.map(t => {
-						const found = allTags.find(at => at.name === t)
-						console.log(`Linking ${it.title} to ${JSON.stringify(found)}`)
-						return { id: found.id }
+					connect: it.tags.map((t) => {
+						const found = allTags.find((at) => at.name === t);
+						console.log(`Linking ${it.title} to ${JSON.stringify(found)}`);
+						return { id: found.id };
 					})
-				}
+				};
 			}
 			await prisma.channel.create({
 				data: d
@@ -84,13 +88,11 @@ export async function get(request: ServerRequest): Promise<void | EndpointOutput
 		}
 	}
 
-
 	if (defaultBoard.positions.length === 0) {
-
-		const allChannels = await prisma.channel.findMany({})
+		const allChannels = await prisma.channel.findMany({});
 
 		for (const it of allChannels) {
-			const mockChannel = mockChannels.find(c => c.title === it.name)
+			const mockChannel = mockChannels.find((c) => c.title === it.name);
 			console.log({
 				data: {
 					channelId: it.id,
@@ -99,7 +101,7 @@ export async function get(request: ServerRequest): Promise<void | EndpointOutput
 					dateCreated: dateCreated,
 					lastModified: dateCreated
 				}
-			})
+			});
 			if (typeof mockChannel?.defaultBoardPosition !== 'undefined') {
 				await prisma.position.create({
 					data: {

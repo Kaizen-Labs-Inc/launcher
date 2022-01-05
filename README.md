@@ -2,7 +2,7 @@
 
 # Launcher
 
-## An open-source & accessible app launcher built with Sveltekit, Prisma, and Tailwind.
+_An open-source & accessible app launcher built with Sveltekit, Prisma, and Tailwind._
 
 <br>
 
