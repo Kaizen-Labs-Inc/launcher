@@ -105,7 +105,7 @@
 		Launcher wrangles the apps your company uses (like GitHub, Notion, and Asana) and makes them
 		beautiful and accessible. Perfect for new hires and growing teams.
 	</h4>
-	<div class="mt-12 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+	<div class="mt-12 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 mb-24">
 		<div
 			class="rounded-2xl bg-black text-white bg-opacity-30 backdrop-blur-md p-8 flex flex-col items-center text-center"
 		>
@@ -148,7 +148,9 @@
 				<CodeIcon size="28" strokeWidth="1.25" />
 			</div>
 			<div class="font-bold text-2xl text-white my-4">Open source.</div>
-			<span class="opacity-75">Peek under the hood, or host it yourself.</span>
+			<span class="opacity-75"
+				>Peek under the hood, or host it yourself under the AGPL license.</span
+			>
 		</div>
 		<div
 			class="rounded-2xl bg-black text-white bg-opacity-30 backdrop-blur-md p-8 flex flex-col items-center text-center"
@@ -159,7 +161,7 @@
 				<LockIcon size="28" strokeWidth="1.25" />
 			</div>
 			<div class="font-bold text-2xl text-white my-4">Private.</div>
-			<span class="opacity-75">We don't track, store, or sell your data.</span>
+			<span class="opacity-75">We don't and never will sell your data.</span>
 		</div>
 		<div
 			class="rounded-2xl bg-black text-white bg-opacity-30 backdrop-blur-md p-8 flex flex-col items-center text-center"
