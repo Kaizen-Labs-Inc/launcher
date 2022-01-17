@@ -240,5 +240,133 @@ export const mockChannels = [
 		url: 'twitter.com',
 		description: 'Social media',
 		tags: ['marketing']
+	},
+	{
+		id: '27',
+		iconImageUrl: '../../../icons/customer-io.svg',
+		title: 'Customer.io',
+		url: 'customer.io',
+		description: 'Customer messaging platform',
+		tags: ['marketing', 'messaging']
+	},
+	{
+		id: '28',
+		iconImageUrl: '../../../icons/canva.svg',
+		title: 'Canva',
+		url: 'canva.com',
+		description: 'Drag-and-drop designer in the browser',
+		tags: ['marketing', 'design']
+	},
+	{
+		id: '29',
+		iconImageUrl: '../../../icons/hopin.svg',
+		title: 'Hopin',
+		url: 'hopin.com',
+		description: 'Event planning platform',
+		tags: ['events']
+	},
+	{
+		id: '30',
+		iconImageUrl: '../../../icons/databricks.png',
+		title: 'Databricks',
+		url: 'databricks.com',
+		description: 'Data warehouse and data lakes platform',
+		tags: ['data', 'engineering']
+	},
+	{
+		id: '31',
+		iconImageUrl: '../../../icons/zapier.svg',
+		title: 'Zapier',
+		url: 'zapier.com',
+		description: 'Internal tools and automation',
+		tags: ['internal', 'workflows']
+	},
+	{
+		id: '32',
+		iconImageUrl: '../../../icons/mailchimp.svg',
+		title: 'Mailchimp',
+		url: 'mailchimp.com',
+		description: 'Email marketing and newsletters',
+		tags: ['email', 'marketing']
+	},
+	{
+		id: '33',
+		iconImageUrl: '../../../icons/samsara.svg',
+		title: 'Samsara',
+		url: 'samsara.com',
+		description: 'IT operations',
+		tags: ['IT', 'operations']
+	},
+	{
+		id: '34',
+		iconImageUrl: '../../../icons/gusto.svg',
+		title: 'Gusto',
+		url: 'gusto.com',
+		description: 'HR, payroll, and benefits',
+		tags: ['hr']
+	},
+	{
+		id: '35',
+		iconImageUrl: '../../../icons/calendly.png',
+		title: 'Calendly',
+		url: 'calendly.com',
+		description: 'Event planning platform',
+		tags: ['events']
+	},
+	{
+		id: '36',
+		iconImageUrl: '../../../icons/hopin.svg',
+		title: 'Amplitude',
+		url: 'amplitude.com',
+		description: 'Product analytics and analysis',
+		tags: ['product', 'analytics']
+	},
+	{
+		id: '37',
+		iconImageUrl: '../../../icons/vercel.svg',
+		title: 'Vercel',
+		url: 'vercel.com',
+		description: 'Frontend, static sites, and serverless',
+		tags: ['dev']
+	},
+	{
+		id: '38',
+		iconImageUrl: '../../../icons/aws.svg',
+		title: 'Amazon Web Services',
+		url: 'aws.amazon.com',
+		description: 'Platform infrastructure',
+		tags: ['dev']
+	},
+	{
+		id: '39',
+		iconImageUrl: '../../../icons/azure.svg',
+		title: 'Microsoft Azure',
+		url: 'azure.microsoft.com',
+		description: 'Platform infrastructure',
+		tags: ['dev']
+	},
+	{
+		id: '40',
+		iconImageUrl: '../../../icons/gcp.svg',
+		title: 'Google Cloud Platform',
+		url: 'vercel.com',
+		description: 'Frontend, static sites, and serverless',
+		tags: ['dev']
+	},
+	{
+		id: '41',
+		iconImageUrl: '../../../icons/ga.svg',
+		title: 'Google Analytics',
+		url: 'analytics.google.com',
+		description: 'Product analytics',
+		tags: ['analytics', 'marketing']
+	},
+	{
+		id: '42',
+		iconImageUrl: '../../../icons/snowflake.svg',
+		title: 'Snowflake',
+		url: 'snowflake.com',
+		description: 'Data warehouse',
+		tags: ['analytics', 'marketing']
 	}
 ];
