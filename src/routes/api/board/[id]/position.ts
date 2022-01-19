@@ -13,7 +13,6 @@ export async function put(request: ServerRequest): Promise<void | EndpointOutput
 		return BAD_REQUEST
 	}
 
-	const parts = request.path.split('/')
 
 	let positions = [];
 	let boardId: number;
@@ -24,7 +23,7 @@ export async function put(request: ServerRequest): Promise<void | EndpointOutput
 			return BAD_REQUEST
 		}
 		positions = parsed;
-		boardId = Number.parseInt(parts[parts.length - 2])
+		boardId = Number.parseInt(request.params.id)
 	} catch (e: unknown) {
 		console.error(e);
 		return BAD_REQUEST

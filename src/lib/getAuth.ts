@@ -4,7 +4,13 @@ import jwt from 'jsonwebtoken';
 
 export default (request: ServerRequest): any | undefined => {
 	try {
-		const authJwt = cookie.parse(request.headers.cookie).svelteauthjwt
+		let authJwt
+		if (request.headers.cookie) {
+			authJwt = cookie.parse(request.headers.cookie).svelteauthjwt
+		}
+		if (!authJwt) {
+			authJwt = request.headers["x-api-key"]
+		}
 		if (!authJwt) {
 			return undefined
 		}
