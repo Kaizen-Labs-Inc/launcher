@@ -5,7 +5,6 @@
 	import { GoogleProfile } from 'sk-auth/providers';
 	import Organization from '../../model/Organization';
 
-	export let user: GoogleProfile;
 	export let organization: Organization;
 </script>
 

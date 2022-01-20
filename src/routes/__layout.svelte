@@ -7,7 +7,7 @@
 	import type GoogleUser from '../model/api/GoogleUser';
 	import LoadingIndicator from '../components/LoadingIndicator.svelte';
 	import { variables } from '$lib/env';
-	import AuthenticatedNav from '../components/nav/AuthenticatedNav.svelte';
+	import AuthenticatedNav from '../../../launcher-subscription/src/components/AuthenticatedNav.svelte';
 	import PublicNav from '../components/nav/PublicNav.svelte';
 	import { OrganizationStatus, organizationStore } from '../stores/organizationStore';
 	import { Gradient } from '$lib/gradient';
@@ -149,7 +149,7 @@ radial-gradient(at 0% 0%, ${selectedBackdrop.colors[3]} 0, transparent 50%);`}
 >
 	<header>
 		{#if userStatus.user}
-			<AuthenticatedNav user={userStatus.user} organization={organizationStatus.organization} />
+			<AuthenticatedNav organization={organizationStatus.organization} />
 		{/if}
 	</header>
 	<div class="container">
