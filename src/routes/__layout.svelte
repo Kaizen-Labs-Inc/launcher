@@ -7,7 +7,7 @@
 	import type GoogleUser from '../model/api/GoogleUser';
 	import LoadingIndicator from '../components/LoadingIndicator.svelte';
 	import { variables } from '$lib/env';
-	import AuthenticatedNav from '../../../launcher-subscription/src/components/AuthenticatedNav.svelte';
+	import AuthenticatedNav from '../components/nav/AuthenticatedNav.svelte';
 	import PublicNav from '../components/nav/PublicNav.svelte';
 	import { OrganizationStatus, organizationStore } from '../stores/organizationStore';
 	import { Gradient } from '$lib/gradient';
