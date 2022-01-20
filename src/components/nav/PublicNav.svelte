@@ -36,7 +36,7 @@
 			<ArrowUpRightIcon strokeWidth={1} size="18" />
 		</li>
 		<li class="text-yellow-200">
-			<a href="/hi">Sign in</a>
+			<a href="/sign-in">Sign in</a>
 		</li>
 	</ul>
 </nav>
