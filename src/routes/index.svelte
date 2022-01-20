@@ -68,14 +68,11 @@
 								pricingCtaIsHovered = false;
 							}}
 							on:click={() => {
-								goto('/pricing');
+								goto('/hi');
 							}}
 							class="bg-white bg-opacity-10 hover:bg-opacity-20 rounded-md cursor-pointer text-2xl font-medium py-3 px-6 flex items-center justify-center"
 						>
-							See pricing
-						</div>
-						<div class="mt-3 {pricingCtaIsHovered ? 'opacity-100' : 'opacity-60'}">
-							Limited-time free trial
+							Sign in
 						</div>
 					</div>
 				</div>
@@ -189,8 +186,6 @@
 	</div>
 	<footer class="z-0">
 		<p class="mx-3">Kaizen Labs Inc 2022</p>
-		<a href="/privacy" class="mx-3">Privacy policy</a>
-		<a href="/terms" class="mx-3">Terms of use</a>
 	</footer>
 </div>
 

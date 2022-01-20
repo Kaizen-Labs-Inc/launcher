@@ -8,6 +8,9 @@ import camelcaseKeys from 'camelcase-keys';
 export async function get(request: ServerRequest): Promise<void | EndpointOutput> {
 	const auth = getAuth(request)
 
+	const dest = request.params.dest
+	console.log("Signing up with destination " + dest)
+
 	if (!auth) {
 		return NOT_FOUND
 	}
@@ -20,22 +23,37 @@ export async function get(request: ServerRequest): Promise<void | EndpointOutput
 	}))
 	delete googleProfile.hd
 
-	const created = await prisma.user.create({
-		data: {
-			dateCreated: dateCreated,
-			lastModified: dateCreated,
-			googleProfile: {
-				create: googleProfile
+	let created;
+	try {
+		created = await prisma.user.create({
+			data: {
+				dateCreated: dateCreated,
+				lastModified: dateCreated,
+				googleProfile: {
+					create: googleProfile
+				}
+			},
+			include: {
+				googleProfile: true
 			}
-		},
-		include: {
-			googleProfile: true
-		}
-	})
+		})
+	} catch (e) {
+		// could be duplicate signup
+		console.error(e)
+		console.warn("Error signing up user, attempting to find an existing user by email")
+		created = await prisma.user.findFirst({
+			where: {
+				googleProfile: {
+					email: googleProfile.email
+				}
+			}
+		})
+	}
+
 	console.log(created)
 
 	return {
-		headers: { Location: '/' },
+		headers: { Location: dest || '/' },
 		status: 302
 	}
 }

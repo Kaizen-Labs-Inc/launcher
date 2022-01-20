@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte';
 
 	import SignInWithGoogleButton from '../../components/SignInWithGoogleButton.svelte';
+	const signupLink = `/api/auth/signin/google?redirect=${encodeURIComponent("/api/user/signin")}`
 	onMount(() => {
 		window.analytics.page();
 	});
@@ -14,5 +15,7 @@
 <div class="flex flex-col items-center mt-16">
 	<a href="/"><img src="icon.png" alt="Launcher logo" class="w-32 h-32 mb-8" /></a>
 	<SignInWithGoogleButton />
-	<a href="/pricing" class="mt-8 text-2xl opacity-75 hover:opacity-100">or sign up</a>
+	<div class="mt-8 text-2xl opacity-75">
+		New to Launcher? <a href={signupLink} class="hover:opacity-100">Sign up</a>
+	</div>
 </div>
