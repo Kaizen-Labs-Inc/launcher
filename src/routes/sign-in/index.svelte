@@ -2,7 +2,7 @@
 	import { onMount } from 'svelte';
 
 	import SignInWithGoogleButton from '../../components/SignInWithGoogleButton.svelte';
-	const signupLink = `/api/auth/signin/google?redirect=${encodeURIComponent("/api/user/signin")}`
+	const signupLink = `/api/auth/signin/google?redirect=${encodeURIComponent("/api/user/signup")}`
 	onMount(() => {
 		window.analytics.page();
 	});
