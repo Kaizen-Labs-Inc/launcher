@@ -3,8 +3,6 @@ CREATE TABLE "organization" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
     "slug" TEXT NOT NULL,
-    "subscription_id" INTEGER NOT NULL,
-    "domain_restricted" BOOLEAN NOT NULL,
     "date_created" TIMESTAMP(3) NOT NULL,
     "last_modified" TIMESTAMP(3) NOT NULL,
 
@@ -21,28 +19,6 @@ CREATE TABLE "role" (
     "last_modified" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "role_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "subscription" (
-    "id" SERIAL NOT NULL,
-    "name" TEXT NOT NULL,
-    "annual_price" DOUBLE PRECISION NOT NULL,
-    "date_created" TIMESTAMP(3) NOT NULL,
-    "last_modified" TIMESTAMP(3) NOT NULL,
-
-    CONSTRAINT "subscription_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "email_domain" (
-    "id" SERIAL NOT NULL,
-    "domain" TEXT NOT NULL,
-    "organization_id" INTEGER NOT NULL,
-    "date_created" TIMESTAMP(3) NOT NULL,
-    "last_modified" TIMESTAMP(3) NOT NULL,
-
-    CONSTRAINT "email_domain_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -67,7 +43,7 @@ CREATE TABLE "google_profile" (
     "email" TEXT NOT NULL,
     "email_verified" BOOLEAN NOT NULL,
     "locale" TEXT NOT NULL,
-    "hd" TEXT NOT NULL,
+    "hd" TEXT,
     "provider" TEXT NOT NULL,
     "date_created" TIMESTAMP(3) NOT NULL,
     "last_modified" TIMESTAMP(3) NOT NULL,
@@ -116,20 +92,6 @@ CREATE TABLE "channel" (
 );
 
 -- CreateTable
-CREATE TABLE "invitation" (
-    "id" SERIAL NOT NULL,
-    "slug" TEXT NOT NULL,
-    "user_id" INTEGER NOT NULL,
-    "invitee_email" TEXT NOT NULL,
-    "invitee_name" TEXT,
-    "organization_id" INTEGER NOT NULL,
-    "date_created" TIMESTAMP(3) NOT NULL,
-    "last_modified" TIMESTAMP(3) NOT NULL,
-
-    CONSTRAINT "invitation_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
 CREATE TABLE "tag" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
@@ -153,19 +115,10 @@ CREATE UNIQUE INDEX "organization_slug_key" ON "organization"("slug");
 CREATE UNIQUE INDEX "role_user_id_key" ON "role"("user_id");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "email_domain_domain_key" ON "email_domain"("domain");
-
--- CreateIndex
 CREATE UNIQUE INDEX "_user_google_profile_id_key" ON "_user"("google_profile_id");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "google_profile_email_key" ON "google_profile"("email");
-
--- CreateIndex
-CREATE UNIQUE INDEX "channel_url_key" ON "channel"("url");
-
--- CreateIndex
-CREATE UNIQUE INDEX "invitation_slug_key" ON "invitation"("slug");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "_ChannelToTag_AB_unique" ON "_ChannelToTag"("A", "B");
@@ -174,16 +127,10 @@ CREATE UNIQUE INDEX "_ChannelToTag_AB_unique" ON "_ChannelToTag"("A", "B");
 CREATE INDEX "_ChannelToTag_B_index" ON "_ChannelToTag"("B");
 
 -- AddForeignKey
-ALTER TABLE "organization" ADD CONSTRAINT "organization_subscription_id_fkey" FOREIGN KEY ("subscription_id") REFERENCES "subscription"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
 ALTER TABLE "role" ADD CONSTRAINT "role_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "_user"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "role" ADD CONSTRAINT "role_organization_id_fkey" FOREIGN KEY ("organization_id") REFERENCES "organization"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "email_domain" ADD CONSTRAINT "email_domain_organization_id_fkey" FOREIGN KEY ("organization_id") REFERENCES "organization"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "_user" ADD CONSTRAINT "_user_google_profile_id_fkey" FOREIGN KEY ("google_profile_id") REFERENCES "google_profile"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -202,12 +149,6 @@ ALTER TABLE "channel" ADD CONSTRAINT "channel_user_id_fkey" FOREIGN KEY ("user_i
 
 -- AddForeignKey
 ALTER TABLE "channel" ADD CONSTRAINT "channel_organization_id_fkey" FOREIGN KEY ("organization_id") REFERENCES "organization"("id") ON DELETE SET NULL ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "invitation" ADD CONSTRAINT "invitation_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "_user"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "invitation" ADD CONSTRAINT "invitation_organization_id_fkey" FOREIGN KEY ("organization_id") REFERENCES "organization"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "tag" ADD CONSTRAINT "tag_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "_user"("id") ON DELETE SET NULL ON UPDATE CASCADE;

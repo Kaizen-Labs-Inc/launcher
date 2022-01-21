@@ -23,15 +23,6 @@ export async function get(request: ServerRequest): Promise<void | EndpointOutput
 	});
 	const dateCreated = new Date().toISOString();
 	if (!defaultBoard) {
-		for (const it of [
-			{ name: 'free', annualPrice: 0 },
-			{ name: 'team', annualPrice: 48 },
-			{ name: 'enterprise', annualPrice: 96 }
-		]) {
-			await prisma.subscription.create({
-				data: Object.assign(it, { dateCreated: dateCreated, lastModified: dateCreated })
-			});
-		}
 
 		console.log('creating default board');
 

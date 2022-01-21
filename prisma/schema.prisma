@@ -10,18 +10,13 @@ generator client {
 }
 
 model Organization {
-  id               Int           @id @default(autoincrement())
-  name             String
-  slug             String        @unique
-  subscription     Subscription  @relation(fields: [subscriptionId], references: [id])
-  subscriptionId   Int           @map("subscription_id")
-  domainRestricted Boolean       @map("domain_restricted")
-  emailDomains     EmailDomain[]
-  channels         Channel[]
-  invitations      Invitation[]
-  dateCreated      DateTime      @map("date_created")
-  lastModified     DateTime      @map("last_modified")
-  members          Role[]
+  id           Int       @id @default(autoincrement())
+  name         String
+  slug         String    @unique
+  channels     Channel[]
+  dateCreated  DateTime  @map("date_created")
+  lastModified DateTime  @map("last_modified")
+  members      Role[]
 
   @@map("organization")
 }
@@ -39,28 +34,6 @@ model Role {
   @@map("role")
 }
 
-model Subscription {
-  id            Int            @id @default(autoincrement())
-  name          String
-  annualPrice   Float          @map("annual_price")
-  dateCreated   DateTime       @map("date_created")
-  lastModified  DateTime       @map("last_modified")
-  organizations Organization[]
-
-  @@map("subscription")
-}
-
-model EmailDomain {
-  id             Int          @id @default(autoincrement())
-  domain         String       @unique
-  organization   Organization @relation(fields: [organizationId], references: [id])
-  organizationId Int          @map("organization_id")
-  dateCreated    DateTime     @map("date_created")
-  lastModified   DateTime     @map("last_modified")
-
-  @@map("email_domain")
-}
-
 model User {
   id              Int           @id @default(autoincrement())
   googleProfile   GoogleProfile @relation(fields: [googleProfileId], references: [id])
@@ -69,7 +42,6 @@ model User {
   roleId          Int?          @map("role_id")
   boards          Board[]
   channels        Channel[]
-  invitations     Invitation[]
   tags            Tag[]
   dateCreated     DateTime      @map("date_created")
   lastModified    DateTime      @map("last_modified")
@@ -124,7 +96,7 @@ model Position {
 model Channel {
   id             Int           @id @default(autoincrement())
   name           String
-  url            String        @unique
+  url            String
   channelType    Int           @map("channel_type")
   image          String?
   description    String?
@@ -139,21 +111,6 @@ model Channel {
   lastModified   DateTime      @map("last_modified")
 
   @@map("channel")
-}
-
-model Invitation {
-  id             Int          @id @default(autoincrement())
-  slug           String       @unique
-  user           User         @relation(fields: [userId], references: [id])
-  userId         Int          @map("user_id")
-  organization   Organization @relation(fields: [organizationId], references: [id])
-  inviteeEmail   String       @map("invitee_email")
-  inviteeName    String?      @map("invitee_name")
-  organizationId Int          @map("organization_id")
-  dateCreated    DateTime     @map("date_created")
-  lastModified   DateTime     @map("last_modified")
-
-  @@map("invitation")
 }
 
 model Tag {

@@ -17,13 +17,6 @@ export async function get(request: ServerRequest): Promise<void | EndpointOutput
 	const role = await prisma.role.findFirst({
 		where: {
 			userId: user.id
-		},
-		include: {
-			organization: {
-				include: {
-					emailDomains: true
-				}
-			}
 		}
 	});
 
@@ -57,18 +50,10 @@ export async function post(request: ServerRequest): Promise<void | EndpointOutpu
 	try {
 		const dateCreated = new Date().toISOString();
 		const body = JSON.parse(request.body.toString());
-		const emailDomains = body.emailDomains;
-		const domainRestricted = body.domainRestricted && !!emailDomains?.length;
 		organization = await prisma.organization.create({
 			data: Object.assign(body, {
 				dateCreated: dateCreated,
 				lastModified: dateCreated,
-				domainRestricted: domainRestricted,
-				emailDomains: {
-					create: emailDomains.map((it) =>
-						Object.assign(it, { dateCreated: dateCreated, lastModified: dateCreated })
-					)
-				},
 				members: {
 					create: [
 						{
@@ -84,10 +69,7 @@ export async function post(request: ServerRequest): Promise<void | EndpointOutpu
 						id: 1
 					}
 				}
-			}),
-			include: {
-				emailDomains: true
-			}
+			})
 		});
 	} catch (e: unknown) {
 		console.error(e);

@@ -349,7 +349,7 @@ export const mockChannels = [
 		id: '40',
 		iconImageUrl: '../../../icons/gcp.svg',
 		title: 'Google Cloud Platform',
-		url: 'vercel.com',
+		url: 'console.cloud.google.com',
 		description: 'Frontend, static sites, and serverless',
 		tags: ['dev']
 	},
