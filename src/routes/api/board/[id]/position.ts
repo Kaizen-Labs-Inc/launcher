@@ -30,7 +30,7 @@ export async function put(request: ServerRequest): Promise<void | EndpointOutput
 	}
 
 	const auth = getAuth(request);
-	const googleId = auth?.user?.connections?.google?.sub;
+	const googleId = auth?.user?.sub;
 
 	if (!googleId) {
 		return NOT_FOUND;

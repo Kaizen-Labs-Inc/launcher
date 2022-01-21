@@ -8,7 +8,7 @@ export default function validateUser(request: ServerRequest, prisma: PrismaClien
 	if (!profile) {
 		return Promise.resolve(null)
 	}
-	const googleId = auth?.user?.connections?.google?.sub
+	const googleId = auth?.user?.sub
 	return prisma.user.findFirst({
 		where: {
 			googleProfile: {
