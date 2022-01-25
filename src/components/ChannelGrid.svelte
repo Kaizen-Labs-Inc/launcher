@@ -205,7 +205,27 @@
 	});
 
 	const handleSelectedBackdrop = (id: number) => {
+		// TODO do we need stores?
 		backdropStore.set(backdropOptions.find((b) => b.id === id));
+		let data = {
+			boardId: board.id,
+			backdropId: id
+		};
+		if (!isDemo) {
+			if (board.boardType === BoardType.USER.valueOf()) {
+				return fetch(`/api/board/${board.id}/backdrop`, {
+					method: 'PUT',
+					credentials: 'include',
+					body: JSON.stringify(data)
+				});
+			} else {
+				return fetch('/api/board', {
+					method: 'POST',
+					credentials: 'include',
+					body: JSON.stringify(board)
+				}).then(assignBoard);
+			}
+		}
 	};
 
 	async function assignBoard(res) {
