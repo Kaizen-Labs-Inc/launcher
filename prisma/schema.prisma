@@ -72,6 +72,7 @@ model Board {
   id           Int        @id @default(autoincrement())
   user         User?      @relation(fields: [userId], references: [id])
   boardType    Int        @map("board_type")
+  backdropId   Int?       @map("backdrop_id")
   userId       Int?       @map("user_id")
   positions    Position[]
   dateCreated  DateTime   @map("date_created")
@@ -91,6 +92,15 @@ model Position {
   lastModified DateTime @map("last_modified")
 
   @@map("position")
+}
+
+model Backdrop {
+  id           Int      @id @default(autoincrement())
+  animated     Boolean
+  darkMode     Boolean  @map("dark_mode")
+  colors       String[]
+  dateCreated  DateTime @map("date_created")
+  lastModified DateTime @map("last_modified")
 }
 
 model Channel {
