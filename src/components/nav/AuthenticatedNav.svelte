@@ -6,6 +6,7 @@
 	import Organization from '../../model/Organization';
 
 	export let organization: Organization;
+
 </script>
 
 <nav
@@ -19,23 +20,22 @@
 			>
 		</li>
 		<li class="flex-grow" />
-		<li
-			on:click={() => {
-				goto('/invite');
-			}}
-			class="cursor-pointer mr-8 hover:opacity-100 {$page.path === '/invite'
-				? 'opacity-100'
-				: 'opacity-60'}"
-		>
-			Invite your team
-		</li>
-		{#if organization}
+
+		{#if !import.meta.env.VITE_USE_DEFAULT_ORGANIZATION}
 			<li
-				class="cursor-pointer mr-8 hover:opacity-100 {$page.path === `/workspace/${organization.id}`
-					? 'opacity-100'
-					: 'opacity-60'}"
+				on:click={() => {
+					goto('/invite');
+				}}
+				class="cursor-pointer mr-8 hover:opacity-100 opacity-60"
 			>
-				<a href="/workspace/{organization.id}">{organization.name}</a>
+				Invite your team
+			</li>
+		{/if}
+		{#if !import.meta.env.VITE_USE_DEFAULT_ORGANIZATION && organization}
+			<li
+				class="cursor-pointer mr-8 hover:opacity-100 opacity-60"
+			>
+				<a href={import.meta.env.VITE_SUBSCRIPTION_BASE_URL + '/team'}>{organization.name}</a>
 			</li>
 		{/if}
 		<li

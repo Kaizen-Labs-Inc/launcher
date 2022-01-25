@@ -4,6 +4,7 @@ import { prisma } from '$lib/prismaClient';
 import type { Organization } from '@prisma/client';
 import validateUser from '$lib/validateUser';
 import { RoleType } from '../../model/RoleType';
+import { BAD_REQUEST, UNAUTHORIZED } from '$lib/responseConstants';
 
 export async function get(request: ServerRequest): Promise<void | EndpointOutput> {
 	const user = await validateUser(request, prisma);
@@ -35,15 +36,11 @@ export async function post(request: ServerRequest): Promise<void | EndpointOutpu
 	const user = await validateUser(request, prisma);
 
 	if (!user) {
-		return {
-			status: 401
-		};
+		return UNAUTHORIZED
 	}
 
 	if (!request.body) {
-		return {
-			status: 400
-		};
+		return BAD_REQUEST
 	}
 	let organization: Organization;
 
@@ -63,11 +60,6 @@ export async function post(request: ServerRequest): Promise<void | EndpointOutpu
 							lastModified: dateCreated
 						}
 					]
-				},
-				subscription: {
-					connect: {
-						id: 1
-					}
 				}
 			})
 		});
