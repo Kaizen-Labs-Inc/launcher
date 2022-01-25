@@ -84,7 +84,6 @@ export async function get(request: ServerRequest): Promise<void | EndpointOutput
 			const d: any = {
 				animated: it.animated,
 				darkMode: it.darkMode,
-				// TODO check if array type works on colors
 				colors: it.colors,
 				dateCreated: dateCreated,
 				lastModified: dateCreated

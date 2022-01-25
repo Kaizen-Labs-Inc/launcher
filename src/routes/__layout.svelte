@@ -25,6 +25,7 @@
 	});
 
 	let selectedBackdrop: Backdrop;
+
 	backdropStore.subscribe((value) => {
 		selectedBackdrop = value;
 	});

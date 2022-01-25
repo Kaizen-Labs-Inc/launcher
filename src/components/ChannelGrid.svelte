@@ -204,12 +204,10 @@
 		selectedBackdrop = value;
 	});
 
-	const handleSelectedBackdrop = (id: number) => {
-		// TODO do we need stores?
-		backdropStore.set(backdropOptions.find((b) => b.id === id));
+	const handleSelectedBackdrop = (backdrop: Backdrop) => {
+		backdropStore.set(backdrop);
 		let data = {
-			boardId: board.id,
-			backdropId: id
+			backdropId: backdrop.id
 		};
 		if (!isDemo) {
 			if (board.boardType === BoardType.USER.valueOf()) {
@@ -234,6 +232,9 @@
 			return a.position - b.position;
 		});
 		board = b;
+		if (board.backdrop) {
+			backdropStore.set(board.backdrop);
+		}
 	}
 	onMount(() => {
 		fetch('api/board', {
@@ -473,7 +474,7 @@
 				{#if backdropOption.colors.length === 1}
 					<li
 						on:click={() => {
-							handleSelectedBackdrop(backdropOption.id);
+							handleSelectedBackdrop(backdropOption);
 						}}
 						on:mouseover={() => {
 							setStatusBar('Change the background color of your board');
@@ -487,7 +488,7 @@
 				{:else}
 					<li
 						on:click={() => {
-							handleSelectedBackdrop(backdropOption.id);
+							handleSelectedBackdrop(backdropOption);
 						}}
 						on:mouseover={() => {
 							setStatusBar('Change the background color of your board');

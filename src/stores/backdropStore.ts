@@ -1,4 +1,8 @@
-import { backdropOptions } from '../model/Backdrop';
 import type { Backdrop } from '../model/Backdrop';
 import { writable } from 'svelte/store';
-export const backdropStore = writable<Backdrop>(backdropOptions[13]);
+export const backdropStore = writable<Backdrop>({
+	id: Number.MAX_VALUE, // A default backdrop while loading
+	animated: false,
+	darkMode: true,
+	colors: ['#283E8E']
+});

@@ -7,6 +7,7 @@ import validateUser from '$lib/validateUser';
 const BOARD_SELECTIONS = {
 	id: true,
 	boardType: true,
+	backdrop: true,
 	positions: {
 		select: {
 			id: true,
@@ -73,6 +74,7 @@ export async function post(request: ServerRequest): Promise<void | EndpointOutpu
 		};
 	}
 	let board;
+
 	try {
 		board = JSON.parse(request.body.toString());
 	} catch (e: unknown) {
@@ -90,6 +92,7 @@ export async function post(request: ServerRequest): Promise<void | EndpointOutpu
 				dateCreated: dateCreated,
 				lastModified: dateCreated,
 				boardType: BoardType.USER.valueOf(),
+				backdropId: board.backdropId,
 				user: {
 					connect: {
 						id: user.id

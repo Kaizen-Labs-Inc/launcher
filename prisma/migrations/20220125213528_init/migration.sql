@@ -55,6 +55,7 @@ CREATE TABLE "google_profile" (
 CREATE TABLE "board" (
     "id" SERIAL NOT NULL,
     "board_type" INTEGER NOT NULL,
+    "backdrop_id" INTEGER,
     "user_id" INTEGER,
     "date_created" TIMESTAMP(3) NOT NULL,
     "last_modified" TIMESTAMP(3) NOT NULL,
@@ -72,6 +73,18 @@ CREATE TABLE "position" (
     "last_modified" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "position_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "backdrop" (
+    "id" SERIAL NOT NULL,
+    "animated" BOOLEAN NOT NULL,
+    "dark_mode" BOOLEAN NOT NULL,
+    "colors" TEXT[],
+    "date_created" TIMESTAMP(3) NOT NULL,
+    "last_modified" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "backdrop_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -137,6 +150,9 @@ ALTER TABLE "_user" ADD CONSTRAINT "_user_google_profile_id_fkey" FOREIGN KEY ("
 
 -- AddForeignKey
 ALTER TABLE "board" ADD CONSTRAINT "board_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "_user"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "board" ADD CONSTRAINT "board_backdrop_id_fkey" FOREIGN KEY ("backdrop_id") REFERENCES "backdrop"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "position" ADD CONSTRAINT "position_board_id_fkey" FOREIGN KEY ("board_id") REFERENCES "board"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

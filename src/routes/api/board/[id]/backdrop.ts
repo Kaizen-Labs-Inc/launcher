@@ -11,12 +11,11 @@ export async function put(request: ServerRequest): Promise<void | EndpointOutput
 		return BAD_REQUEST;
 	}
 
-	let boardId: number;
+	const boardId: number = parseInt(request.params.id);
 	let backdropId: number;
 	try {
 		const parsed = JSON.parse(request.body.toString());
 		backdropId = parsed.backdropId;
-		boardId = parsed.boardId;
 	} catch (e: unknown) {
 		console.error(e);
 		return BAD_REQUEST;
@@ -53,7 +52,11 @@ export async function put(request: ServerRequest): Promise<void | EndpointOutput
 	const response = await prisma.board
 		.update({
 			data: {
-				backdropId: backdropId,
+				backdrop: {
+					connect: {
+						id: backdropId
+					}
+				},
 				lastModified: new Date().toISOString()
 			},
 			where: {
