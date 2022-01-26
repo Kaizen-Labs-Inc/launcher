@@ -8,15 +8,15 @@
 	import { dndzone } from 'svelte-dnd-action';
 	import AddChannelPopover from '../components/AddChannelPopover.svelte';
 	import ChannelSearchDropdown from '../components/ChannelSearchDropdown.svelte';
-	import Channel from '../model/Channel';
+	import type Channel from '../model/Channel';
 	import { SearchIcon, Edit2Icon, XIcon } from 'svelte-feather-icons';
 	import { goto } from '$app/navigation';
 	import { addToast } from '../stores/toaststore';
-	import Board from '../model/Board';
+	import type Board from '../model/Board';
 	import { BoardType } from '../model/api/BoardType';
 	import { isMobileDevice } from '../utils/DetectDevice';
 	import filterChannelsByQuery from '../lib/filterChannelsByQuery';
-	import { Backdrop, backdropOptions } from '../model/Backdrop';
+	import type { Backdrop } from '../model/Backdrop';
 	import { backdropStore } from '../stores/backdropStore';
 	import StatusBar from './StatusBar.svelte';
 	import { getFocusedIndexOnGrid } from '../utils/getFocusedIndexOnGrid';
@@ -31,6 +31,7 @@
 	let isMobile: boolean = false;
 	let board: Board;
 	let channelsToSearch: Channel[];
+	let backdropOptions: Backdrop[];
 	let statusBarVisible: boolean = false;
 	let statusBarLabel: string;
 	const flipDurationMs: number = 200;
@@ -248,6 +249,10 @@
 			credentials: 'include'
 		}).then(async (res) => {
 			channelsToSearch = await res.json();
+		});
+
+		fetch('/api/backdrop').then(async (res) => {
+			backdropOptions = await res.json();
 		});
 
 		isMobile = isMobileDevice();
