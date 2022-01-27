@@ -4,7 +4,7 @@ import { prisma } from '$lib/prismaClient';
 import { ChannelType } from '../../model/ChannelType';
 import { BoardType } from '../../model/api/BoardType';
 import { mockChannels } from '../../model/MockChannel';
-
+import { backdropOptions } from '../../model/Backdrop';
 const BOARD_SELECTIONS = {
 	id: true,
 	positions: {
@@ -23,7 +23,6 @@ export async function get(request: ServerRequest): Promise<void | EndpointOutput
 	});
 	const dateCreated = new Date().toISOString();
 	if (!defaultBoard) {
-
 		console.log('creating default board');
 
 		await prisma.board.create({
@@ -79,6 +78,22 @@ export async function get(request: ServerRequest): Promise<void | EndpointOutput
 		}
 	}
 
+	const backdrops = await prisma.backdrop.findMany({});
+	if (backdrops.length === 0) {
+		for (const it of backdropOptions) {
+			const d: any = {
+				animated: it.animated,
+				darkMode: it.darkMode,
+				colors: it.colors,
+				dateCreated: dateCreated,
+				lastModified: dateCreated
+			};
+
+			await prisma.backdrop.create({
+				data: d
+			});
+		}
+	}
 	if (defaultBoard.positions.length === 0) {
 		const allChannels = await prisma.channel.findMany({});
 

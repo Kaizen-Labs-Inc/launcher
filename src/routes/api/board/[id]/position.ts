@@ -2,9 +2,7 @@ import type { ServerRequest } from '@sveltejs/kit/types/hooks';
 import type { EndpointOutput } from '@sveltejs/kit/types/endpoint';
 import getAuth from '$lib/getAuth';
 import { prisma } from '$lib/prismaClient';
-
-const BAD_REQUEST = { status: 400 }
-const NOT_FOUND = { status: 404 }
+import { BAD_REQUEST, NOT_FOUND } from '$lib/responseConstants';
 
 
 export async function put(request: ServerRequest): Promise<void | EndpointOutput> {
@@ -147,7 +145,7 @@ export async function put(request: ServerRequest): Promise<void | EndpointOutput
 	})
 
 	if (syncdPositions) {
-		return { body: syncdPositions};
+		return { body: syncdPositions };
 	} else {
 		return {
 			status: 500
