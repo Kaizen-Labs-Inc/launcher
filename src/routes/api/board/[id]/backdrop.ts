@@ -2,9 +2,8 @@ import type { ServerRequest } from '@sveltejs/kit/types/hooks';
 import type { EndpointOutput } from '@sveltejs/kit/types/endpoint';
 import getAuth from '$lib/getAuth';
 import { prisma } from '$lib/prismaClient';
+import { BAD_REQUEST, NOT_FOUND } from '$lib/responseConstants';
 
-const BAD_REQUEST = { status: 400 };
-const NOT_FOUND = { status: 404 };
 
 export async function put(request: ServerRequest): Promise<void | EndpointOutput> {
 	if (!request.body) {
