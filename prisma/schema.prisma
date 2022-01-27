@@ -69,11 +69,11 @@ model GoogleProfile {
 }
 
 model Board {
-  id        Int      @id @default(autoincrement())
-  user      User?    @relation(fields: [userId], references: [id])
-  boardType Int      @map("board_type")
-  backdrop  Backdrop? @relation(fields: [backdropId], references: [id])
-  backdropId   Int?        @map("backdrop_id")
+  id           Int        @id @default(autoincrement())
+  user         User?      @relation(fields: [userId], references: [id])
+  boardType    Int        @map("board_type")
+  backdrop     Backdrop?  @relation(fields: [backdropId], references: [id])
+  backdropId   Int?       @map("backdrop_id")
   userId       Int?       @map("user_id")
   positions    Position[]
   dateCreated  DateTime   @map("date_created")
