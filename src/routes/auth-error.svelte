@@ -6,6 +6,8 @@
 	let email
 	let signup
 	let slug
+	let message
+
 	onMount(() => {
 		window.analytics.page();
 		try {
@@ -18,6 +20,10 @@
 				slug = atobUnicode(encodedInvitationSlug)
 			}
 
+			const encodedMessage = $page.query.get('m')
+			if (encodedMessage) {
+				message = atobUnicode(encodedMessage)
+			}
 			signup = $page.query.get('s')
 			// eslint-disable-next-line no-empty
 		} catch (_) {}
@@ -34,7 +40,7 @@
 		We couldn't find a Launcher account associated with {email}
 	</div>
 	<div class="my-6 text-center">
-		If you already have a Launcher account, head to <a href="/sign-in">the sign-in page</a> and try again.
+		If you already have a Launcher account, head to <a href="/auth/sign-in">the sign-in page</a> and try again.
 	</div>
 	<div class="my-6 text-center">
 		Otherwise, you can <a href="/pricing">get started with a free account</a>.
@@ -45,7 +51,7 @@
 		We couldn't create your account.
 	</div>
 	<div class="my-6 text-center">
-		If you already have a Launcher account, try <a href="/sign-in">signing in</a>.
+		If you already have a Launcher account, try <a href="/auth/sign-in">signing in</a>.
 	</div>
 	<div class="my-6 text-center">
 		Otherwise, you can <a href="/pricing">get started with a free account</a>.
@@ -60,6 +66,14 @@
 	</div>
 	<div class="my-6 text-center">
 		Otherwise, you can <a href="/pricing">get started with a free account</a>.
+	</div>
+{/if}
+{#if message}
+	<div class="my-6 text-2xl text-center">
+		An error occurred
+	</div>
+	<div class="my-6 text-center">
+		{message}
 	</div>
 {/if}
 {#if !email && !signup && !slug}

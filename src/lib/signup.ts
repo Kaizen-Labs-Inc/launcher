@@ -1,22 +1,12 @@
-import { prisma } from '$lib/prismaClient';
-import type { ServerRequest } from '@sveltejs/kit/types/hooks';
-import type { EndpointOutput } from '@sveltejs/kit/types/endpoint';
-import getAuth from '$lib/getAuth';
-import { NOT_FOUND } from '$lib/responseConstants';
 import camelcaseKeys from 'camelcase-keys';
+import { prisma } from '$lib/prismaClient';
+import type { User } from '@prisma/client';
+import type GoogleUser from '../model/api/GoogleUser';
 
-export async function get(request: ServerRequest): Promise<void | EndpointOutput> {
-	const auth = getAuth(request)
-
-	const dest = request.params.dest
-	console.log("Signing up with destination " + dest)
-
-	if (!auth) {
-		return NOT_FOUND
-	}
+export default async function (user: GoogleUser): Promise<User> {
 
 	const dateCreated = new Date().toISOString()
-	const googleProfile = camelcaseKeys(Object.assign({}, auth.user, {
+	const googleProfile = camelcaseKeys(Object.assign({}, user, {
 		dateCreated: dateCreated,
 		lastModified: dateCreated,
 		provider: 'google'
@@ -49,11 +39,5 @@ export async function get(request: ServerRequest): Promise<void | EndpointOutput
 			}
 		})
 	}
-
-	console.log(created)
-
-	return {
-		headers: { Location: dest || '/' },
-		status: 302
-	}
+	return created
 }

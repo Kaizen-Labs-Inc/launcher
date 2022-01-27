@@ -28,7 +28,7 @@
 			<ArrowUpRightIcon strokeWidth={1} size="18" />
 		</li>
 		<li class="text-yellow-200">
-			<a href="/sign-in">Sign in</a>
+			<a href="/auth/sign-in">Sign in</a>
 		</li>
 	</ul>
 </nav>
