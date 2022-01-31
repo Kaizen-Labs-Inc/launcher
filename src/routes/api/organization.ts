@@ -18,6 +18,9 @@ export async function get(request: ServerRequest): Promise<void | EndpointOutput
 	const role = await prisma.role.findFirst({
 		where: {
 			userId: user.id
+		},
+		select: {
+			organization: true
 		}
 	});
 
