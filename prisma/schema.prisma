@@ -1,0 +1,156 @@
+// uncomment to use sqlite (recommended)
+//datasource db {
+//  provider = "sqlite"
+//  url      = "file:./dev.db"
+//}
+
+// remove if using sqlite
+datasource db {
+  provider = "postgresql"
+  url      = env("PG_URL")
+}
+
+
+generator client {
+  provider        = "prisma-client-js"
+  engineType      = "library"
+  previewFeatures = ["interactiveTransactions"]
+}
+
+model Organization {
+  id           Int       @id @default(autoincrement())
+  name         String
+  slug         String    @unique
+  channels     Channel[]
+  dateCreated  DateTime  @map("date_created")
+  lastModified DateTime  @map("last_modified")
+  members      Role[]
+
+  @@map("organization")
+}
+
+model Role {
+  id             Int          @id @default(autoincrement())
+  user           User         @relation(fields: [userId], references: [id])
+  userId         Int          @unique @map("user_id")
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  organizationId Int          @map("organization_id")
+  roleType       Int          @map("role_type")
+  dateCreated    DateTime     @map("date_created")
+  lastModified   DateTime     @map("last_modified")
+
+  @@map("role")
+}
+
+model User {
+  id              Int           @id @default(autoincrement())
+  googleProfile   GoogleProfile @relation(fields: [googleProfileId], references: [id])
+  googleProfileId Int           @unique @map("google_profile_id")
+  role            Role?
+  roleId          Int?          @map("role_id")
+  boards          Board[]
+  channels        Channel[]
+  tags            Tag[]
+  dateCreated     DateTime      @map("date_created")
+  lastModified    DateTime      @map("last_modified")
+
+  @@map("_user")
+}
+
+model GoogleProfile {
+  id            Int      @id @default(autoincrement())
+  sub           String
+  name          String
+  givenName     String   @map("given_name")
+  familyName    String   @map("family_name")
+  picture       String
+  email         String   @unique
+  emailVerified Boolean  @map("email_verified")
+  locale        String
+  hd            String?
+  provider      String
+  User          User?
+  dateCreated   DateTime @map("date_created")
+  lastModified  DateTime @map("last_modified")
+
+  @@map("google_profile")
+}
+
+model Board {
+  id           Int        @id @default(autoincrement())
+  user         User?      @relation(fields: [userId], references: [id])
+  boardType    Int        @map("board_type")
+  backdrop     Backdrop?  @relation(fields: [backdropId], references: [id])
+  backdropId   Int?       @map("backdrop_id")
+  userId       Int?       @map("user_id")
+  positions    Position[]
+  dateCreated  DateTime   @map("date_created")
+  lastModified DateTime   @map("last_modified")
+
+  @@map("board")
+}
+
+model Position {
+  id           Int      @id @default(autoincrement())
+  position     Int
+  board        Board    @relation(fields: [boardId], references: [id])
+  channel      Channel  @relation(fields: [channelId], references: [id])
+  boardId      Int      @map("board_id")
+  channelId    Int      @map("channel_id")
+  dateCreated  DateTime @map("date_created")
+  lastModified DateTime @map("last_modified")
+
+  @@map("position")
+}
+
+model Backdrop {
+  id           Int             @id @default(autoincrement())
+  animated     Boolean
+  darkMode     Boolean         @map("dark_mode")
+  colors       BackdropColor[]
+  dateCreated  DateTime        @map("date_created")
+  lastModified DateTime        @map("last_modified")
+  Board        Board[]
+
+  @@map("backdrop")
+}
+
+model BackdropColor {
+  id       Int        @id @default(autoincrement())
+  value    String
+  Backdrop Backdrop[]
+
+  @@map("backdrop_color")
+}
+
+model Channel {
+  id             Int           @id @default(autoincrement())
+  name           String
+  url            String
+  channelType    Int           @map("channel_type")
+  image          String?
+  description    String?
+  emoji          String?
+  user           User?         @relation(fields: [userId], references: [id])
+  organization   Organization? @relation(fields: [organizationId], references: [id])
+  userId         Int?          @map("user_id")
+  organizationId Int?          @map("organization_id")
+  positions      Position[]
+  tags           Tag[]
+  dateCreated    DateTime      @map("date_created")
+  lastModified   DateTime      @map("last_modified")
+
+  @@map("channel")
+}
+
+model Tag {
+  id           Int       @id @default(autoincrement())
+  name         String
+  user         User?     @relation(fields: [userId], references: [id])
+  userId       Int?      @map("user_id")
+  channels     Channel[]
+  dateCreated  DateTime  @map("date_created")
+  lastModified DateTime  @map("last_modified")
+
+  @@map("tag")
+}

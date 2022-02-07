@@ -1,0 +1,11 @@
+.DS_Store
+node_modules
+build
+.svelte-kit
+package
+.idea
+local
+*.key
+*.crt
+cockroach-data
+.env
