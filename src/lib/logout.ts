@@ -5,5 +5,5 @@ import { userStore } from '../stores/userStore';
 export const logout = () => {
 	signOut();
 	userStore.set({ loading: false, user: undefined });
-	goto('/');
+	goto(import.meta.env.VITE_LOGOUT_URL || '/');
 };
