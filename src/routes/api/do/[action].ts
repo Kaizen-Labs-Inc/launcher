@@ -6,6 +6,8 @@ import atobUnicode from '$lib/atobUnicode';
 import type { GoogleProfile } from '@prisma/client';
 import { prisma } from '$lib/prismaClient';
 import btoaUnicode from '$lib/btoaUnicode';
+import cookie from 'cookie';
+import getRawJwt from '$lib/getRawJwt';
 
 interface DoAction {
 	type: number,
@@ -72,8 +74,13 @@ export async function get(request: ServerRequest): Promise<void | EndpointOutput
 		await signup(auth.user)
 	}
 
+	const domain = process.env['COOKIE_DOMAIN']
+
 	return {
-		headers: { Location: action.dest || '/' },
+		headers: {
+			"Location": action.dest || '/',
+			"Set-Cookie": `svelteauthjwt=${getRawJwt(request)}; path=/; ${domain ? ' domain=' + domain + ';' : ""} HttpOnly`
+		},
 		status: 302
 	}
 }
