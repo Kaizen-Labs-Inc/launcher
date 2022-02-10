@@ -79,7 +79,7 @@ export async function get(request: ServerRequest): Promise<void | EndpointOutput
 	return {
 		headers: {
 			"Location": action.dest || '/',
-			"Set-Cookie": `svelteauthjwt=${getRawJwt(request)}; path=/; ${domain ? ' domain=' + domain + ';' : ""} HttpOnly`
+			"Set-Cookie": `svelteauthjwt=${getRawJwt(request)}; path=/; ${domain ? ' Domain=' + domain + ';' : ""} HttpOnly`
 		},
 		status: 302
 	}
