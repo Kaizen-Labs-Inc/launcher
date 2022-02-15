@@ -1,10 +1,10 @@
+import { logoutSetCookie } from './callback/google';
+
 export async function get(req) {
-	req.locals.user = null
-	console.log(req.locals.user)
 	return {
-		status: 302,
+		status: 200,
 		headers: {
-			location: '/'
+			'Set-Cookie': logoutSetCookie
 		}
 	}
 }

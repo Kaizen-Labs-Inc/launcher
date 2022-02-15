@@ -8,6 +8,7 @@ import signup from '$lib/signup';
 
 const accessTokenUrl = "https://accounts.google.com/o/oauth2/token"
 const profileUrl = "https://openidconnect.googleapis.com/v1/userinfo"
+export const logoutSetCookie = "launcher_auth=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT"
 
 export async function get(request: ServerRequest) {
 	const domain = process.env['AUTH_COOKIE_DOMAIN']
@@ -34,7 +35,7 @@ export async function get(request: ServerRequest) {
 			return {
 				headers: {
 					"Location": `/auth-error?e=${btoaUnicode(user?.email)}`,
-					"Set-Cookie": "launcher_auth=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT"
+					"Set-Cookie": logoutSetCookie
 				},
 				status: 302
 			}
@@ -95,8 +96,8 @@ export enum DoActionType {
 
 const GENERIC_ERROR = {
 	headers: {
-		Location:  `/auth-error?m=${btoaUnicode('An unknown error has occurred while signing up or signing in')}`,
-		"Set-Cookie": "launcher_auth=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT"
+		"Location":  `/auth-error?m=${btoaUnicode('An unknown error has occurred while signing up or signing in')}`,
+		"Set-Cookie": logoutSetCookie
 	},
 	status: 302
 }
