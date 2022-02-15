@@ -27,8 +27,8 @@ export async function put(request: ServerRequest): Promise<void | EndpointOutput
 		return BAD_REQUEST
 	}
 
-	const auth = getAuth(request);
-	const googleId = auth?.user?.sub;
+	const user = getAuth(request);
+	const googleId = user?.sub;
 
 	if (!googleId) {
 		return NOT_FOUND;

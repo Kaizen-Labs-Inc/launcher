@@ -3,12 +3,11 @@ import type { ServerRequest } from '@sveltejs/kit/types/hooks';
 import type { PrismaClient, User } from '@prisma/client'
 
 export default function validateUser(request: ServerRequest, prisma: PrismaClient): Promise<User | null> {
-	const auth = getAuth(request)
-	const profile = auth?.user
+	const profile = getAuth(request)
 	if (!profile) {
 		return Promise.resolve(null)
 	}
-	const googleId = auth?.user?.sub
+	const googleId = profile.sub
 	return prisma.user.findFirst({
 		where: {
 			googleProfile: {
