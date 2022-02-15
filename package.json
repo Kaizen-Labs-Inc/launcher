@@ -30,7 +30,6 @@
 		"prettier": "^2.4.1",
 		"prettier-plugin-svelte": "^2.4.0",
 		"prisma": "^3.6.0",
-		"sk-auth": "^0.3.7",
 		"svelte": "^3.34.0",
 		"svelte-check": "^2.2.6",
 		"svelte-dnd-action": "^0.9.11",
