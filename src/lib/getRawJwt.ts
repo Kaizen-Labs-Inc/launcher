@@ -5,7 +5,7 @@ import jwt from 'jsonwebtoken';
 export default (request: ServerRequest): string | undefined => {
 	let authJwt
 	if (request.headers.cookie) {
-		authJwt = cookie.parse(request.headers.cookie).svelteauthjwt
+		authJwt = cookie.parse(request.headers.cookie).launcher_auth
 	}
 	if (!authJwt) {
 		authJwt = request.headers["x-api-key"]

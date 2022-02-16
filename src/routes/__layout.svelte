@@ -99,7 +99,7 @@
 							res.json().then((s: any) => {
 								userStore.set({
 									loading: false,
-									user: s?.session?.user as GoogleUser
+									user: s as GoogleUser
 								});
 							});
 						} else {
