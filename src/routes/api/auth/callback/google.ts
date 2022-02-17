@@ -8,7 +8,6 @@ import signup from '$lib/signup';
 
 const accessTokenUrl = "https://accounts.google.com/o/oauth2/token"
 const profileUrl = "https://openidconnect.googleapis.com/v1/userinfo"
-export const logoutSetCookie = "launcher_auth=; expires=Thu, 01 Jan 1970 00:00:00 GMT"
 
 export async function get(request: ServerRequest) {
 	const domain = process.env['AUTH_COOKIE_DOMAIN']
