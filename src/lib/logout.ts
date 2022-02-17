@@ -8,7 +8,7 @@ export const logout = async () => {
 		method: 'POST',
 		credentials: 'include'
 	})
-	if (variables.logoutUrl) {
+	if (typeof variables.logoutUrl === 'string') {
 		// note this assumes the logout URL is external;
 		// otherwise, the user will experience an infinite spinner
 		goto(variables.logoutUrl);
