@@ -2,7 +2,7 @@
 	import { goto } from '$app/navigation';
 	import IconGoogle from './icons/icon-google.svelte';
 
-	export let link = `/api/auth/signin/google?type=0&dest=${encodeURIComponent("/home")}`;
+	export let link = '/api/auth/signin/google?type=0'
 	export let label = 'Sign in with Google'
 </script>
 

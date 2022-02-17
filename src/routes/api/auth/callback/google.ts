@@ -52,7 +52,7 @@ export async function get(request: ServerRequest) {
 
 	return {
 		headers: {
-			"Location": state.dest || '/',
+			"Location": state.dest || '/home',
 			'Set-Cookie': `launcher_auth=${token}; Path=/; ${domain ? ' Domain=' + domain + ';' : ""} HttpOnly`
 		},
 		status: 302
