@@ -4,7 +4,7 @@ import type { EndpointOutput } from '@sveltejs/kit/types/endpoint';
 export async function post(_: ServerRequest): Promise<void | EndpointOutput> {
 
 	const domain = process.env['AUTH_COOKIE_DOMAIN']
-	const logoutCookieWithDomain = `launcher_auth=;${ domain ? ' Domain=' + domain + ';' : "" } expires=Thu, 01 Jan 1970 00:00:00 GMT; HttpOnly`
+	const logoutCookieWithDomain = `launcher_auth=;${ domain ? ' Domain=' + domain + ';' : "" } Path=/; Max-Age=0; HttpOnly`
 
 	return {
 		status: 200,
