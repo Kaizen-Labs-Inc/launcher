@@ -1,4 +1,4 @@
-import type { ServerRequest } from '@sveltejs/kit/types/hooks';
+import type { RequestEvent } from '@sveltejs/kit/types/hooks';
 import type { EndpointOutput } from '@sveltejs/kit/types/endpoint';
 import { prisma } from '$lib/prismaClient';
 import { ChannelType } from '../../model/ChannelType';
@@ -14,7 +14,7 @@ const BOARD_SELECTIONS = {
 	}
 };
 
-export async function get(request: ServerRequest): Promise<void | EndpointOutput> {
+export async function get(event: RequestEvent): Promise<void | EndpointOutput> {
 	let defaultBoard: any = await prisma.board.findFirst({
 		where: {
 			boardType: 0

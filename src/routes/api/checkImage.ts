@@ -1,10 +1,10 @@
 import type { EndpointOutput } from '@sveltejs/kit';
-import type { ServerRequest } from '@sveltejs/kit/types/hooks';
+import type { RequestEvent } from '@sveltejs/kit/types/hooks';
 
 const BAD_REQUEST = { status: 400 };
 
-export async function get(request: ServerRequest): Promise<void | EndpointOutput> {
-	const imageUrl = request.query?.get('url');
+export async function get(event: RequestEvent): Promise<void | EndpointOutput> {
+	const imageUrl = event.params['url']; // todo fixme query param
 	if (!imageUrl) {
 		return BAD_REQUEST;
 	} else {

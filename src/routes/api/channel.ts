@@ -1,4 +1,4 @@
-import type { ServerRequest } from '@sveltejs/kit/types/hooks';
+import type { RequestEvent } from '@sveltejs/kit/types/hooks';
 import type { EndpointOutput } from '@sveltejs/kit/types/endpoint';
 import { prisma } from '$lib/prismaClient';
 import { ChannelType } from '../../model/ChannelType';
@@ -10,8 +10,8 @@ export const CHANNEL_SELECTIONS = {
 	tags: true
 }
 
-export async function get(request: ServerRequest): Promise<void | EndpointOutput> {
-	const user = await validateUser(request, prisma)
+export async function get(event: RequestEvent): Promise<void | EndpointOutput> {
+	const user = await validateUser(event.request, prisma)
 
 	const searchConditions: any = [{ channelType: 0 }]
 	if (user) {
@@ -27,9 +27,9 @@ export async function get(request: ServerRequest): Promise<void | EndpointOutput
 	}
 }
 
-export async function post(request: ServerRequest): Promise<void | EndpointOutput> {
+export async function post(event: RequestEvent): Promise<void | EndpointOutput> {
 
-	const user = await validateUser(request, prisma)
+	const user = await validateUser(event.request, prisma)
 
 	if (!user) {
 		return {
@@ -37,14 +37,14 @@ export async function post(request: ServerRequest): Promise<void | EndpointOutpu
 		}
 	}
 
-	if (!request.body) {
+	if (!event.request.body) {
 		return {
 			status: 400
 		}
 	}
 	let channel
 	try {
-		channel = JSON.parse(request.body.toString())
+		channel = await event.request.json()
 	} catch (e: unknown) {
 		console.error(e)
 		return {

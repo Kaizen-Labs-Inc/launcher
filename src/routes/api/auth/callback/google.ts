@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import type { ServerRequest } from '@sveltejs/kit/types/hooks';
+import type { RequestEvent } from '@sveltejs/kit/types/hooks';
 import atobUnicode from '$lib/atobUnicode';
 import btoaUnicode from '$lib/btoaUnicode';
 import type { GoogleProfile } from '@prisma/client';
@@ -9,15 +9,15 @@ import signup from '$lib/signup';
 const accessTokenUrl = "https://accounts.google.com/o/oauth2/token"
 const profileUrl = "https://openidconnect.googleapis.com/v1/userinfo"
 
-export async function get(request: ServerRequest) {
+export async function get(event: RequestEvent) {
 	const domain = process.env['AUTH_COOKIE_DOMAIN']
-	const code = request.query.get('code')
+	const code = event.params['code']// todo fixme query param
 	const accessTokenResp = await getAccessToken(code)
 	const user = await getUser(accessTokenResp.access_token)
 	let state;
 
 	try {
-		state = JSON.parse(atobUnicode(request.query.get('state')))
+		state = JSON.parse(atobUnicode(event.params['state']))// todo fixme query param
 		console.log(`Login action ${state.type} ${state.dest ? `with destination ${state.dest}` : ''}`)
 	} catch (e) {
 		console.error(e)

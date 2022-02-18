@@ -1,19 +1,19 @@
-import type { ServerRequest } from '@sveltejs/kit/types/hooks';
+import type { RequestEvent } from '@sveltejs/kit/types/hooks';
 import type { EndpointOutput } from '@sveltejs/kit/types/endpoint';
 import getAuth from '$lib/getAuth';
 import { prisma } from '$lib/prismaClient';
 import { BAD_REQUEST, NOT_FOUND } from '$lib/responseConstants';
 
 
-export async function put(request: ServerRequest): Promise<void | EndpointOutput> {
-	if (!request.body) {
+export async function put(event: RequestEvent): Promise<void | EndpointOutput> {
+	if (!event.request.body) {
 		return BAD_REQUEST;
 	}
 
-	const boardId: number = parseInt(request.params.id);
+	const boardId: number = parseInt(event.request.params.id);
 	let backdropId: number;
 	try {
-		const parsed = JSON.parse(request.body.toString());
+		const parsed = await event.request.json()
 		backdropId = parsed.backdropId;
 	} catch (e: unknown) {
 		console.error(e);

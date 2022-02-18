@@ -1,4 +1,4 @@
-import type { ServerRequest } from '@sveltejs/kit/types/hooks';
+import type { RequestEvent } from '@sveltejs/kit/types/hooks';
 import btoaUnicode from '$lib/btoaUnicode';
 
 const scope = ["openid", "profile", "email"];
@@ -9,11 +9,11 @@ interface OauthState {
 	dest?: string
 }
 
-export async function get(request: ServerRequest) {
+export async function get(event: RequestEvent) {
 
 	const state: OauthState = {
-		dest: request.query.get('dest'),
-		type: request.query.get('type') ? Number.parseInt(request.query.get('type')) : undefined
+		dest: event.params['dest'], // todo fixme query param
+		type: event.params['type'] ? Number.parseInt(event.params['type']) : undefined
 	}
 
 	const base64State = btoaUnicode(JSON.stringify(state))

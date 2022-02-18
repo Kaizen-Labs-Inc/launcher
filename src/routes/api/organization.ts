@@ -1,4 +1,4 @@
-import type { ServerRequest } from '@sveltejs/kit/types/hooks';
+import type { RequestEvent } from '@sveltejs/kit/types/hooks';
 import type { EndpointOutput } from '@sveltejs/kit/types/endpoint';
 import { prisma } from '$lib/prismaClient';
 import type { Organization } from '@prisma/client';
@@ -6,8 +6,8 @@ import validateUser from '$lib/validateUser';
 import { RoleType } from '../../model/RoleType';
 import { BAD_REQUEST, UNAUTHORIZED } from '$lib/responseConstants';
 
-export async function get(request: ServerRequest): Promise<void | EndpointOutput> {
-	const user = await validateUser(request, prisma);
+export async function get(event: RequestEvent): Promise<void | EndpointOutput> {
+	const user = await validateUser(event.request, prisma);
 
 	if (!user) {
 		return {
@@ -35,21 +35,21 @@ export async function get(request: ServerRequest): Promise<void | EndpointOutput
 	}
 }
 
-export async function post(request: ServerRequest): Promise<void | EndpointOutput> {
-	const user = await validateUser(request, prisma);
+export async function post(event: RequestEvent): Promise<void | EndpointOutput> {
+	const user = await validateUser(event.request, prisma);
 
 	if (!user) {
 		return UNAUTHORIZED
 	}
 
-	if (!request.body) {
+	if (!event.request.body) {
 		return BAD_REQUEST
 	}
 	let organization: Organization;
 
 	try {
 		const dateCreated = new Date().toISOString();
-		const body = JSON.parse(request.body.toString());
+		const body = await event.request.json();
 		organization = await prisma.organization.create({
 			data: Object.assign(body, {
 				dateCreated: dateCreated,

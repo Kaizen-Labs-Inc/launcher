@@ -1,8 +1,8 @@
-import type { ServerRequest } from '@sveltejs/kit/types/hooks';
+import type { RequestEvent } from '@sveltejs/kit/types/hooks';
 import getAuth from '$lib/getAuth';
 
-export async function get(request: ServerRequest) {
-	const user = getAuth(request)
+export async function get(event: RequestEvent) {
+	const user = getAuth(event.request)
 	if (!user) {
 		return {
 			status: 401

@@ -1,12 +1,12 @@
-import type { ServerRequest } from '@sveltejs/kit/types/hooks';
+import type { RequestEvent } from '@sveltejs/kit/types/hooks';
 import type { EndpointOutput } from '@sveltejs/kit/types/endpoint';
 import { prisma } from '$lib/prismaClient';
 import type { Role } from '@prisma/client';
 import validateUser from '$lib/validateUser';
 import { BAD_REQUEST, UNAUTHORIZED } from '$lib/responseConstants';
 
-export async function get(request: ServerRequest): Promise<void | EndpointOutput> {
-	const user = await validateUser(request, prisma);
+export async function get(event: RequestEvent): Promise<void | EndpointOutput> {
+	const user = await validateUser(event.request, prisma);
 
 	const role = await prisma.role.findFirst({
 		where: {
@@ -28,21 +28,21 @@ export async function get(request: ServerRequest): Promise<void | EndpointOutput
 	}
 }
 
-export async function post(request: ServerRequest): Promise<void | EndpointOutput> {
-	const user = await validateUser(request, prisma);
+export async function post(event: RequestEvent): Promise<void | EndpointOutput> {
+	const user = await validateUser(event.request, prisma);
 
 	if (!user) {
 		return UNAUTHORIZED
 	}
 
-	if (!request.body) {
+	if (!event.request.body) {
 		return BAD_REQUEST
 	}
 	let role: Role;
 
 	try {
 		const dateCreated = new Date().toISOString();
-		const body = JSON.parse(request.body.toString());
+		const body = await event.request.json()
 		role = await prisma.role.create({
 			data: {
 				user: { connect: { id: user.id } },
