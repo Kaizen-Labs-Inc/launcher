@@ -37,7 +37,7 @@
 			</li>
 		{/each}
 		<li
-			class="cursor-pointer mr-8 hover:opacity-100 {$page.path === '/user'
+			class="cursor-pointer mr-8 hover:opacity-100 {$page.url.pathName === '/user'
 				? 'opacity-100'
 				: 'opacity-60'}"
 		>

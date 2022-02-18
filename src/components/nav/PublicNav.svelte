@@ -9,7 +9,7 @@
 			<!-- TODO figure out why page path styles aren't applying -->
 			<a
 				href="/"
-				class="{$page.path === '/'
+				class="{$page.url.pathName === '/'
 					? 'text-opacity-10'
 					: 'text-opacity-50'} hover:text-opacity-100 flex items-center"
 				><img src="favicon-32x32.png" class="w-4 h-4 mr-1" alt="Logo" />Home</a
@@ -18,9 +18,7 @@
 		<li class="mr-6">
 			<a
 				href="/demo"
-				class="{$page.path === '/demo'
-					? 'text-opacity-10'
-					: 'text-opacity-50'} hover:text-opacity-100">Demo</a
+				class="text-opacity-50 hover:text-opacity-100">Demo</a
 			>
 		</li>
 		<li class="mr-6 hover:text-opacity-100 text-opacity-50 flex items-center">
