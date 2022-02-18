@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+	import { afterNavigate } from '$app/navigation';
 	import { logout } from '$lib/logout';
 	import { userStore } from '../../stores/userStore';
 	import checkValueAndRedirect from '$lib/checkUserAndRedirect';
@@ -10,7 +10,7 @@
 		user = value.user;
 	});
 
-	onMount(() => {
+	afterNavigate(() => {
 		window.analytics.page();
 	});
 </script>

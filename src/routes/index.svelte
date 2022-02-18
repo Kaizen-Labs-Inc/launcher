@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+	import { afterNavigate } from '$app/navigation';
 	import { userStore } from '../stores/userStore';
 	import { goto } from '$app/navigation';
 
@@ -8,7 +8,7 @@
 			goto('/home');
 		}
 	});
-	onMount(() => {
+	afterNavigate(() => {
 		window.analytics.page();
 	});
 </script>

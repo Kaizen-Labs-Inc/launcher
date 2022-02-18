@@ -2,7 +2,7 @@
 	import type GoogleUser from '../../model/api/GoogleUser';
 	import type { Backdrop } from '../../model/Backdrop';
 	import '../../app.postcss';
-	import { onMount } from 'svelte';
+	import { afterNavigate } from '$app/navigation';
 	import Toasts from '../../components/Toasts.svelte';
 	import { UserStatus, userStore } from '../../stores/userStore';
 	import LoadingIndicator from '../../components/LoadingIndicator.svelte';
@@ -26,7 +26,7 @@
 		selectedBackdrop = value;
 	});
 
-	onMount(async () => {
+	afterNavigate(async () => {
 		const analytics = (window.analytics = window.analytics || []);
 
 		if (!analytics.initialize)

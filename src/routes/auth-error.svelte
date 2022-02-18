@@ -1,5 +1,5 @@
 <script>
-	import { onMount } from 'svelte';
+	import { afterNavigate } from '$app/navigation';
 	import { page } from '$app/stores';
 	import atobUnicode from '../lib/atobUnicode';
 
@@ -8,7 +8,7 @@
 	let slug
 	let message
 
-	onMount(() => {
+	afterNavigate(() => {
 		window.analytics.page();
 		try {
 			const encodedEmail = $page.query.get('e')

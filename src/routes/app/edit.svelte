@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+	import { afterNavigate } from '$app/navigation';
 	import ChannelForm from '../../components/ChannelForm.svelte';
 	import { goto } from '$app/navigation';
 	import MockChannel, { mockChannels } from '../../model/MockChannel';
@@ -15,7 +15,7 @@
 		user = value.user;
 	});
 
-	onMount(() => {
+	afterNavigate(() => {
 		window.analytics.page();
 	});
 </script>

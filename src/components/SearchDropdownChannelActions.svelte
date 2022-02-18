@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { onMount, createEventDispatcher } from 'svelte';
+	import { createEventDispatcher } from 'svelte';
 	import type Channel from '../model/Channel';
 	import { CheckIcon, Edit2Icon, PlusIcon } from 'svelte-feather-icons';
 	export let channelIds: number[];

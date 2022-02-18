@@ -1,9 +1,9 @@
 <script>
-	import { onMount } from 'svelte';
+	import { afterNavigate } from '$app/navigation';
 
 	import SignInWithGoogleButton from '../../components/SignInWithGoogleButton.svelte';
 
-	onMount(() => {
+	afterNavigate(() => {
 		window.analytics.page();
 	});
 </script>

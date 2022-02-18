@@ -1,6 +1,6 @@
 <script lang="ts">
 	import '../app.postcss';
-	import { onMount } from 'svelte';
+	import { afterNavigate } from '$app/navigation';
 	import { fade } from 'svelte/transition';
 	import Toasts from '../components/Toasts.svelte';
 	import { UserStatus, userStore } from '../stores/userStore';
@@ -31,7 +31,7 @@
 	});
 
 	const gradient = new Gradient();
-	onMount(async () => {
+	afterNavigate(async () => {
 		const analytics = (window.analytics = window.analytics || []);
 		if (selectedBackdrop.animated) {
 			gradient.initGradient('#gradient-canvas');

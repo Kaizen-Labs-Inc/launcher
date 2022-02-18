@@ -4,7 +4,7 @@
 <script lang="ts">
 	import checkUserAndRedirect from '$lib/checkUserAndRedirect';
 	import { userStore } from '../../stores/userStore';
-	import { onMount } from 'svelte';
+	import { afterNavigate } from '$app/navigation';
 	import ChannelGrid from '../../components/ChannelGrid.svelte';
 
 	let user;
@@ -13,7 +13,7 @@
 		user = value.user;
 	});
 
-	onMount(() => {
+	afterNavigate(() => {
 		window.analytics.page();
 	});
 </script>

@@ -4,12 +4,12 @@
 
 <script lang="ts">
 	import { variables } from '../../lib/env';
-	import { onMount } from 'svelte';
+	import { afterNavigate } from '$app/navigation';
 	import { fade } from 'svelte/transition';
 	import { goto } from '$app/navigation';
 	import ChannelGrid from '../../components/ChannelGrid.svelte';
 	let isHovering: boolean = false;
-	onMount(() => {
+	afterNavigate(() => {
 		window.analytics.page();
 	});
 </script>
