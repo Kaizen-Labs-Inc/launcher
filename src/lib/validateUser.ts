@@ -1,6 +1,6 @@
 import getAuth from '$lib/getAuth';
 import type { ServerRequest } from '@sveltejs/kit/types/hooks';
-import type { PrismaClient, User } from '@prisma/client'
+import type { PrismaClient, User } from '@prisma/client';
 
 export default function validateUser(request: ServerRequest, prisma: PrismaClient): Promise<User | null> {
 	const profile = getAuth(request)

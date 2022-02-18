@@ -1,6 +1,5 @@
 import type { ServerRequest } from '@sveltejs/kit/types/hooks';
 import cookie from 'cookie';
-import jwt from 'jsonwebtoken';
 
 export default (request: ServerRequest): string | undefined => {
 	let authJwt
