@@ -1,9 +1,10 @@
 import type { ServerRequest } from '@sveltejs/kit/types/hooks';
 import type { EndpointOutput } from '@sveltejs/kit/types/endpoint';
 import { prisma } from '$lib/prismaClient';
-import { ChannelType } from '../../model/ChannelType';
+import { ChannelType } from '../../../model/ChannelType';
 import validateUser from '$lib/validateUser';
 import stripPrefix from '$lib/stripPrefix';
+import { BAD_REQUEST, INTERNAL_SERVER_ERROR, UNAUTHORIZED } from '$lib/responseConstants';
 
 
 export const CHANNEL_SELECTIONS = {
@@ -32,41 +33,31 @@ export async function post(request: ServerRequest): Promise<void | EndpointOutpu
 	const user = await validateUser(request, prisma)
 
 	if (!user) {
-		return {
-			status: 401
-		}
+		return UNAUTHORIZED
 	}
 
 	if (!request.body) {
-		return {
-			status: 400
-		}
+		return BAD_REQUEST
 	}
 	let channel
 	try {
 		channel = JSON.parse(request.body.toString())
 	} catch (e: unknown) {
 		console.error(e)
-		return {
-			status: 400
-		}
+		return BAD_REQUEST
 	}
 	channel.userId = user.id;
 
 	channel.name = channel.name?.trim()
 
 	if (!channel.name || channel.name.length === 0) {
-		return {
-			status: 400
-		}
+		return BAD_REQUEST
 	}
 
 	channel.url = stripPrefix(channel.url?.trim())
 
 	if (!channel.url || channel.url.length === 0) {
-		return {
-			status: 400
-		}
+		return BAD_REQUEST
 	}
 
 	const foundChannel = await prisma.channel.findFirst({
@@ -129,9 +120,7 @@ export async function post(request: ServerRequest): Promise<void | EndpointOutpu
 	}
 
 	if (!created) {
-		return {
-			status: 500
-		}
+		return INTERNAL_SERVER_ERROR
 	}
 
 	created.positions = []

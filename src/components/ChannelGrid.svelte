@@ -109,7 +109,7 @@
 	};
 
 	const handleEdit = (channel: Channel) => {
-		goto(`/app/edit?id=${channel.id}`);
+		goto(`/app/${channel.id}/edit`);
 	};
 
 	const handleRemove = (channel: Channel) => {
