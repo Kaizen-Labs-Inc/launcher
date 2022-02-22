@@ -3,6 +3,7 @@
 	export let label: string;
 	export let disabled: boolean = false;
 	export let loading: boolean = false;
+
 	const dispatch = createEventDispatcher();
 	const handleOnClick = () => {
 		if (disabled || loading) {

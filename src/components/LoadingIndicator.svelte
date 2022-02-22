@@ -4,8 +4,8 @@
 	.loader {
 		width: 40px;
 		height: 40px;
-		background: linear-gradient(currentColor 0 0), linear-gradient(currentColor 0 0),
-			linear-gradient(currentColor 0 0), linear-gradient(currentColor 0 0);
+		background: linear-gradient(white 0 0), linear-gradient(white 0 0), linear-gradient(white 0 0),
+			linear-gradient(white 0 0);
 		background-size: 21px 21px;
 		background-repeat: no-repeat;
 		animation: loading 1.5s infinite cubic-bezier(0.3, 1, 0, 1);

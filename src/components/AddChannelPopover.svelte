@@ -279,7 +279,7 @@
 			{/if}
 		{:else if !stepTwoComplete}
 			<form>
-				<div class="flex flex-col">
+				<div class="flex flex-col items-start">
 					<label for="url" class="font-medium mb-1">URL</label>
 					<input
 						bind:value={channelUrl}
@@ -287,7 +287,7 @@
 						name="url"
 						type="url"
 						placeholder="Paste the link here"
-						class="bg-white bg-opacity-10 rounded p-2"
+						class="bg-white bg-opacity-10 rounded p-2 w-full"
 					/>
 				</div>
 

@@ -45,7 +45,7 @@
 </script>
 
 <div class="flex flex-row items-end justify-between mb-4 mt-2 z-50">
-	<div class="flex flex-col flex-grow mr-6">
+	<div class="flex flex-col flex-grow items-start mr-6">
 		<label for="url" class="font-medium ">URL</label>
 		<input
 			bind:value={channel.url}
@@ -53,7 +53,9 @@
 			name="url"
 			type="url"
 			placeholder="Paste the link here"
-			class="bg-white {selectedBackdrop.darkMode ? 'bg-opacity-10' : 'bg-opacity-90'} rounded p-2"
+			class="bg-white {selectedBackdrop.darkMode
+				? 'bg-opacity-10'
+				: 'bg-opacity-90'} rounded p-2 w-full"
 		/>
 	</div>
 	<div
@@ -74,7 +76,7 @@
 		{/if}
 	</div>
 </div>
-<div class="flex flex-col flex-1">
+<div class="flex flex-col items-start flex-1">
 	<label for="name" class="font-medium ">Name it</label>
 	<input
 		bind:value={channel.name}
@@ -83,11 +85,13 @@
 		type="text"
 		maxlength="30"
 		placeholder="Type a name"
-		class="bg-white {selectedBackdrop.darkMode ? 'bg-opacity-10' : 'bg-opacity-90'}  rounded p-2"
+		class="bg-white {selectedBackdrop.darkMode
+			? 'bg-opacity-10'
+			: 'bg-opacity-90'}  rounded p-2 w-full"
 	/>
 </div>
 
-<div class="my-4 flex flex-col">
+<div class="my-4 flex  items-start flex-col">
 	<label for="description" class="font-medium ">Describe it</label>
 	<textarea
 		bind:value={channel.description}
@@ -95,12 +99,14 @@
 		type="text"
 		rows="4"
 		placeholder="Add an optional description"
-		class="bg-white {selectedBackdrop.darkMode ? 'bg-opacity-10' : 'bg-opacity-90'} rounded p-2"
+		class="bg-white {selectedBackdrop.darkMode
+			? 'bg-opacity-10'
+			: 'bg-opacity-90'} rounded p-2 w-full"
 	/>
 </div>
-<div class="my-4 flex flex-col">
+<div class="my-4 flex items-start flex-col">
 	<label for="tags" class="font-medium ">Tag it</label>
-	<div class="tagsContainer">
+	<div class="tagsContainer w-full rounded-2">
 		<Tags
 			on:tags={(e) => {
 				handleTags(e);
