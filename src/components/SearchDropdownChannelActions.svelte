@@ -33,12 +33,14 @@
 			<PlusIcon size="20" strokeWidth="1" />
 		{/if}
 	</div>
-	<div
-		on:mousedown|preventDefault={() => {
-			handleEdit(channel);
-		}}
-		class="w-12 h-12 cursor-pointer hover:bg-white hover:bg-opacity-10 rounded-md flex justify-center items-center"
-	>
-		<Edit2Icon size="20" strokeWidth="1" />
-	</div>
+	{#if channel.createdByUser}
+		<div
+			on:mousedown|preventDefault={() => {
+				handleEdit(channel);
+			}}
+			class="w-12 h-12 cursor-pointer hover:bg-white hover:bg-opacity-10 rounded-md flex justify-center items-center"
+		>
+			<Edit2Icon size="20" strokeWidth="1" />
+		</div>
+	{/if}
 </div>

@@ -5,7 +5,7 @@ import { ChannelType } from '../../../model/ChannelType';
 import validateUser from '$lib/validateUser';
 import stripPrefix from '$lib/stripPrefix';
 import { BAD_REQUEST, INTERNAL_SERVER_ERROR, UNAUTHORIZED } from '$lib/responseConstants';
-
+import transformChannels from '$lib/transformChannels';
 
 export const CHANNEL_SELECTIONS = {
 	tags: true
@@ -19,12 +19,16 @@ export async function get(request: ServerRequest): Promise<void | EndpointOutput
 		searchConditions.push({ channelType: 1, userId: user?.id })
 	}
 
-	return { body: await prisma.channel.findMany({
-			where: {
-				OR: searchConditions
-			},
-			include: CHANNEL_SELECTIONS
-		})
+	const channels = await prisma.channel.findMany({
+		where: {
+			OR: searchConditions
+		},
+		include: CHANNEL_SELECTIONS
+	})
+
+	transformChannels(channels, user)
+
+	return { body: channels
 	}
 }
 
@@ -124,6 +128,8 @@ export async function post(request: ServerRequest): Promise<void | EndpointOutpu
 	}
 
 	created.positions = []
+
+	transformChannels([created], user)
 
 	return {
 		status: 201,
