@@ -3,31 +3,30 @@
 	import { page } from '$app/stores';
 	import atobUnicode from '../lib/atobUnicode';
 
-	let email
-	let signup
-	let slug
-	let message
+	let email;
+	let signup;
+	let slug;
+	let message;
 
 	onMount(() => {
-		window.analytics.page();
+		analytics.page();
 		try {
-			const encodedEmail = $page.query.get('e')
+			const encodedEmail = $page.query.get('e');
 			if (encodedEmail) {
-				email = atobUnicode(encodedEmail)
+				email = atobUnicode(encodedEmail);
 			}
-			const encodedInvitationSlug = $page.query.get('i')
+			const encodedInvitationSlug = $page.query.get('i');
 			if (encodedInvitationSlug) {
-				slug = atobUnicode(encodedInvitationSlug)
+				slug = atobUnicode(encodedInvitationSlug);
 			}
 
-			const encodedMessage = $page.query.get('m')
+			const encodedMessage = $page.query.get('m');
 			if (encodedMessage) {
-				message = atobUnicode(encodedMessage)
+				message = atobUnicode(encodedMessage);
 			}
-			signup = $page.query.get('s')
+			signup = $page.query.get('s');
 			// eslint-disable-next-line no-empty
 		} catch (_) {}
-
 	});
 </script>
 
@@ -47,9 +46,7 @@
 	</div>
 {/if}
 {#if signup}
-	<div class="my-6 text-2xl text-center">
-		We couldn't create your account.
-	</div>
+	<div class="my-6 text-2xl text-center">We couldn't create your account.</div>
 	<div class="my-6 text-center">
 		If you already have a Launcher account, try <a href="/sign-in">signing in</a>.
 	</div>
@@ -61,17 +58,13 @@
 	<div class="my-6 text-2xl text-center">
 		We couldn't find an invitation with the code {slug}
 	</div>
-	<div class="my-6 text-center">
-		Please check your invitation link and try again.
-	</div>
+	<div class="my-6 text-center">Please check your invitation link and try again.</div>
 	<div class="my-6 text-center">
 		Otherwise, you can <a href="/pricing">get started with a free account</a>.
 	</div>
 {/if}
 {#if message}
-	<div class="my-6 text-2xl text-center">
-		An error occurred
-	</div>
+	<div class="my-6 text-2xl text-center">An error occurred</div>
 	<div class="my-6 text-center">
 		{message}
 	</div>

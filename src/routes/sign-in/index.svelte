@@ -4,7 +4,7 @@
 	import SignInWithGoogleButton from '../../components/SignInWithGoogleButton.svelte';
 
 	onMount(() => {
-		window.analytics.page();
+		analytics.page();
 	});
 </script>
 

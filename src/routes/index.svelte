@@ -9,7 +9,7 @@
 		}
 	});
 	onMount(() => {
-		window.analytics.page();
+		analytics.page();
 	});
 </script>
 

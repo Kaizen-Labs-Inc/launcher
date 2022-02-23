@@ -101,6 +101,7 @@
 	}
 
 	const handleProceed = (channel: Channel) => {
+		console.log(channel);
 		focusedChannelIndex = null;
 		window.open('https://' + channel.url, '_blank').focus();
 		analytics.track('Channel opened', {

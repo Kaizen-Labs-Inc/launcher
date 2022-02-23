@@ -1,6 +1,7 @@
 <script context="module" lang="ts">
 	export const prerender = true;
 </script>
+
 <script lang="ts">
 	import checkUserAndRedirect from '$lib/checkUserAndRedirect';
 	import { userStore } from '../../stores/userStore';
@@ -14,7 +15,7 @@
 	});
 
 	onMount(() => {
-		window.analytics.page();
+		analytics.page();
 	});
 </script>
 

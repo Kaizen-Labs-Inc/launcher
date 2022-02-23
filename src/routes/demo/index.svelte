@@ -10,7 +10,7 @@
 	import ChannelGrid from '../../components/ChannelGrid.svelte';
 	let isHovering: boolean = false;
 	onMount(() => {
-		window.analytics.page();
+		analytics.page();
 	});
 </script>
 
