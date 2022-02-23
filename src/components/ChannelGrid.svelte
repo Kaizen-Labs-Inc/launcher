@@ -20,7 +20,6 @@
 	import { backdropStore } from '../stores/backdropStore';
 	import StatusBar from './StatusBar.svelte';
 	import { getFocusedIndexOnGrid } from '../utils/getFocusedIndexOnGrid';
-	import { userStore } from '../stores/userStore';
 
 	export let isDemo = false;
 	let editModeEnabled: boolean = false;
@@ -249,17 +248,21 @@
 
 		fetch('/api/channel', {
 			credentials: 'include'
-		}).then(async (res) => {
-			channelsToSearch = await res.json();
-		}).catch((err) => {
-			console.error(err.message);
-		});
+		})
+			.then(async (res) => {
+				channelsToSearch = await res.json();
+			})
+			.catch((err) => {
+				console.error(err.message);
+			});
 
-		fetch('/api/backdrop').then(async (res) => {
-			backdropOptions = await res.json();
-		}).catch((err) => {
-			console.error(err.message);
-		});
+		fetch('/api/backdrop')
+			.then(async (res) => {
+				backdropOptions = await res.json();
+			})
+			.catch((err) => {
+				console.error(err.message);
+			});
 
 		isMobile = isMobileDevice();
 		document.addEventListener(
@@ -304,7 +307,6 @@
 
 				if (!searchIsFocused && !editModeEnabled && event.key === 'Enter') {
 					handleProceed(filteredChannels[focusedChannelIndex]);
-					alert('why');
 				}
 
 				if (
@@ -505,8 +507,8 @@
 							setStatusBar('Change the background color of your board');
 						}}
 						on:mouseout={resetStatusBar}
-						style="background-image: radial-gradient(at 0% 50%, {backdropOption
-							.colors[0].value} 0, transparent 100%),
+						style="background-image: radial-gradient(at 0% 50%, {backdropOption.colors[0]
+							.value} 0, transparent 100%),
 				radial-gradient(at 0% 100%, {backdropOption.colors[1].value} 0, transparent 50%),
 				radial-gradient(at 80% 100%, {backdropOption.colors[2].value} 0, transparent 50%),
 				radial-gradient(at 0% 0%, {backdropOption.colors[3].value} 0, transparent 50%);"
@@ -662,7 +664,7 @@
 	{/if}
 {:else}
 	<ChannelSearchDropdown
-		bind:focusedChannelIndex
+		bind:selectedChannelIndex={focusedChannelIndex}
 		bind:filteredChannels
 		bind:positions={board.positions}
 		on:appSelected={(event) => {
