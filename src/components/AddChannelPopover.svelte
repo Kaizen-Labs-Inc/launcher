@@ -112,6 +112,8 @@
 
 	const clickOutsideFilter = (node: Node) => {
 		const emojiPicker = document.getElementsByClassName('emoji-picker__wrapper');
+		const addTarget = document.getElementById('addTarget');
+		if (addTarget.contains(node)) return true;
 		if (emojiPicker.length > 0 && emojiPicker[0].contains(node)) return true;
 	};
 
