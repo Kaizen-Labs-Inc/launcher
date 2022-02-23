@@ -4,6 +4,8 @@
 
 _An open-source & accessible app launcher built with Sveltekit, Prisma, and Tailwind._
 
+![Launcher](static/gif.gif 'Launcher')
+
 We built launcher after scaling teams that rapidly adopted dozens of SaaS products. Keeping track of which teams use which apps became a guessing game. Centralize, find, and launch your growing team's apps with _Launcher_.
 
 Get started by following the instructions below, or sign up for a managed instance at [launcher.team](https://launcher.team)!
@@ -40,7 +42,7 @@ Copy `.env.example` to a new `.env` file. The newly-copied `.env` file will be i
 
 **Install node.js** (if not already installed).
 
-Using Homebrew (mac): 
+Using Homebrew (mac):
 
 ```zsh
 brew update
@@ -67,6 +69,7 @@ Open up `/prisma/schema.prisma` and uncomment the following lines:
 ```
 
 Remove or comment the following lines:
+
 ```
 datasource db {
   provider = "postgresql"
@@ -75,6 +78,7 @@ datasource db {
 ```
 
 Finally, generate prisma js stubs:
+
 ```
 npx prisma generate
 ```
@@ -88,6 +92,7 @@ Congrats! Your SQLite database is configured, and dev.db is pre-seeded with key 
 Install Postgresql (if not installed):
 
 Using Homebrew (mac):
+
 ```
 brew update
 brew install postgresql
