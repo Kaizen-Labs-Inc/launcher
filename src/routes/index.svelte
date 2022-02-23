@@ -2,10 +2,12 @@
 	import { onMount } from 'svelte';
 	import { userStore } from '../stores/userStore';
 	import { goto } from '$app/navigation';
-
+	let loading: boolean = true;
 	userStore.subscribe((value) => {
 		if (value.user) {
 			goto('/home');
+		} else {
+			loading = false;
 		}
 	});
 	onMount(() => {
@@ -17,33 +19,36 @@
 	<title>Launcher - you're up and running.</title>
 </svelte:head>
 <div class="container mx-auto">
-	<div class="mt-24">
-		<div class="flex md:flex-row flex-col justify-between items-center">
-			<div class="flex flex-col mx-auto items-center">
-				<h1 class="font-bold text-4xl md:text-6xl md:text-left" style="line-height: 115%">
-					You're up and running.
-				</h1>
-				<h2 class="text-3xl opacity-80 mt-6">Welcome to Launcher!</h2>
-				<p class="mt-8 opacity-60 text-xl">
-					Support the team by subscribing to <a href="https://launcher.team">our hosted version</a>,
-					or <a href="https://github.com/natevaughan/launcher">visit us on Github</a> to contribute.
-				</p>
-				<div class="flex flex-col items-center  mt-8">
-					<div class="flex flex-col my-4 items-start">
-						<div
-							on:click={() => {
-								goto('/sign-in');
-							}}
-							class="cta mx-auto rounded-md cursor-pointer text-2xl font-medium py-3 px-6 flex items-center justify-center text-black"
-						>
-							Get started
+	{#if loading}
+		<div />
+	{:else}
+		<div class="mt-24">
+			<div class="flex md:flex-row flex-col justify-between items-center">
+				<div class="flex flex-col mx-auto items-center">
+					<h1 class="font-bold text-4xl md:text-6xl md:text-left" style="line-height: 115%">
+						You're up and running.
+					</h1>
+					<h2 class="text-3xl opacity-80 mt-6">Welcome to Launcher!</h2>
+					<p class="mt-8 opacity-60 text-xl">
+						Support the team by subscribing to <a href="https://launcher.team">our hosted version</a
+						>, or <a href="https://github.com/natevaughan/launcher">visit us on Github</a> to contribute.
+					</p>
+					<div class="flex flex-col items-center  mt-8">
+						<div class="flex flex-col my-4 items-start">
+							<div
+								on:click={() => {
+									goto('/sign-in');
+								}}
+								class="cta mx-auto rounded-md cursor-pointer text-2xl font-medium py-3 px-6 flex items-center justify-center text-black"
+							>
+								Get started
+							</div>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-	</div>
-
+	{/if}
 	<footer class="z-0">
 		<p class="mx-3">Kaizen Labs Inc 2022</p>
 	</footer>
