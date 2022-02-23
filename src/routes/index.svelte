@@ -48,10 +48,10 @@
 				</div>
 			</div>
 		</div>
+		<footer class="z-0">
+			<p class="mx-3">Kaizen Labs Inc 2022</p>
+		</footer>
 	{/if}
-	<footer class="z-0">
-		<p class="mx-3">Kaizen Labs Inc 2022</p>
-	</footer>
 </div>
 
 <style>
