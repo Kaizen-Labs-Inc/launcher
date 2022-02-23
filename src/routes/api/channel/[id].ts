@@ -1,10 +1,10 @@
 import type { ServerRequest } from '@sveltejs/kit/types/hooks';
 import type { EndpointOutput } from '@sveltejs/kit/types/endpoint';
 import { prisma } from '$lib/prismaClient';
-import { ChannelType } from '../../../model/ChannelType';
 import validateUser from '$lib/validateUser';
 import stripPrefix from '$lib/stripPrefix';
 import { BAD_REQUEST, INTERNAL_SERVER_ERROR, NOT_FOUND, UNAUTHORIZED } from '$lib/responseConstants';
+import transformChannels from '$lib/transformChannels';
 
 export const CHANNEL_SELECTIONS = {
 	tags: true
@@ -42,6 +42,8 @@ export async function get(request: ServerRequest): Promise<void | EndpointOutput
 	if (!found) {
 		return NOT_FOUND
 	}
+
+	transformChannels([found], user)
 
 	return {
 		body: found
@@ -129,7 +131,7 @@ export async function put(request: ServerRequest): Promise<void | EndpointOutput
 		}
 	}
 
-	// todo get tag update working
+	// todo tag update
 	delete channel.tags
 	if (false && foundOrCreatedTags.length > 0) {
 		channel.tags = foundOrCreatedTags
@@ -150,6 +152,9 @@ export async function put(request: ServerRequest): Promise<void | EndpointOutput
 	if (!updated) {
 		return INTERNAL_SERVER_ERROR
 	}
+
+	transformChannels([updated], user)
+
 	return {
 		status: 200,
 		body: updated

@@ -3,7 +3,7 @@ import type { EndpointOutput } from '@sveltejs/kit/types/endpoint';
 import { prisma } from '$lib/prismaClient';
 import { BoardType } from '../../../model/api/BoardType';
 import validateUser from '$lib/validateUser';
-import { ChannelType } from '../../../model/ChannelType';
+import transformChannels from '$lib/transformChannels';
 
 const BOARD_SELECTIONS = {
 	id: true,
@@ -64,7 +64,7 @@ export async function get(request: ServerRequest): Promise<void | EndpointOutput
 		};
 	}
 
-	board.positions.forEach(it => { if (it.channel.userId === user?.id) { it.channel.createdByUser = true }})
+	transformChannels(board.positions.map(it => it.channel), user)
 
 	return { body: board };
 }
