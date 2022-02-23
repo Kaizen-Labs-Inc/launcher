@@ -19,6 +19,7 @@
 	let searchQuery: string = '';
 	let selectedChannelIndex: number = 0;
 	let stepTwoComplete: boolean = false;
+	let channelName: string = '';
 	let channelUrl: string = '';
 	let channelMetadataLoading: boolean = false;
 	let channel: Channel;
@@ -33,7 +34,8 @@
 
 	$: channel = {
 		description: channelDescription,
-		url: channelUrl
+		url: channelUrl,
+		name: channelName
 	};
 	export let popOverIsFocused: boolean = false;
 
@@ -70,11 +72,12 @@
 				}
 
 				if (popOverIsFocused && event.key === 'Enter') {
-					if (selectedChannelIndex < filteredChannels.length) {
-						handleAdd(filteredChannels[selectedChannelIndex]);
-					} else {
-						handleContinue();
-					}
+					event.preventDefault();
+					// if (selectedChannelIndex < filteredChannels.length) {
+					// 	handleAdd(filteredChannels[selectedChannelIndex]);
+					// } else {
+					// 	handleContinue();
+					// }
 				}
 			},
 			false
@@ -108,6 +111,7 @@
 		selectedChannelIndex = null;
 		searchQuery = '';
 		channelUrl = '';
+		channelName = '';
 	};
 
 	const clickOutsideFilter = (node: Node) => {
@@ -280,21 +284,28 @@
 				</div>
 			{/if}
 		{:else if !stepTwoComplete}
-			<form>
-				<div class="flex flex-col items-start">
-					<label for="url" class="font-medium mb-1">URL</label>
-					<input
-						bind:value={channelUrl}
-						autofocus
-						name="url"
-						type="url"
-						placeholder="Paste the link here"
-						class="bg-white bg-opacity-10 rounded p-2 w-full"
-					/>
-				</div>
-
-				<Button label="Next" loading={channelMetadataLoading} on:clicked={handleContinue} />
-			</form>
+			<div class="flex flex-col items-start">
+				<label for="name" class="font-medium mb-1">Name</label>
+				<input
+					bind:value={channelName}
+					name="name"
+					type="text"
+					autofocus
+					placeholder="Name the new app"
+					class="bg-white bg-opacity-10 rounded p-2 w-full mb-3"
+				/>
+			</div>
+			<div class="flex flex-col items-start">
+				<label for="url" class="font-medium mb-1">Full URL</label>
+				<input
+					bind:value={channelUrl}
+					name="url"
+					type="url"
+					placeholder="https://www.example.com"
+					class="bg-white bg-opacity-10 rounded p-2 w-full"
+				/>
+			</div>
+			<Button label="Next" loading={channelMetadataLoading} on:clicked={handleContinue} />
 		{:else}
 			<ChannelForm
 				channel={channel}
