@@ -3,12 +3,9 @@
 </script>
 
 <script lang="ts">
-	import { variables } from '../../lib/env';
 	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
-	import { goto } from '$app/navigation';
 	import ChannelGrid from '../../components/ChannelGrid.svelte';
-	let isHovering: boolean = false;
 	onMount(() => {
 		analytics.page();
 	});
