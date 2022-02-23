@@ -20,6 +20,7 @@
 	import { backdropStore } from '../stores/backdropStore';
 	import StatusBar from './StatusBar.svelte';
 	import { getFocusedIndexOnGrid } from '../utils/getFocusedIndexOnGrid';
+	import { userStore } from '../stores/userStore';
 
 	export let isDemo = false;
 	let editModeEnabled: boolean = false;
@@ -364,8 +365,8 @@
 				e.target.parentElement.id !== 'editToggle' &&
 				e.target.parentElement.id !== 'backdropSelector'
 			) {
-				var node = e.target;
-				var inside = false;
+				let node = e.target;
+				let inside = false;
 				while (node) {
 					if (node.classList.contains('channel')) {
 						inside = true;
@@ -611,19 +612,21 @@
 							? 'opacity-0 scale-50'
 							: 'opacity-100 scale-100'}"
 					>
-						<div
-							on:click={() => {
-								handleEdit(position.channel);
-							}}
-							on:mouseover={() => {
-								setStatusBar('Edit app');
-							}}
-							on:mouseout={resetStatusBar}
-							tabindex="0"
-							class="cursor-pointer mx-2 rounded bg-white bg-opacity-50 p-2 hover:bg-opacity-10"
-						>
-							<Edit2Icon strokeWidth="1" size="16" />
-						</div>
+						{#if position.channel.createdByUser}
+							<div
+								on:click={() => {
+									handleEdit(position.channel);
+								}}
+								on:mouseover={() => {
+									setStatusBar('Edit app');
+								}}
+								on:mouseout={resetStatusBar}
+								tabindex="0"
+								class="cursor-pointer mx-2 rounded bg-white bg-opacity-50 p-2 hover:bg-opacity-10"
+							>
+								<Edit2Icon strokeWidth="1" size="16" />
+							</div>
+						{/if}
 						<div
 							on:click={() => {
 								handleRemove(position.channel);

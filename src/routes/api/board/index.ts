@@ -3,6 +3,7 @@ import type { EndpointOutput } from '@sveltejs/kit/types/endpoint';
 import { prisma } from '$lib/prismaClient';
 import { BoardType } from '../../../model/api/BoardType';
 import validateUser from '$lib/validateUser';
+import { ChannelType } from '../../../model/ChannelType';
 
 const BOARD_SELECTIONS = {
 	id: true,
@@ -23,7 +24,9 @@ const BOARD_SELECTIONS = {
 					emoji: true,
 					image: true,
 					url: true,
-					tags: true
+					tags: true,
+					channelType: true,
+					userId: true
 				}
 			},
 			position: true
@@ -60,6 +63,9 @@ export async function get(request: ServerRequest): Promise<void | EndpointOutput
 			status: 404
 		};
 	}
+
+	board.positions.forEach(it => { if (it.channel.userId === user?.id) { it.channel.createdByUser = true }})
+
 	return { body: board };
 }
 
