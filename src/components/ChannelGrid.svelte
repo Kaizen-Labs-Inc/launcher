@@ -179,9 +179,6 @@
 						analytics.track('Channel added', {
 							channel: channel
 						});
-						board.positions.unshift(newPosition);
-						await orderAndSyncBoardPositions();
-						addToast({ dismissible: false, message: 'Added', type: 'success', timeout: 3000 });
 					} else {
 						analytics.track('Error adding channel', {
 							channel: channel
@@ -189,12 +186,11 @@
 						addToast({ dismissible: false, message: `Error: ${res.status}`, type: 'error', timeout: 3000 })
 					}
 				});
-			} else {
-				board.positions.unshift(newPosition);
-				await orderAndSyncBoardPositions();
-				addToast({ dismissible: false, message: 'Added', type: 'success', timeout: 3000 });
 			}
 		}
+		board.positions.unshift(newPosition);
+		await orderAndSyncBoardPositions();
+		addToast({ dismissible: false, message: 'Added', type: 'success', timeout: 3000 });
 		handleSearchBlur();
 	}
 
