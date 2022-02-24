@@ -10,6 +10,7 @@
 	import type Channel from 'src/model/Channel';
 
 	import type { Backdrop } from 'src/model/Backdrop';
+	import { addToast } from '../stores/toaststore';
 
 	const dispatch = createEventDispatcher();
 	export let channel: Channel = {
@@ -25,6 +26,16 @@
 
 	export const handleSubmit = (channel: Channel) => {
 		channel.emoji = emoji;
+		if (channel.name.trim().length === 0) {
+			addToast({ dismissible: false, message: 'Please add a name', type: 'error', timeout: 3000 });
+			return
+		}
+		try {
+			new URL(channel.url)
+		} catch (_) {
+			addToast({ dismissible: false, message: 'Please add a valid URL', type: 'error', timeout: 3000 });
+			return
+		}
 		dispatch('submit', {
 			channel: channel
 		});

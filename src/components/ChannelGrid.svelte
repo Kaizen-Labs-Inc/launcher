@@ -176,17 +176,22 @@
 					// 409 means a channel with this URL already exists; add it instead
 					if (res.status === 201 || res.status === 409) {
 						newPosition = { position: 0, channel: await res.json() };
+						analytics.track('Channel added', {
+							channel: channel
+						});
+						board.positions.unshift(newPosition);
+						await orderAndSyncBoardPositions();
+						addToast({ dismissible: false, message: 'Added', type: 'success', timeout: 3000 });
+					} else {
+						analytics.track('Error adding channel', {
+							channel: channel
+						});
+						addToast({ dismissible: false, message: `Error: ${res.status}`, type: 'error', timeout: 3000 })
 					}
 				});
 			}
 		}
-		board.positions.unshift(newPosition);
-		await orderAndSyncBoardPositions();
-		addToast({ dismissible: false, message: 'Added', type: 'success', timeout: 3000 });
 		handleSearchBlur();
-		analytics.track('Channel added', {
-			channel: channel
-		});
 	}
 
 	const toggleAddForm = () => {
