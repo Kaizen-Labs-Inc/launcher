@@ -189,6 +189,10 @@
 						addToast({ dismissible: false, message: `Error: ${res.status}`, type: 'error', timeout: 3000 })
 					}
 				});
+			} else {
+				board.positions.unshift(newPosition);
+				await orderAndSyncBoardPositions();
+				addToast({ dismissible: false, message: 'Added', type: 'success', timeout: 3000 });
 			}
 		}
 		handleSearchBlur();

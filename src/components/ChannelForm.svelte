@@ -30,9 +30,7 @@
 			addToast({ dismissible: false, message: 'Please add a name', type: 'error', timeout: 3000 });
 			return
 		}
-		try {
-			new URL(channel.url)
-		} catch (_) {
+		if (channel.url.trim().length === 0) {
 			addToast({ dismissible: false, message: 'Please add a valid URL', type: 'error', timeout: 3000 });
 			return
 		}

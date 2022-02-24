@@ -40,16 +40,16 @@
 			if (res.status === 200) {
 				addToast({
 					type: 'success',
-					message: `${event.detail.channel.name} successfully updated`,
-					dismissible: true,
+					message: `Updated`,
+					dismissible: false,
 					timeout: 3000
 				})
 				goto('/home');
 			} else {
 				addToast({
 					type: 'error',
-					message: `Error updating ${event.detail.channel.name}: ${res.status}`,
-					dismissible: true,
+					message: `Error: ${res.status}`,
+					dismissible: false,
 					timeout: 3000
 				})
 			}

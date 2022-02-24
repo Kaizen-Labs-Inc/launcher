@@ -16,7 +16,20 @@ export async function get(request: ServerRequest): Promise<void | EndpointOutput
 
 	const searchConditions: any = [{ channelType: 0 }]
 	if (user) {
-		searchConditions.push({ channelType: 1, userId: user?.id })
+		searchConditions.push({ channelType: ChannelType.PRIVATE.valueOf(), userId: user?.id })
+	}
+
+	const role = await prisma.role.findFirst({
+		where: {
+			userId: user.id
+		},
+		select: {
+			organization: true
+		}
+	});
+
+	if (role) {
+		searchConditions.push({ channelType: ChannelType.ORGANIZATION.valueOf(), organizationId: role.organization.id })
 	}
 
 	const channels = await prisma.channel.findMany({
@@ -51,6 +64,23 @@ export async function post(request: ServerRequest): Promise<void | EndpointOutpu
 		return BAD_REQUEST
 	}
 	channel.userId = user.id;
+
+	const role = await prisma.role.findFirst({
+		where: {
+			userId: user.id
+		},
+		select: {
+			organization: true
+		}
+	});
+
+	// if user is in an organizaton, set the visibility to ORGANIZATION
+	if (role) {
+		channel.channelType = ChannelType.ORGANIZATION.valueOf()
+		channel.organization = { connect: { id: role.organization.id }}
+	} else {
+		channel.channelType = ChannelType.PRIVATE.valueOf()
+	}
 
 	channel.name = channel.name?.trim()
 
@@ -111,8 +141,8 @@ export async function post(request: ServerRequest): Promise<void | EndpointOutpu
 	}
 	channel.dateCreated = dateCreated
 	channel.lastModified = dateCreated
-	channel.channelType = ChannelType.PRIVATE.valueOf()
-	channel.userId = user.id
+	channel.user = { connect: { id: user.id }}
+	delete channel.userId
 
 	let created;
 	try {

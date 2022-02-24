@@ -5,6 +5,7 @@ import validateUser from '$lib/validateUser';
 import stripPrefix from '$lib/stripPrefix';
 import { BAD_REQUEST, INTERNAL_SERVER_ERROR, NOT_FOUND, UNAUTHORIZED } from '$lib/responseConstants';
 import transformChannels from '$lib/transformChannels';
+import { ChannelType } from '../../../model/ChannelType';
 
 export const CHANNEL_SELECTIONS = {
 	tags: true
@@ -81,26 +82,42 @@ export async function put(request: ServerRequest): Promise<void | EndpointOutput
 	channel.name = channel.name?.trim()
 
 	if (!channel.name || channel.name.length === 0) {
-		console.log("no channel name")
+		console.error("no channel name")
 		return BAD_REQUEST
 	}
 
 	channel.url = stripPrefix(channel.url?.trim())
 
 	if (!channel.url || channel.url.length === 0) {
-		console.log("no url")
+		console.error("no url")
 		return BAD_REQUEST
 	}
 
-	const searchConditions: any = { id: id, channelType: 1, userId: user?.id }
+	const searchConditions: any = [{ id: id, channelType: 1, userId: user?.id }]
+
+	const role = await prisma.role.findFirst({
+		where: {
+			userId: user.id
+		},
+		select: {
+			organization: true
+		}
+	});
+
+	// if user is part of an organization, allow them to edit any channel in that org
+	if (role) {
+		searchConditions.push({ channelType: ChannelType.ORGANIZATION.valueOf(), organizationId: role.organization.id })
+	}
 
 	const found = await prisma.channel.findFirst({
-		where: searchConditions,
+		where: {
+			OR: searchConditions
+		},
 		include: CHANNEL_SELECTIONS
 	})
 
 	if (!found) {
-		console.log("no channel found")
+		console.warn("no channel found")
 		return NOT_FOUND
 	}
 
@@ -138,6 +155,7 @@ export async function put(request: ServerRequest): Promise<void | EndpointOutput
 	}
 
 	channel.lastModified = lastModified
+	delete channel.createdByUser
 
 	let updated;
 	try {
