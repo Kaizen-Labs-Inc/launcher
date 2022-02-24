@@ -17,19 +17,19 @@ export async function get(request: ServerRequest): Promise<void | EndpointOutput
 	const searchConditions: any = [{ channelType: 0 }]
 	if (user) {
 		searchConditions.push({ channelType: ChannelType.PRIVATE.valueOf(), userId: user?.id })
-	}
+	
+		const role = await prisma.role.findFirst({
+			where: {
+				userId: user.id
+			},
+			select: {
+				organization: true
+			}
+		});
 
-	const role = await prisma.role.findFirst({
-		where: {
-			userId: user.id
-		},
-		select: {
-			organization: true
+		if (role) {
+			searchConditions.push({ channelType: ChannelType.ORGANIZATION.valueOf(), organizationId: role.organization.id })
 		}
-	});
-
-	if (role) {
-		searchConditions.push({ channelType: ChannelType.ORGANIZATION.valueOf(), organizationId: role.organization.id })
 	}
 
 	const channels = await prisma.channel.findMany({
